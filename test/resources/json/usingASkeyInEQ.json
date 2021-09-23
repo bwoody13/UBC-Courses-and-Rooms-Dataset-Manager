@@ -1,0 +1,29 @@
+{
+  "errorMsg": "Invalid key type in EQ",
+  "title": "using a skey in EQ",
+  "input": {
+    "WHERE": {
+      "AND": [
+        {
+          "IS": {
+            "courses_dept": "c*"
+          }
+        },
+        {
+          "EQ": {
+            "courses_id": 100
+          }
+        }
+      ]
+    },
+    "OPTIONS": {
+      "COLUMNS": [
+        "courses_dept",
+        "courses_id"
+      ],
+      "ORDER": "courses_dept"
+    }
+  },
+  "errorExpected": true,
+  "with": "InsightError"
+}

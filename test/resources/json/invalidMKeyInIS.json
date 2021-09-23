@@ -1,0 +1,21 @@
+{
+  "errorMsg": "Invalid key type in IS",
+  "title": "Invalid MKey in IS",
+  "input": {
+    "WHERE": {
+      "IS": {
+        "courses_pass": "three"
+      }
+    },
+    "OPTIONS": {
+      "COLUMNS": [
+        "courses_dept",
+        "courses_id",
+        "courses_avg"
+      ],
+      "ORDER": "courses_avg"
+    }
+  },
+  "errorExpected": true,
+  "with": "InsightError"
+}
