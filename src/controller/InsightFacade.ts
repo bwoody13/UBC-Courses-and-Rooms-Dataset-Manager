@@ -5,6 +5,7 @@ import {Course} from "../objects/Course";
 import JSZip from "jszip";
 
 const COURSES_DIR_NAME = "courses/";
+const DATASETS_DIRECTORY = "data/";
 
 /**
  * This is the main programmatic entry point for the project.
@@ -24,6 +25,11 @@ export default class InsightFacade implements IInsightFacade {
 		// TODO: Remove this code in future checkpoints
 		if (kind === InsightDatasetKind.Rooms) {
 			return Promise.reject(new InsightError("Invalid InsightDatasetKind: Rooms"));
+		}
+		// ensure there are no other datasets with the same id
+		const datasetPath = DATASETS_DIRECTORY + id + ".json";
+		if (await fs.pathExists(datasetPath)) {
+			return Promise.reject(new InsightError("A dataset with that ID already exists."));
 		}
 		// load content directory
 		let dir;
@@ -46,33 +52,44 @@ export default class InsightFacade implements IInsightFacade {
 			}
 		});
 		const courseFiles = await Promise.all(courseFilePromises);
-		// setup dataset object
-		// TODO: load in all of the added datasets
-		// TODO: ensure there are no other datasets with the same id
+		// setup the dataset object
 		let dataset = new Dataset(id, kind);
 		// parse the course file string data into Course objects
 		for(const courseFileData of courseFiles) {
-			const jsonObj = JSON.parse(courseFileData);
-			// skip file if JSON could not be parsed
-			if(jsonObj) {
-				try {
-					let course: Course = jsonObj as Course;
-					dataset.addCourse(course);
-				} catch(e) {
-					// skip file if it could not be cast
-					console.warn("Failed to cast JSON Object to Course: " + e);
+			try {
+				const jsonObj = JSON.parse(courseFileData);
+				// skip file if JSON could not be parsed
+				if(jsonObj) {
+					try {
+						// TODO: check for properties within the Json Object to ensure safe casting
+						//		 https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/in
+						let course: Course = jsonObj as Course;
+						dataset.addCourse(course);
+					} catch(e) {
+						// skip file if it could not be cast
+						console.warn("Failed to cast JSON Object to Course: " + e);
+					}
+				} else {
+					console.warn("Failed to parse JSON file.");
 				}
+			} catch(e) {
+				console.warn("Failed to parse JSON file: " + e);
 			}
 		}
 		// reject if there are no valid course sections in the dataset
+		console.log(dataset.numRows);
 		if (!dataset.numRows) {
 			return Promise.reject(new InsightError("No valid course sections."));
 		}
-		// TODO: save the dataset to disk
-		await fs.mkdirp("data/");
-		await fs.writeJSON("data/dataset.json", dataset.toJSONObject());
-		// TODO: return an array of strings of the names of added datasets
-		return Promise.resolve([]);
+		// save the dataset to disk
+		await fs.ensureDir(DATASETS_DIRECTORY);
+		await fs.writeJSON(datasetPath, dataset.toJSONObject());
+		// return an array of strings of the names of all added datasets
+		const datasetFileNames = await fs.readdir(DATASETS_DIRECTORY);
+		const datasetIDs = datasetFileNames.map(function(fileName) {
+			return fileName.replace(".json", "");
+		});
+		return Promise.resolve(datasetIDs);
 	}
 
 	public removeDataset(id: string): Promise<string> {
