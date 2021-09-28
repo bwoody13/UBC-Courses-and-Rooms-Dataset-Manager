@@ -46,28 +46,32 @@ export default class InsightFacade implements IInsightFacade {
 			}
 		});
 		const courseFiles = await Promise.all(courseFilePromises);
+		// setup dataset object
+		// TODO: load in all of the added datasets
+		// TODO: ensure there are no other datasets with the same id
+		let dataset = new Dataset(id, kind);
 		// parse the course file string data into Course objects
-		let courseCount = 0;
-		let dataset = new Dataset();
 		for(const courseFileData of courseFiles) {
 			const jsonObj = JSON.parse(courseFileData);
 			// skip file if JSON could not be parsed
 			if(jsonObj) {
 				try {
 					let course: Course = jsonObj as Course;
-					courseCount++;
-					// TODO: load course sections into data structure
-					// TODO: ensure there is at least one valid course section
+					dataset.addCourse(course);
 				} catch(e) {
 					// skip file if it could not be cast
 					console.warn("Failed to cast JSON Object to Course: " + e);
 				}
 			}
 		}
-		// reject if there are no course files in the courses directory
-		if (!courseCount) {
-			return Promise.reject(new InsightError("No course files in directory."));
+		// reject if there are no valid course sections in the dataset
+		if (!dataset.numRows) {
+			return Promise.reject(new InsightError("No valid course sections."));
 		}
+		// TODO: save the dataset to disk
+		await fs.mkdirp("data/");
+		await fs.writeJSON("data/dataset.json", dataset.toJSONObject());
+		// TODO: return an array of strings of the names of added datasets
 		return Promise.resolve([]);
 	}
 
