@@ -407,283 +407,283 @@ describe("InsightFacade", function () {
 				});
 		});
 	});
-	//
-	// describe("Remove Datasets", function () {
-	//
-	// 	let facade: IInsightFacade;
-	//
-	// 	beforeEach(function () {
-	// 		clearDisk();
-	// 		facade = new InsightFacade();
-	// 	});
-	//
-	// 	it("should remove one dataset from a one dataset library", function () {
-	// 		return facade.addDataset("courses", courses, InsightDatasetKind.Courses)
-	// 			.then(() => {
-	// 				return facade.removeDataset("courses");
-	// 			})
-	// 			.then(() => {
-	// 				return facade.listDatasets();
-	// 			})
-	// 			.then((insightDatasets) => {
-	// 				expect(insightDatasets).to.deep.equal([]);
-	// 			});
-	// 	});
-	//
-	// 	it("should attempt to remove from empty database", function () {
-	// 		const result = facade.removeDataset("nothere");
-	// 		return expect(result).eventually.to.be.rejectedWith(NotFoundError);
-	// 	});
-	//
-	// 	it("should attempt to remove an invalid id dataset using _", function () {
-	// 		const result = facade.removeDataset("not_valid");
-	// 		return expect(result).eventually.to.be.rejectedWith(InsightError);
-	// 	});
-	//
-	// 	it("should attempt to remove an invalid id dataset using whitespace", function () {
-	// 		const result = facade.removeDataset("       ");
-	// 		return expect(result).eventually.to.be.rejectedWith(InsightError);
-	// 	});
-	//
-	// 	it("should remove proper dataset from multiple",  async function () {
-	// 		await facade.addDataset("courses", courses, InsightDatasetKind.Courses);
-	// 		await facade.addDataset("courses1", courses, InsightDatasetKind.Courses);
-	// 		await facade.addDataset("courses2", courses, InsightDatasetKind.Courses);
-	// 		await facade.removeDataset("courses");
-	// 		let insightDatasets = await facade.listDatasets();
-	// 		expect(insightDatasets).to.be.an.instanceOf(Array);
-	// 		expect(insightDatasets).to.have.length(2);
-	// 		let  insightDatasetCourses = insightDatasets.find((dataset) => dataset.id === "courses");
-	// 		expect(insightDatasetCourses).to.not.exist;
-	//
-	// 		await facade.addDataset("courses3", courses, InsightDatasetKind.Courses);
-	// 		await facade.addDataset("courses4", courses, InsightDatasetKind.Courses);
-	//
-	// 		await facade.removeDataset("courses2");
-	// 		insightDatasets = await facade.listDatasets();
-	// 		expect(insightDatasets).to.be.an.instanceOf(Array);
-	// 		expect(insightDatasets).to.have.length(3);
-	// 		insightDatasetCourses = insightDatasets.find((dataset) => dataset.id === "courses2");
-	// 		expect(insightDatasetCourses).to.not.exist;
-	//
-	// 		await facade.removeDataset("courses4");
-	// 		insightDatasets = await facade.listDatasets();
-	// 		expect(insightDatasets).to.be.an.instanceOf(Array);
-	// 		expect(insightDatasets).to.have.length(2);
-	// 		insightDatasetCourses = insightDatasets.find((dataset) => dataset.id === "courses4");
-	// 		expect(insightDatasetCourses).to.not.exist;
-	// 	});
-	// 	it("should attempt to remove a dataset not in the (non-empty) database", function () {
-	// 		return facade.addDataset("courses", courses, InsightDatasetKind.Courses)
-	// 			.then(() => {
-	// 				return facade.removeDataset("nothere");
-	// 			})
-	// 			.catch((reason) => {
-	// 				expect(reason).to.be.instanceof(NotFoundError);
-	// 			});
-	//
-	// 	});
-	//
-	// 	it("should attempt to remove same dataset twice", async function () {
-	// 		try {
-	// 			await facade.addDataset("courses", courses, InsightDatasetKind.Courses);
-	// 			await facade.removeDataset("courses");
-	// 			await facade.removeDataset("courses");
-	// 			expect.fail("should have rejected");
-	// 		} catch (err) {
-	// 			expect(err).to.be.instanceof(NotFoundError);
-	// 		}
-	//
-	// 	});
-	//
-	// 	it("should remove a dataset then re-add it successfully", async function () {
-	// 		await facade.addDataset("courses", courses, InsightDatasetKind.Courses);
-	// 		await facade.removeDataset("courses");
-	// 		await facade.addDataset("courses", courses, InsightDatasetKind.Courses);
-	// 		const insightDatasets = await facade.listDatasets();
-	//
-	// 		return expect(insightDatasets).to.deep.equal([{
-	// 			id: "courses",
-	// 			kind: InsightDatasetKind.Courses,
-	// 			numRows: 64612,
-	// 		}]);
-	// 	});
-	//
-	//
-	// 	it("should throw an error if dataset doesn't exist", async function () {
-	// 		try {
-	// 			await facade.removeDataset("courses");
-	// 			expect.fail("Should have thrown error");
-	// 		} catch(e) {
-	// 			expect(e).to.be.instanceOf(NotFoundError);
-	// 		}
-	// 		await facade.addDataset("courses", courses, InsightDatasetKind.Courses);
-	// 		try {
-	// 			await facade.removeDataset("course");
-	// 			expect.fail("Should have thrown error");
-	// 		} catch(e) {
-	// 			expect(e).to.be.instanceOf(NotFoundError);
-	// 		}
-	// 		await facade.addDataset("courses1", courses, InsightDatasetKind.Courses);
-	// 		await facade.addDataset("courses2", courses, InsightDatasetKind.Courses);
-	// 		await facade.addDataset("courses3", courses, InsightDatasetKind.Courses);
-	// 		try {
-	// 			await facade.removeDataset("test");
-	// 			expect.fail("Should have thrown error");
-	// 		} catch(e) {
-	// 			expect(e).to.be.instanceOf(NotFoundError);
-	// 		}
-	// 		try {
-	// 			await facade.removeDataset("courses4");
-	// 			expect.fail("Should have thrown error");
-	// 		} catch(e) {
-	// 			expect(e).to.be.instanceOf(NotFoundError);
-	// 		}
-	//
-	// 		const insightDatasets = await facade.listDatasets();
-	// 		expect(insightDatasets).to.be.an.instanceOf(Array);
-	// 		expect(insightDatasets).to.have.length(4);
-	// 		const insightDatasetCourses = insightDatasets.find((dataset) => dataset.id === "courses");
-	// 		expect(insightDatasetCourses).to.exist;
-	// 		expect(insightDatasetCourses).to.deep.equal({
-	// 			id: "courses",
-	// 			kind: InsightDatasetKind.Courses,
-	// 			numRows: 34
-	// 		});
-	// 	});
-	//
-	// 	it("should throw error if id is invalid",  async function () {
-	// 		try {
-	// 			await facade.removeDataset("_courses");
-	// 			expect.fail("Should have thrown error");
-	// 		} catch(e) {
-	// 			expect(e).to.be.instanceOf(InsightError);
-	// 		}
-	// 		try {
-	// 			await facade.removeDataset("courses_");
-	// 			expect.fail("Should have thrown error");
-	// 		} catch(e) {
-	// 			expect(e).to.be.instanceOf(InsightError);
-	// 		}
-	// 		try {
-	// 			await facade.removeDataset("cour_ses");
-	// 			expect.fail("Should have thrown error");
-	// 		} catch(e) {
-	// 			expect(e).to.be.instanceOf(InsightError);
-	// 		}
-	// 		try {
-	// 			await facade.removeDataset("_");
-	// 			expect.fail("Should have thrown error");
-	// 		} catch(e) {
-	// 			expect(e).to.be.instanceOf(InsightError);
-	// 		}
-	// 		try {
-	// 			await facade.removeDataset("");
-	// 			expect.fail("Should have thrown error");
-	// 		} catch(e) {
-	// 			expect(e).to.be.instanceOf(InsightError);
-	// 		}
-	// 		try {
-	// 			await facade.removeDataset(" ");
-	// 			expect.fail("Should have thrown error");
-	// 		} catch(e) {
-	// 			expect(e).to.be.instanceOf(InsightError);
-	// 		}
-	// 		try {
-	// 			await facade.removeDataset("   ");
-	// 			expect.fail("Should have thrown error");
-	// 		} catch(e) {
-	// 			expect(e).to.be.instanceOf(InsightError);
-	// 		}
-	//
-	// 		await facade.addDataset("courses", courses, InsightDatasetKind.Courses);
-	// 		await facade.addDataset("courses1", courses, InsightDatasetKind.Courses);
-	//
-	// 		try {
-	// 			await facade.removeDataset("_courses");
-	// 			expect.fail("Should have thrown error");
-	// 		} catch(e) {
-	// 			expect(e).to.be.instanceOf(InsightError);
-	// 		}
-	// 		try {
-	// 			await facade.removeDataset("courses_");
-	// 			expect.fail("Should have thrown error");
-	// 		} catch(e) {
-	// 			expect(e).to.be.instanceOf(InsightError);
-	// 		}
-	// 		try {
-	// 			await facade.removeDataset("cour_ses");
-	// 			expect.fail("Should have thrown error");
-	// 		} catch(e) {
-	// 			expect(e).to.be.instanceOf(InsightError);
-	// 		}
-	// 		try {
-	// 			await facade.removeDataset("_");
-	// 			expect.fail("Should have thrown error");
-	// 		} catch(e) {
-	// 			expect(e).to.be.instanceOf(InsightError);
-	// 		}
-	// 		try {
-	// 			await facade.removeDataset("");
-	// 			expect.fail("Should have thrown error");
-	// 		} catch(e) {
-	// 			expect(e).to.be.instanceOf(InsightError);
-	// 		}
-	// 		try {
-	// 			await facade.removeDataset(" ");
-	// 			expect.fail("Should have thrown error");
-	// 		} catch(e) {
-	// 			expect(e).to.be.instanceOf(InsightError);
-	// 		}
-	// 		try {
-	// 			await facade.removeDataset("   ");
-	// 			expect.fail("Should have thrown error");
-	// 		} catch(e) {
-	// 			expect(e).to.be.instanceOf(InsightError);
-	// 		}
-	// 	});
-	//
-	// 	it("should fulfil with the id",  async function () {
-	// 		await facade.addDataset("courses", courses, InsightDatasetKind.Courses);
-	// 		let out = await facade.removeDataset("courses");
-	// 		expect(out).to.be.equal("courses");
-	//
-	// 		await facade.addDataset("courses1", courses, InsightDatasetKind.Courses);
-	// 		await facade.addDataset("courses2", courses, InsightDatasetKind.Courses);
-	// 		await facade.addDataset("courses3", courses, InsightDatasetKind.Courses);
-	//
-	// 		out = await facade.removeDataset("courses2");
-	// 		expect(out).to.be.equal("courses2");
-	// 		out = await facade.removeDataset("courses1");
-	// 		expect(out).to.be.equal("courses1");
-	// 	});
-	//
-	// 	it("should fail to query after removal", async function () {
-	// 		await facade.addDataset("courses", courses, InsightDatasetKind.Courses);
-	// 		await facade.removeDataset("courses");
-	// 		try {
-	// 			await facade.performQuery("" +
-	// 				"{\n" +
-	// 				"\t\"WHERE\": {\n" +
-	// 				"\t\t\"IS\": {\n" +
-	// 				"\t\t\t\"courses_title\": \"stoch processes\"\n" +
-	// 				"\t\t}\n" +
-	// 				"\t\t\n" +
-	// 				"\t},\n" +
-	// 				"\t\"OPTIONS\": {\n" +
-	// 				"\t\t\"COLUMNS\": [\n" +
-	// 				"\t\t\t\"courses_avg\"\n" +
-	// 				"\t\t],\n" +
-	// 				"\t\t\"ORDER\": \"courses_avg\"\n" +
-	// 				"\t}\n" +
-	// 				"}");
-	// 			expect.fail("Should have thrown error");
-	// 		} catch(e) {
-	// 			expect(e).to.be.instanceOf(InsightError);
-	// 		}
-	// 	});
-	// });
-	//
+
+	describe("Remove Datasets", function () {
+
+		let facade: IInsightFacade;
+
+		beforeEach(function () {
+			clearDisk();
+			facade = new InsightFacade();
+		});
+
+		it("should remove one dataset from a one dataset library", function () {
+			return facade.addDataset("courses", courses, InsightDatasetKind.Courses)
+				.then(() => {
+					return facade.removeDataset("courses");
+				})
+				.then(() => {
+					return facade.listDatasets();
+				})
+				.then((insightDatasets) => {
+					expect(insightDatasets).to.deep.equal([]);
+				});
+		});
+
+		it("should attempt to remove from empty database", function () {
+			const result = facade.removeDataset("nothere");
+			return expect(result).eventually.to.be.rejectedWith(NotFoundError);
+		});
+
+		it("should attempt to remove an invalid id dataset using _", function () {
+			const result = facade.removeDataset("not_valid");
+			return expect(result).eventually.to.be.rejectedWith(InsightError);
+		});
+
+		it("should attempt to remove an invalid id dataset using whitespace", function () {
+			const result = facade.removeDataset("       ");
+			return expect(result).eventually.to.be.rejectedWith(InsightError);
+		});
+
+		it("should remove proper dataset from multiple",  async function () {
+			await facade.addDataset("courses", courses, InsightDatasetKind.Courses);
+			await facade.addDataset("courses1", courses, InsightDatasetKind.Courses);
+			await facade.addDataset("courses2", courses, InsightDatasetKind.Courses);
+			await facade.removeDataset("courses");
+			let insightDatasets = await facade.listDatasets();
+			expect(insightDatasets).to.be.an.instanceOf(Array);
+			expect(insightDatasets).to.have.length(2);
+			let  insightDatasetCourses = insightDatasets.find((dataset) => dataset.id === "courses");
+			expect(insightDatasetCourses).to.not.exist;
+
+			await facade.addDataset("courses3", courses, InsightDatasetKind.Courses);
+			await facade.addDataset("courses4", courses, InsightDatasetKind.Courses);
+
+			await facade.removeDataset("courses2");
+			insightDatasets = await facade.listDatasets();
+			expect(insightDatasets).to.be.an.instanceOf(Array);
+			expect(insightDatasets).to.have.length(3);
+			insightDatasetCourses = insightDatasets.find((dataset) => dataset.id === "courses2");
+			expect(insightDatasetCourses).to.not.exist;
+
+			await facade.removeDataset("courses4");
+			insightDatasets = await facade.listDatasets();
+			expect(insightDatasets).to.be.an.instanceOf(Array);
+			expect(insightDatasets).to.have.length(2);
+			insightDatasetCourses = insightDatasets.find((dataset) => dataset.id === "courses4");
+			expect(insightDatasetCourses).to.not.exist;
+		});
+		it("should attempt to remove a dataset not in the (non-empty) database", function () {
+			return facade.addDataset("courses", courses, InsightDatasetKind.Courses)
+				.then(() => {
+					return facade.removeDataset("nothere");
+				})
+				.catch((reason) => {
+					expect(reason).to.be.instanceof(NotFoundError);
+				});
+
+		});
+
+		it("should attempt to remove same dataset twice", async function () {
+			try {
+				await facade.addDataset("courses", courses, InsightDatasetKind.Courses);
+				await facade.removeDataset("courses");
+				await facade.removeDataset("courses");
+				expect.fail("should have rejected");
+			} catch (err) {
+				expect(err).to.be.instanceof(NotFoundError);
+			}
+
+		});
+
+		it("should remove a dataset then re-add it successfully", async function () {
+			await facade.addDataset("courses", courses, InsightDatasetKind.Courses);
+			await facade.removeDataset("courses");
+			await facade.addDataset("courses", courses, InsightDatasetKind.Courses);
+			const insightDatasets = await facade.listDatasets();
+
+			return expect(insightDatasets).to.deep.equal([{
+				id: "courses",
+				kind: InsightDatasetKind.Courses,
+				numRows: 64612,
+			}]);
+		});
+
+
+		it("should throw an error if dataset doesn't exist", async function () {
+			try {
+				await facade.removeDataset("courses");
+				expect.fail("Should have thrown error");
+			} catch(e) {
+				expect(e).to.be.instanceOf(NotFoundError);
+			}
+			await facade.addDataset("courses", courses, InsightDatasetKind.Courses);
+			try {
+				await facade.removeDataset("course");
+				expect.fail("Should have thrown error");
+			} catch(e) {
+				expect(e).to.be.instanceOf(NotFoundError);
+			}
+			await facade.addDataset("courses1", courses, InsightDatasetKind.Courses);
+			await facade.addDataset("courses2", courses, InsightDatasetKind.Courses);
+			await facade.addDataset("courses3", courses, InsightDatasetKind.Courses);
+			try {
+				await facade.removeDataset("test");
+				expect.fail("Should have thrown error");
+			} catch(e) {
+				expect(e).to.be.instanceOf(NotFoundError);
+			}
+			try {
+				await facade.removeDataset("courses4");
+				expect.fail("Should have thrown error");
+			} catch(e) {
+				expect(e).to.be.instanceOf(NotFoundError);
+			}
+
+			const insightDatasets = await facade.listDatasets();
+			expect(insightDatasets).to.be.an.instanceOf(Array);
+			expect(insightDatasets).to.have.length(4);
+			const insightDatasetCourses = insightDatasets.find((dataset) => dataset.id === "courses");
+			expect(insightDatasetCourses).to.exist;
+			expect(insightDatasetCourses).to.deep.equal({
+				id: "courses",
+				kind: InsightDatasetKind.Courses,
+				numRows: 34
+			});
+		});
+
+		it("should throw error if id is invalid",  async function () {
+			try {
+				await facade.removeDataset("_courses");
+				expect.fail("Should have thrown error");
+			} catch(e) {
+				expect(e).to.be.instanceOf(InsightError);
+			}
+			try {
+				await facade.removeDataset("courses_");
+				expect.fail("Should have thrown error");
+			} catch(e) {
+				expect(e).to.be.instanceOf(InsightError);
+			}
+			try {
+				await facade.removeDataset("cour_ses");
+				expect.fail("Should have thrown error");
+			} catch(e) {
+				expect(e).to.be.instanceOf(InsightError);
+			}
+			try {
+				await facade.removeDataset("_");
+				expect.fail("Should have thrown error");
+			} catch(e) {
+				expect(e).to.be.instanceOf(InsightError);
+			}
+			try {
+				await facade.removeDataset("");
+				expect.fail("Should have thrown error");
+			} catch(e) {
+				expect(e).to.be.instanceOf(InsightError);
+			}
+			try {
+				await facade.removeDataset(" ");
+				expect.fail("Should have thrown error");
+			} catch(e) {
+				expect(e).to.be.instanceOf(InsightError);
+			}
+			try {
+				await facade.removeDataset("   ");
+				expect.fail("Should have thrown error");
+			} catch(e) {
+				expect(e).to.be.instanceOf(InsightError);
+			}
+
+			await facade.addDataset("courses", courses, InsightDatasetKind.Courses);
+			await facade.addDataset("courses1", courses, InsightDatasetKind.Courses);
+
+			try {
+				await facade.removeDataset("_courses");
+				expect.fail("Should have thrown error");
+			} catch(e) {
+				expect(e).to.be.instanceOf(InsightError);
+			}
+			try {
+				await facade.removeDataset("courses_");
+				expect.fail("Should have thrown error");
+			} catch(e) {
+				expect(e).to.be.instanceOf(InsightError);
+			}
+			try {
+				await facade.removeDataset("cour_ses");
+				expect.fail("Should have thrown error");
+			} catch(e) {
+				expect(e).to.be.instanceOf(InsightError);
+			}
+			try {
+				await facade.removeDataset("_");
+				expect.fail("Should have thrown error");
+			} catch(e) {
+				expect(e).to.be.instanceOf(InsightError);
+			}
+			try {
+				await facade.removeDataset("");
+				expect.fail("Should have thrown error");
+			} catch(e) {
+				expect(e).to.be.instanceOf(InsightError);
+			}
+			try {
+				await facade.removeDataset(" ");
+				expect.fail("Should have thrown error");
+			} catch(e) {
+				expect(e).to.be.instanceOf(InsightError);
+			}
+			try {
+				await facade.removeDataset("   ");
+				expect.fail("Should have thrown error");
+			} catch(e) {
+				expect(e).to.be.instanceOf(InsightError);
+			}
+		});
+
+		it("should fulfil with the id",  async function () {
+			await facade.addDataset("courses", courses, InsightDatasetKind.Courses);
+			let out = await facade.removeDataset("courses");
+			expect(out).to.be.equal("courses");
+
+			await facade.addDataset("courses1", courses, InsightDatasetKind.Courses);
+			await facade.addDataset("courses2", courses, InsightDatasetKind.Courses);
+			await facade.addDataset("courses3", courses, InsightDatasetKind.Courses);
+
+			out = await facade.removeDataset("courses2");
+			expect(out).to.be.equal("courses2");
+			out = await facade.removeDataset("courses1");
+			expect(out).to.be.equal("courses1");
+		});
+
+		it("should fail to query after removal", async function () {
+			await facade.addDataset("courses", courses, InsightDatasetKind.Courses);
+			await facade.removeDataset("courses");
+			try {
+				await facade.performQuery("" +
+					"{\n" +
+					"\t\"WHERE\": {\n" +
+					"\t\t\"IS\": {\n" +
+					"\t\t\t\"courses_title\": \"stoch processes\"\n" +
+					"\t\t}\n" +
+					"\t\t\n" +
+					"\t},\n" +
+					"\t\"OPTIONS\": {\n" +
+					"\t\t\"COLUMNS\": [\n" +
+					"\t\t\t\"courses_avg\"\n" +
+					"\t\t],\n" +
+					"\t\t\"ORDER\": \"courses_avg\"\n" +
+					"\t}\n" +
+					"}");
+				expect.fail("Should have thrown error");
+			} catch(e) {
+				expect(e).to.be.instanceOf(InsightError);
+			}
+		});
+	});
+
 	// describe("Perform Query", function () {
 	//
 	// 	let facade: IInsightFacade;
@@ -730,27 +730,27 @@ describe("InsightFacade", function () {
 	// 			expect(e).to.be.instanceOf(InsightError);
 	// 		}
 	// 	});
-	//
-	// 	testFolder<Input, Output, Error>(
-	// 		"Perform Query (Dynamic Tests)",
-	// 		(input: Input): Output => {
-	// 			return facade.performQuery(input);
-	// 		},
-	// 		"./test/resources/json",
-	// 		{
-	// 			errorValidator: (error): error is Error =>
-	// 				error === "InsightError" || error === "ResultTooLargeError",
-	// 			assertOnError: (expected, actual) => {
-	// 				if (expected === "InsightError") {
-	// 					expect(actual).to.be.instanceof(InsightError);
-	// 				} else if (expected === "ResultTooLargeError") {
-	// 					expect(actual).to.be.instanceof(ResultTooLargeError);
-	// 				} else {
-	// 					// should not happen
-	// 					expect.fail("UNEXPECTED ERROR");
-	// 				}
-	// 			}
-	// 		}
-	// 	);
+
+		// testFolder<Input, Output, Error>(
+		// 	"Perform Query (Dynamic Tests)",
+		// 	(input: Input): Output => {
+		// 		return facade.performQuery(input);
+		// 	},
+		// 	"./test/resources/json",
+		// 	{
+		// 		errorValidator: (error): error is Error =>
+		// 			error === "InsightError" || error === "ResultTooLargeError",
+		// 		assertOnError: (expected, actual) => {
+		// 			if (expected === "InsightError") {
+		// 				expect(actual).to.be.instanceof(InsightError);
+		// 			} else if (expected === "ResultTooLargeError") {
+		// 				expect(actual).to.be.instanceof(ResultTooLargeError);
+		// 			} else {
+		// 				// should not happen
+		// 				expect.fail("UNEXPECTED ERROR");
+		// 			}
+		// 		}
+		// 	}
+		// );
 	// });
 });
