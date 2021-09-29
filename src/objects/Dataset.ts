@@ -2,7 +2,7 @@ import {Section} from "./Section";
 import {Course} from "./Course";
 import {InsightDatasetKind} from "../controller/IInsightFacade";
 
-interface SerializableData {
+export interface DatasetData {
 	id: string;
 	kind: InsightDatasetKind;
 	numRows: number;
@@ -52,7 +52,7 @@ export class Dataset {
 
 	public static loadFromJSON(file: string) {
 		const jsonObj = JSON.parse(file);
-		let data: SerializableData = jsonObj as SerializableData;
+		let data: DatasetData = jsonObj as DatasetData;
 		return new Dataset(data.id, data.kind, data.numRows, data.sections);
 	}
 }

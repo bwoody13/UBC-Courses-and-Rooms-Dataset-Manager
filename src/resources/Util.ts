@@ -1,13 +1,12 @@
 import * as fs from "fs-extra";
 import {InsightError} from "../controller/IInsightFacade";
+import {DATASETS_DIRECTORY} from "../controller/InsightFacade";
 
-const DATASETS_DIRECTORY = "data/";
-
-export function validID(id: string): boolean {
+export function invalidID(id: string): boolean {
 	return (id.includes("_") || !id.trim());
 }
 
-export async function directoryExists(id: string): Promise<boolean> {
+export async function datasetExists(id: string): Promise<boolean> {
 	const datasetPath = DATASETS_DIRECTORY + id + ".json";
 	if(await fs.pathExists(datasetPath)) {
 		return Promise.resolve(true);

@@ -189,7 +189,7 @@ describe("InsightFacade", function () {
 				{
 					id: "courses",
 					kind: InsightDatasetKind.Courses,
-					numRows: 64612,
+					numRows: 34,
 				}
 			];
 			return expect(insightDatasets).to.have.deep.members(expectedDatasets);
@@ -369,7 +369,7 @@ describe("InsightFacade", function () {
 			expect(insightDatasets).to.deep.equal([{
 				id: "courses",
 				kind: InsightDatasetKind.Courses,
-				numRows: 64612,
+				numRows: 34,
 			}]);
 		});
 
@@ -386,12 +386,12 @@ describe("InsightFacade", function () {
 						{
 							id: "courses",
 							kind: InsightDatasetKind.Courses,
-							numRows: 64612,
+							numRows: 34,
 						},
 						{
 							id: "courses-2",
 							kind: InsightDatasetKind.Courses,
-							numRows: 64612,
+							numRows: 34,
 						}
 					];
 					expect(insightDatasets).to.be.an.instanceof(Array);
@@ -401,7 +401,7 @@ describe("InsightFacade", function () {
 					expect(insightDatasetCourses).to.deep.equal({
 						id: "courses",
 						kind: InsightDatasetKind.Courses,
-						numRows: 64612,
+						numRows: 34,
 					});
 					expect(insightDatasets).to.have.deep.members(expectedDatasets);
 				});
@@ -505,7 +505,7 @@ describe("InsightFacade", function () {
 			return expect(insightDatasets).to.deep.equal([{
 				id: "courses",
 				kind: InsightDatasetKind.Courses,
-				numRows: 64612,
+				numRows: 34,
 			}]);
 		});
 

@@ -1,12 +1,12 @@
 import {IInsightFacade, InsightDataset, InsightDatasetKind, InsightError, NotFoundError} from "./IInsightFacade";
 import * as fs from "fs-extra";
-import {Dataset} from "../objects/Dataset";
+import {Dataset, DatasetData} from "../objects/Dataset";
 import {Course} from "../objects/Course";
 import JSZip from "jszip";
-import {datasetExistsReject, directoryExists, invalidIDReject, validID} from "../resources/Util";
+import {datasetExistsReject, datasetExists, invalidIDReject, invalidID} from "../resources/Util";
 
 const COURSES_DIR_NAME = "courses/";
-const DATASETS_DIRECTORY = "data/";
+export const DATASETS_DIRECTORY = "data/";
 
 /**
  * This is the main programmatic entry point for the project.
@@ -18,7 +18,7 @@ export default class InsightFacade implements IInsightFacade {
 
 	public async addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
 		// reject if ID is invalid
-		if (validID(id)) {
+		if (invalidID(id)) {
 			return invalidIDReject();
 		}
 		// reject if kind is InsightDatasetKind Rooms
@@ -27,7 +27,7 @@ export default class InsightFacade implements IInsightFacade {
 			return Promise.reject(new InsightError("Invalid InsightDatasetKind: Rooms"));
 		}
 		// ensure there are no other datasets with the same id
-		if (await directoryExists) {
+		if (await datasetExists(id)) {
 			return datasetExistsReject();
 		}
 		// load content directory
@@ -76,7 +76,6 @@ export default class InsightFacade implements IInsightFacade {
 			}
 		}
 		// reject if there are no valid course sections in the dataset
-		console.log(dataset.numRows);
 		if (!dataset.numRows) {
 			return Promise.reject(new InsightError("No valid course sections."));
 		}
@@ -93,11 +92,11 @@ export default class InsightFacade implements IInsightFacade {
 
 	public async removeDataset(id: string): Promise<string> {
 		// check for a valid id
-		if(validID(id)) {
+		if(invalidID(id)) {
 			return invalidIDReject();
 		}
-		// check if in dataset
-		if(await directoryExists(id)) {
+		// check if dataset exists
+		if(await datasetExists(id)) {
 			// remove from disk
 			fs.removeSync(DATASETS_DIRECTORY + id + ".json");
 			// TODO: remove from memory cache?
@@ -111,7 +110,21 @@ export default class InsightFacade implements IInsightFacade {
 		return Promise.reject(new InsightError("Not Implemented"));
 	}
 
-	public listDatasets(): Promise<InsightDataset[]> {
-		return Promise.reject(new InsightError("Not Implemented"));
+	public async listDatasets(): Promise<InsightDataset[]> {
+		let datasetList: InsightDataset[] = [];
+		try {
+			const datasetFileNames = await fs.readdir(DATASETS_DIRECTORY);
+			for(const datasetFileName of datasetFileNames) {
+				const dataset = await fs.readJSON(DATASETS_DIRECTORY + datasetFileName) as unknown as DatasetData;
+				datasetList.push({
+					id: dataset.id,
+					kind: dataset.kind,
+					numRows: dataset.numRows
+				});
+			}
+		} catch(e) {
+			// if reading the dataset directory fails just return an empty dataset list
+		}
+		return Promise.resolve(datasetList);
 	}
 }
