@@ -3,6 +3,7 @@ import * as fs from "fs-extra";
 import {Dataset} from "../objects/Dataset";
 import {Course} from "../objects/Course";
 import JSZip from "jszip";
+import {datasetExistsReject, directoryExists, invalidIDReject, validID} from "../resources/Util";
 
 const COURSES_DIR_NAME = "courses/";
 const DATASETS_DIRECTORY = "data/";
@@ -17,9 +18,8 @@ export default class InsightFacade implements IInsightFacade {
 
 	public async addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
 		// reject if ID is invalid
-		if (id.includes("_") || !id.trim()) {
-			return Promise.reject(new InsightError("ID is invalid: An id is invalid if it contains an underscore, " +
-				"or is only whitespace characters."));
+		if (validID(id)) {
+			return invalidIDReject();
 		}
 		// reject if kind is InsightDatasetKind Rooms
 		// TODO: Remove this code in future checkpoints
@@ -27,9 +27,8 @@ export default class InsightFacade implements IInsightFacade {
 			return Promise.reject(new InsightError("Invalid InsightDatasetKind: Rooms"));
 		}
 		// ensure there are no other datasets with the same id
-		const datasetPath = DATASETS_DIRECTORY + id + ".json";
-		if (await fs.pathExists(datasetPath)) {
-			return Promise.reject(new InsightError("A dataset with that ID already exists."));
+		if (await directoryExists) {
+			return datasetExistsReject();
 		}
 		// load content directory
 		let dir;
@@ -83,7 +82,7 @@ export default class InsightFacade implements IInsightFacade {
 		}
 		// save the dataset to disk
 		await fs.ensureDir(DATASETS_DIRECTORY);
-		await fs.writeJSON(datasetPath, dataset.toJSONObject());
+		await fs.writeJSON(DATASETS_DIRECTORY + id + ".json", dataset.toJSONObject());
 		// return an array of strings of the names of all added datasets
 		const datasetFileNames = await fs.readdir(DATASETS_DIRECTORY);
 		const datasetIDs = datasetFileNames.map(function(fileName) {
@@ -92,8 +91,20 @@ export default class InsightFacade implements IInsightFacade {
 		return Promise.resolve(datasetIDs);
 	}
 
-	public removeDataset(id: string): Promise<string> {
-		return Promise.reject(new InsightError("Not Implemented"));
+	public async removeDataset(id: string): Promise<string> {
+		// check for a valid id
+		if(validID(id)) {
+			return invalidIDReject();
+		}
+		// check if in dataset
+		if(await directoryExists(id)) {
+			// remove from disk
+			fs.removeSync(DATASETS_DIRECTORY + id + ".json");
+			// TODO: remove from memory cache?
+			// return id upon successful remove
+			return Promise.resolve(id);
+		}
+		return Promise.reject(new NotFoundError("Dataset with id=" + id + " does not exist."));
 	}
 
 	public performQuery(query: any): Promise<any[]> {
