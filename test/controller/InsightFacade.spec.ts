@@ -714,9 +714,18 @@ describe("InsightFacade", function () {
 					"          ]\n" +
 					"        },\n" +
 					"        {\n" +
-					"          \"EQ\": {\n" +
-					"            \"courses_avg\": 95\n" +
-					"          }\n" +
+					"\t\t\t\"AND\": [\n" +
+					"\t\t\t\t{\n" +
+					"\t\t\t\t\t\"GT\": {\n" +
+					"\t\t\t\t\t\t\"courses_avg\": 90\n" +
+					"\t\t\t\t\t}\n" +
+					"\t\t\t\t},\n" +
+					"\t\t\t\t{\n" +
+					"\t\t\t\t\t\"IS\": {\n" +
+					"\t\t\t\t\t\t\"courses_dept\": \"adhe\"\n" +
+					"\t\t\t\t\t}\n" +
+					"\t\t\t\t}\n" +
+					"\t\t\t]\n" +
 					"        }\n" +
 					"      ]\n" +
 					"    },\n" +
@@ -731,7 +740,7 @@ describe("InsightFacade", function () {
 					"  }");
 				// expect.fail("Should have thrown error");
 			} catch(e) {
-				// expect(e).to.be.instanceOf(InsightError);
+				console.log(e);
 			}
 		});
 	});
