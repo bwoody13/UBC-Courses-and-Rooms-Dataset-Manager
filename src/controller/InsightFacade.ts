@@ -4,6 +4,8 @@ import {Dataset, DatasetData} from "../objects/Dataset";
 import {Course} from "../objects/Course";
 import JSZip from "jszip";
 import {datasetExistsReject, datasetExists, invalidIDReject, invalidID} from "../resources/Util";
+import {Query} from "../objects/query_structure/Query";
+import {parseQuery} from "../resources/QueryParser";
 
 const COURSES_DIR_NAME = "courses/";
 export const DATASETS_DIRECTORY = "data/";
@@ -106,7 +108,14 @@ export default class InsightFacade implements IInsightFacade {
 		return Promise.reject(new NotFoundError("Dataset with id=" + id + " does not exist."));
 	}
 
-	public performQuery(query: any): Promise<any[]> {
+	public async performQuery(query: any): Promise<any[]> {
+		try {
+			const queryObj: Query = parseQuery(query);
+		} catch(e) {
+			return Promise.reject(new InsightError("Error parsing Query: " + e));
+		}
+
+
 		return Promise.reject(new InsightError("Not Implemented"));
 	}
 
@@ -115,7 +124,7 @@ export default class InsightFacade implements IInsightFacade {
 		try {
 			const datasetFileNames = await fs.readdir(DATASETS_DIRECTORY);
 			for(const datasetFileName of datasetFileNames) {
-				const dataset = await fs.readJSON(DATASETS_DIRECTORY + datasetFileName) as unknown as DatasetData;
+				const dataset = await fs.readJSON(DATASETS_DIRECTORY + datasetFileName);
 				datasetList.push({
 					id: dataset.id,
 					kind: dataset.kind,
