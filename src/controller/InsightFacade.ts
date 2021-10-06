@@ -111,6 +111,8 @@ export default class InsightFacade implements IInsightFacade {
 	public async performQuery(query: any): Promise<any[]> {
 		try {
 			const queryObj: Query = parseQuery(query);
+			const dataset = await fs.readJSON(DATASETS_DIRECTORY + Query.ID + ".json");
+			let filteredResult = queryObj.performFilter(dataset);
 		} catch(e) {
 			return Promise.reject(new InsightError("Error parsing Query: " + e));
 		}

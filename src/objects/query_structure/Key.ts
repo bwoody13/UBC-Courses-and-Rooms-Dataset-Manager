@@ -1,5 +1,5 @@
 export enum Key {
-	NULL,
+	NULL = "",
 	Average = "avg",
 	Pass = "pass" ,
 	Fail = "fail" ,

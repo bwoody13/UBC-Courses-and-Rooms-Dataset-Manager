@@ -13,13 +13,13 @@ export class Dataset {
 	private readonly _id: string;
 	private readonly _kind: InsightDatasetKind;
 	private _numRows: number;
-	private readonly sections: Section[];
+	private readonly _sections: Section[];
 
 	constructor(id: string, kind: InsightDatasetKind, numRows?: number, sections?: Section[]) {
 		this._id = id;
 		this._kind = kind;
 		this._numRows = numRows || 0;
-		this.sections = sections || [];
+		this._sections = sections || [];
 	}
 
 	public get id(): string {
@@ -32,6 +32,10 @@ export class Dataset {
 
 	public get numRows(): number {
 		return this._numRows;
+	}
+
+	public get sections(): Section[] {
+		return this._sections;
 	}
 
 	public addCourse(course: Course) {
@@ -55,4 +59,5 @@ export class Dataset {
 		let data: DatasetData = jsonObj as DatasetData;
 		return new Dataset(data.id, data.kind, data.numRows, data.sections);
 	}
+
 }

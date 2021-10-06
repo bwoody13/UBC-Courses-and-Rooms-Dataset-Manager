@@ -1,19 +1,23 @@
 import {Filter} from "./Filter";
 import {Key} from "./Key";
+import {Dataset} from "../Dataset";
+import {Section} from "../Section";
+import {keyToSectionVal} from "../../resources/Util";
 
 export class Query {
-	private filters: Filter[];
-	private keys: Key[];
+	public static ID: string;
+
+	private filter?: Filter;
+	private readonly keys: Key[];
 	private order: Key;
 
 	constructor() {
-		this.filters = [];
 		this.keys = [];
 		this.order = Key.NULL;
 	}
 
-	public addFilter(filter: Filter) {
-		this.filters.push(filter);
+	public setFilter(filter: Filter) {
+		this.filter = filter;
 	}
 
 	public addKey(key: Key) {
@@ -23,4 +27,41 @@ export class Query {
 	public setOrder(order: Key) {
 		this.order = order;
 	}
+
+	public performFilter(dataset: Dataset): Section[] {
+		if(!this.filter) {
+			return [];
+		}
+		let filteredSections = [];
+		for(const section of dataset.sections) {
+			if(this.filter.applyFilter(section)) {
+				filteredSections.push(section);
+			}
+		}
+		return filteredSections;
+	}
+
+// {
+// 	"courses_dept": "adhe",
+// 	"courses_id": "329",
+// 	"courses_avg": 90.02
+// },
+	// interface Output {
+	// [key: string]: any
+	// }
+	//
+	public getOutput(sections: Section[]): any[] {
+		let out = [];
+		for(const section of sections) {
+			let sectionObj: {[k: string]: any} = {};
+			for(const key in this.keys) {
+				const queryKey = Query.ID + "_" + key;
+				const queryVal = keyToSectionVal(key, section);
+				sectionObj[queryKey] = queryVal;
+			}
+			out.push(sectionObj);
+		}
+		return out;
+	}
+
 }

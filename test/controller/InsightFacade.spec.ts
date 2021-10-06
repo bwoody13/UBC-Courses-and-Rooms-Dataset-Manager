@@ -739,12 +739,43 @@ describe("InsightFacade", function () {
 					"    }\n" +
 					"  }");
 				// expect.fail("Should have thrown error");
-			} catch(e) {
+			} catch (e) {
+				console.log(e);
+			}
+		});
+
+		it("test2", async function () {
+			try {
+				await facade.performQuery("{\n" +
+					"    \"WHERE\": {\n" +
+					"      \"OR\": [\n" +
+					"            {\n" +
+					"              \"GT\": {\n" +
+					"                \"courses_avg\": 90\n" +
+					"              }\n" +
+					"            },\n" +
+					"            {\n" +
+					"              \"IS\": {\n" +
+					"                \"courses_dept\": \"adhe\"\n" +
+					"              }\n" +
+					"            }\n" +
+					"          ]\n" +
+					"        },\n" +
+					"    \"OPTIONS\": {\n" +
+					"      \"COLUMNS\": [\n" +
+					"        \"courses_dept\",\n" +
+					"        \"courses_id\",\n" +
+					"        \"courses_avg\"\n" +
+					"      ],\n" +
+					"      \"ORDER\": \"courses_avg\"\n" +
+					"    }\n" +
+					"  }");
+				// expect.fail("Should have thrown error");
+			} catch (e) {
 				console.log(e);
 			}
 		});
 	});
-
 	// describe("Perform Query", function () {
 	//
 	// 	let facade: IInsightFacade;

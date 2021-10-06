@@ -1,25 +1,17 @@
 import {Query} from "../objects/query_structure/Query";
 import {InsightError} from "../controller/IInsightFacade";
+import {
+	makeFilter
+} from "../objects/query_structure/Filter";
+import {extractKey} from "./Util";
 
 export function parseQuery(queryJSON: string): Query {
+	Query.ID = "";
 	const queryObj = JSON.parse(queryJSON);
 	const query = new Query();
-	if (queryObj.WHERE) {
-		for(const key of Object.keys(queryObj.WHERE)) {
-			console.log("QUERY TESTING: " + key);
-			try {
-				parseFilter(queryObj.WHERE[key], query);
-			} catch(e) {
-				throw new InsightError("Error parsing Filter: " + key + ": " + e);
-			}
-		}
-	} else {
-		throw new InsightError("Missing 'WHERE' clause in Query.");
-	}
-
 	if (queryObj.OPTIONS) {
 		if(queryObj.OPTIONS.COLUMNS) {
-			for(const key of Object.keys(queryObj.OPTIONS.COLUMNS)) {
+			for(const key of queryObj.OPTIONS.COLUMNS) {
 				console.log("QUERY TESTING: " + key);
 				try {
 					parseKey(queryObj.OPTIONS.COLUMNS[key], query);
@@ -40,23 +32,40 @@ export function parseQuery(queryJSON: string): Query {
 	} else {
 		throw new InsightError("Missing 'OPTIONS' clause in Query.");
 	}
+
+	if (queryObj.WHERE) {
+		for(const key of Object.keys(queryObj.WHERE)) {
+			console.log("QUERY TESTING: " + key);
+			try {
+				parseFilter(queryObj.WHERE, query);
+			} catch(e) {
+				throw new InsightError("Error parsing Filter: " + key + ": " + e);
+			}
+		}
+	} else {
+		throw new InsightError("Missing 'WHERE' clause in Query.");
+	}
 	return query;
 }
 
 function parseFilter(filterObj: any, query: Query) {
-	for(const key of Object.keys(filterObj)) {
-		switch (key) {
-			// TODO: implement
-		default:
-			throw new InsightError("Invalid Filter: " + key);
-		}
+	query.setFilter(makeFilter(filterObj));
+}
+
+function parseKey(keyStr: string, query: Query) {
+	try {
+		const key = extractKey(keyStr);
+		query.addKey(key);
+	} catch(e) {
+		throw new InsightError("Error parsing key: " + e);
 	}
 }
 
-function parseKey(keyObj: any, query: Query) {
-	// TODO: implement
-}
-
-function parseOrder(orderObj: any, query: Query) {
-	// TODO: implement
+function parseOrder(orderKey: string, query: Query) {
+	try {
+		const key = extractKey(orderKey);
+		query.setOrder(key);
+	} catch (e) {
+		throw new InsightError("Error parsing order key: " + e);
+	}
 }
