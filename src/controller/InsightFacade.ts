@@ -6,6 +6,7 @@ import JSZip from "jszip";
 import {datasetExistsReject, datasetExists, invalidIDReject, invalidID} from "../resources/Util";
 import {Query} from "../objects/query_structure/Query";
 import {parseQuery} from "../resources/QueryParser";
+import {Section} from "../objects/Section";
 
 const COURSES_DIR_NAME = "courses/";
 export const DATASETS_DIRECTORY = "data/";
@@ -109,16 +110,32 @@ export default class InsightFacade implements IInsightFacade {
 	}
 
 	public async performQuery(query: any): Promise<any[]> {
+		let queryObj: Query;
 		try {
-			const queryObj: Query = parseQuery(query);
-			const dataset = await fs.readJSON(DATASETS_DIRECTORY + Query.ID + ".json");
-			let filteredResult = queryObj.performFilter(dataset);
+			queryObj = parseQuery(query);
 		} catch(e) {
 			return Promise.reject(new InsightError("Error parsing Query: " + e));
 		}
+		let dataset: Dataset;
+		try {
+			dataset = await fs.readJSON(DATASETS_DIRECTORY + Query.ID + ".json");
+		} catch(e) {
+			return Promise.reject(new InsightError("Error reading dataset: " + e));
+		}
+		let filteredSections: Section[];
+		try {
+			filteredSections = queryObj.performFilter(dataset);
+		} catch(e) {
+			return Promise.reject(new InsightError("Error filtering sections: " + e));
+		}
+		let out: any[];
+		try {
+			out = queryObj.getOutput(filteredSections);
+		} catch(e) {
+			return Promise.reject(new InsightError("Error getting output: " + e));
+		}
 
-
-		return Promise.reject(new InsightError("Not Implemented"));
+		return Promise.resolve(out);
 	}
 
 	public async listDatasets(): Promise<InsightDataset[]> {

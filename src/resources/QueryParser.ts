@@ -12,9 +12,8 @@ export function parseQuery(queryJSON: string): Query {
 	if (queryObj.OPTIONS) {
 		if(queryObj.OPTIONS.COLUMNS) {
 			for(const key of queryObj.OPTIONS.COLUMNS) {
-				console.log("QUERY TESTING: " + key);
 				try {
-					parseKey(queryObj.OPTIONS.COLUMNS[key], query);
+					parseKey(key, query);
 				} catch(e) {
 					throw new InsightError("Error parsing Key: " + key + ": " + e);
 				}
@@ -35,7 +34,6 @@ export function parseQuery(queryJSON: string): Query {
 
 	if (queryObj.WHERE) {
 		for(const key of Object.keys(queryObj.WHERE)) {
-			console.log("QUERY TESTING: " + key);
 			try {
 				parseFilter(queryObj.WHERE, query);
 			} catch(e) {

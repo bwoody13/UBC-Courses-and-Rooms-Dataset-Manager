@@ -81,7 +81,7 @@ export function stringToKey(str: string): Key {
 	return key;
 }
 
-export function keyToSectionVal(key: Key, section: Section): any {
+export function keyToSectionVal(key: string, section: Section): any {
 	switch(key) {
 	case Key.Average:
 		return section.Avg;

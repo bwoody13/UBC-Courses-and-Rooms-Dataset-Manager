@@ -53,11 +53,4 @@ export class Dataset {
 			sections: this.sections
 		};
 	}
-
-	public static loadFromJSON(file: string) {
-		const jsonObj = JSON.parse(file);
-		let data: DatasetData = jsonObj as DatasetData;
-		return new Dataset(data.id, data.kind, data.numRows, data.sections);
-	}
-
 }

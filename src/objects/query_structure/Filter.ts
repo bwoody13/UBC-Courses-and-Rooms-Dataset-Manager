@@ -18,7 +18,7 @@ export class LogicFilter extends Filter {
 	constructor(filters: any[]) {
 		super();
 		this.components = [];
-		console.log("QUERY TESTING: Logic Filter: Filters: " + filters);
+		// console.log("QUERY TESTING: Logic Filter: Filters: " + filters);
 		for(const filterObj of filters) {
 			this.addComponent(makeFilter(filterObj));
 		}
@@ -38,7 +38,7 @@ export class NotFilter extends Filter {
 	constructor(filterObj: any) {
 		super();
 		this.type = "NOT";
-		console.log(filterObj.keys()[0]);
+		// console.log(filterObj.keys()[0]);
 		this.component = (makeFilter(filterObj));
 	}
 
@@ -121,7 +121,7 @@ export class IsFilter extends SFilter {
 export function makeFilter(filterObj: any): Filter {
 	const key = Object.keys(filterObj)[0];
 	let filter: Filter;
-	console.log("QUERY TESTING: Filter: " + key);
+	// console.log("QUERY TESTING: Filter: " + key);
 	switch (key) {
 	case "OR":
 		filter = new OrFilter(filterObj.OR);

@@ -684,98 +684,6 @@ describe("InsightFacade", function () {
 	// 	// });
 	// });
 
-	describe("Perform Query", function () {
-
-		let facade: IInsightFacade;
-
-		before(async function () {
-			clearDisk();
-			facade = new InsightFacade();
-			await facade.addDataset("courses-small", courses, InsightDatasetKind.Courses);
-		});
-
-		it("test", async function () {
-			try {
-				await facade.performQuery("{\n" +
-					"    \"WHERE\": {\n" +
-					"      \"OR\": [\n" +
-					"        {\n" +
-					"          \"AND\": [\n" +
-					"            {\n" +
-					"              \"GT\": {\n" +
-					"                \"courses_avg\": 90\n" +
-					"              }\n" +
-					"            },\n" +
-					"            {\n" +
-					"              \"IS\": {\n" +
-					"                \"courses_dept\": \"adhe\"\n" +
-					"              }\n" +
-					"            }\n" +
-					"          ]\n" +
-					"        },\n" +
-					"        {\n" +
-					"\t\t\t\"AND\": [\n" +
-					"\t\t\t\t{\n" +
-					"\t\t\t\t\t\"GT\": {\n" +
-					"\t\t\t\t\t\t\"courses_avg\": 90\n" +
-					"\t\t\t\t\t}\n" +
-					"\t\t\t\t},\n" +
-					"\t\t\t\t{\n" +
-					"\t\t\t\t\t\"IS\": {\n" +
-					"\t\t\t\t\t\t\"courses_dept\": \"adhe\"\n" +
-					"\t\t\t\t\t}\n" +
-					"\t\t\t\t}\n" +
-					"\t\t\t]\n" +
-					"        }\n" +
-					"      ]\n" +
-					"    },\n" +
-					"    \"OPTIONS\": {\n" +
-					"      \"COLUMNS\": [\n" +
-					"        \"courses_dept\",\n" +
-					"        \"courses_id\",\n" +
-					"        \"courses_avg\"\n" +
-					"      ],\n" +
-					"      \"ORDER\": \"courses_avg\"\n" +
-					"    }\n" +
-					"  }");
-				// expect.fail("Should have thrown error");
-			} catch (e) {
-				console.log(e);
-			}
-		});
-
-		it("test2", async function () {
-			try {
-				await facade.performQuery("{\n" +
-					"    \"WHERE\": {\n" +
-					"      \"OR\": [\n" +
-					"            {\n" +
-					"              \"GT\": {\n" +
-					"                \"courses_avg\": 90\n" +
-					"              }\n" +
-					"            },\n" +
-					"            {\n" +
-					"              \"IS\": {\n" +
-					"                \"courses_dept\": \"adhe\"\n" +
-					"              }\n" +
-					"            }\n" +
-					"          ]\n" +
-					"        },\n" +
-					"    \"OPTIONS\": {\n" +
-					"      \"COLUMNS\": [\n" +
-					"        \"courses_dept\",\n" +
-					"        \"courses_id\",\n" +
-					"        \"courses_avg\"\n" +
-					"      ],\n" +
-					"      \"ORDER\": \"courses_avg\"\n" +
-					"    }\n" +
-					"  }");
-				// expect.fail("Should have thrown error");
-			} catch (e) {
-				console.log(e);
-			}
-		});
-	});
 	// describe("Perform Query", function () {
 	//
 	// 	let facade: IInsightFacade;
@@ -783,66 +691,158 @@ describe("InsightFacade", function () {
 	// 	before(async function () {
 	// 		clearDisk();
 	// 		facade = new InsightFacade();
-	// 		await facade.addDataset("courses", coursesFull, InsightDatasetKind.Courses);
-	// 		await facade.addDataset("courses-small", courses, InsightDatasetKind.Courses);
-	// 		await facade.addDataset("class", getContentFromArchives("oneclass.zip"), InsightDatasetKind.Courses);
+	// 		await facade.addDataset("courses", courses, InsightDatasetKind.Courses);
 	// 	});
 	//
-	// 	it("should fail to query invalid json", async function () {
+	// 	it("test", async function () {
 	// 		try {
-	// 			await facade.performQuery("" +
-	// 				"{\n" +
-	// 				"\t\"WHERE\": {\n" +
-	// 				"\t\t\"IS\": {\n" +
-	// 				"\t\t\t\"courses_title\": \"stoch processes\"\n" +
-	// 				"\t\t}\n" +
-	// 				"\t\t\n" +
-	// 				"\t},\n" +
-	// 				"\t\"OPTIONS\": {\n" +
-	// 				"\t\t\"COLUMNS\": [\n" +
-	// 				"\t\t\t\"courses_avg\"\n" +
-	// 				"\t\t],\n" +
-	// 				"\t\t\"ORDER\": \"courses_avg\"\n" +
-	// 				"\t}\n" +
-	// 				"");
-	// 			expect.fail("Should have thrown error");
-	// 		} catch(e) {
-	// 			expect(e).to.be.instanceOf(InsightError);
-	// 		}
-	// 		try {
-	// 			await facade.performQuery("Invalid Json");
-	// 			expect.fail("Should have thrown error");
-	// 		} catch(e) {
-	// 			expect(e).to.be.instanceOf(InsightError);
-	// 		}
-	// 		try {
-	// 			await facade.performQuery("");
-	// 			expect.fail("Should have thrown error");
-	// 		} catch(e) {
-	// 			expect(e).to.be.instanceOf(InsightError);
+	// 			await facade.performQuery("{\n" +
+	// 				"    \"WHERE\": {\n" +
+	// 				"      \"OR\": [\n" +
+	// 				"        {\n" +
+	// 				"          \"AND\": [\n" +
+	// 				"            {\n" +
+	// 				"              \"GT\": {\n" +
+	// 				"                \"courses_avg\": 90\n" +
+	// 				"              }\n" +
+	// 				"            },\n" +
+	// 				"            {\n" +
+	// 				"              \"IS\": {\n" +
+	// 				"                \"courses_dept\": \"adhe\"\n" +
+	// 				"              }\n" +
+	// 				"            }\n" +
+	// 				"          ]\n" +
+	// 				"        },\n" +
+	// 				"        {\n" +
+	// 				"\t\t\t\"AND\": [\n" +
+	// 				"\t\t\t\t{\n" +
+	// 				"\t\t\t\t\t\"GT\": {\n" +
+	// 				"\t\t\t\t\t\t\"courses_avg\": 90\n" +
+	// 				"\t\t\t\t\t}\n" +
+	// 				"\t\t\t\t},\n" +
+	// 				"\t\t\t\t{\n" +
+	// 				"\t\t\t\t\t\"IS\": {\n" +
+	// 				"\t\t\t\t\t\t\"courses_dept\": \"adhe\"\n" +
+	// 				"\t\t\t\t\t}\n" +
+	// 				"\t\t\t\t}\n" +
+	// 				"\t\t\t]\n" +
+	// 				"        }\n" +
+	// 				"      ]\n" +
+	// 				"    },\n" +
+	// 				"    \"OPTIONS\": {\n" +
+	// 				"      \"COLUMNS\": [\n" +
+	// 				"        \"courses_dept\",\n" +
+	// 				"        \"courses_id\",\n" +
+	// 				"        \"courses_avg\"\n" +
+	// 				"      ],\n" +
+	// 				"      \"ORDER\": \"courses_avg\"\n" +
+	// 				"    }\n" +
+	// 				"  }");
+	// 			// expect.fail("Should have thrown error");
+	// 		} catch (e) {
+	// 			console.log(e);
 	// 		}
 	// 	});
-
-		// testFolder<Input, Output, Error>(
-		// 	"Perform Query (Dynamic Tests)",
-		// 	(input: Input): Output => {
-		// 		return facade.performQuery(input);
-		// 	},
-		// 	"./test/resources/json",
-		// 	{
-		// 		errorValidator: (error): error is Error =>
-		// 			error === "InsightError" || error === "ResultTooLargeError",
-		// 		assertOnError: (expected, actual) => {
-		// 			if (expected === "InsightError") {
-		// 				expect(actual).to.be.instanceof(InsightError);
-		// 			} else if (expected === "ResultTooLargeError") {
-		// 				expect(actual).to.be.instanceof(ResultTooLargeError);
-		// 			} else {
-		// 				// should not happen
-		// 				expect.fail("UNEXPECTED ERROR");
-		// 			}
-		// 		}
-		// 	}
-		// );
+	//
+	// 	it("test2", async function () {
+	// 		try {
+	// 			await facade.performQuery("{\n" +
+	// 				"    \"WHERE\": {\n" +
+	// 				"      \"OR\": [\n" +
+	// 				"            {\n" +
+	// 				"              \"GT\": {\n" +
+	// 				"                \"courses_avg\": 90\n" +
+	// 				"              }\n" +
+	// 				"            },\n" +
+	// 				"            {\n" +
+	// 				"              \"IS\": {\n" +
+	// 				"                \"courses_dept\": \"adhe\"\n" +
+	// 				"              }\n" +
+	// 				"            }\n" +
+	// 				"          ]\n" +
+	// 				"        },\n" +
+	// 				"    \"OPTIONS\": {\n" +
+	// 				"      \"COLUMNS\": [\n" +
+	// 				"        \"courses_dept\",\n" +
+	// 				"        \"courses_id\",\n" +
+	// 				"        \"courses_avg\"\n" +
+	// 				"      ],\n" +
+	// 				"      \"ORDER\": \"courses_avg\"\n" +
+	// 				"    }\n" +
+	// 				"  }");
+	// 			// expect.fail("Should have thrown error");
+	// 		} catch (e) {
+	// 			console.log(e);
+	// 		}
+	// 	});
 	// });
+	describe("Perform Query", function () {
+
+		let facade: IInsightFacade;
+
+		before(async function () {
+			clearDisk();
+			facade = new InsightFacade();
+			await facade.addDataset("courses", coursesFull, InsightDatasetKind.Courses);
+			await facade.addDataset("courses-small", courses, InsightDatasetKind.Courses);
+			await facade.addDataset("class", getContentFromArchives("oneclass.zip"), InsightDatasetKind.Courses);
+		});
+
+		it("should fail to query invalid json", async function () {
+			try {
+				await facade.performQuery("" +
+					"{\n" +
+					"\t\"WHERE\": {\n" +
+					"\t\t\"IS\": {\n" +
+					"\t\t\t\"courses_title\": \"stoch processes\"\n" +
+					"\t\t}\n" +
+					"\t\t\n" +
+					"\t},\n" +
+					"\t\"OPTIONS\": {\n" +
+					"\t\t\"COLUMNS\": [\n" +
+					"\t\t\t\"courses_avg\"\n" +
+					"\t\t],\n" +
+					"\t\t\"ORDER\": \"courses_avg\"\n" +
+					"\t}\n" +
+					"");
+				expect.fail("Should have thrown error");
+			} catch(e) {
+				expect(e).to.be.instanceOf(InsightError);
+			}
+			try {
+				await facade.performQuery("Invalid Json");
+				expect.fail("Should have thrown error");
+			} catch(e) {
+				expect(e).to.be.instanceOf(InsightError);
+			}
+			try {
+				await facade.performQuery("");
+				expect.fail("Should have thrown error");
+			} catch(e) {
+				expect(e).to.be.instanceOf(InsightError);
+			}
+		});
+
+		testFolder<Input, Output, Error>(
+			"Perform Query (Dynamic Tests)",
+			(input: Input): Output => {
+				return facade.performQuery(input);
+			},
+			"./test/resources/json",
+			{
+				errorValidator: (error): error is Error =>
+					error === "InsightError" || error === "ResultTooLargeError",
+				assertOnError: (expected, actual) => {
+					if (expected === "InsightError") {
+						expect(actual).to.be.instanceof(InsightError);
+					} else if (expected === "ResultTooLargeError") {
+						expect(actual).to.be.instanceof(ResultTooLargeError);
+					} else {
+						// should not happen
+						expect.fail("UNEXPECTED ERROR");
+					}
+				}
+			}
+		);
+	});
 });
