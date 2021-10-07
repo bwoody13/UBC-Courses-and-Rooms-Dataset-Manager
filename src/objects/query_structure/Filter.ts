@@ -1,7 +1,7 @@
 import {Dataset} from "../Dataset";
 import {InsightError} from "../../controller/IInsightFacade";
 import {Key} from "./Key";
-import {extractKey} from "../../resources/Util";
+import {extractKey, keyToSectionVal} from "../../resources/Util";
 import {Section} from "../Section";
 
 export abstract class Filter {
@@ -96,7 +96,7 @@ export class EqFilter extends MFilter {
 	}
 
 	public applyFilter(section: Section): boolean {
-		return section[this.key as keyof Section] === this.val;
+		return keyToSectionVal(this.key, section) === this.val;
 	}
 }
 
@@ -107,7 +107,7 @@ export class GtFilter extends MFilter {
 	}
 
 	public applyFilter(section: Section): boolean {
-		return section[this.key as keyof Section] > this.val;
+		return keyToSectionVal(this.key, section) > this.val;
 	}
 }
 
@@ -118,7 +118,7 @@ export class LtFilter extends MFilter {
 	}
 
 	public applyFilter(section: Section): boolean {
-		return section[this.key as keyof Section] < this.val;
+		return keyToSectionVal(this.key, section) < this.val;
 	}
 }
 
@@ -137,7 +137,7 @@ export class IsFilter extends SFilter {
 	}
 
 	public applyFilter(section: Section): boolean {
-		return section[this.key as keyof Section] === this.val;
+		return keyToSectionVal(this.key, section) === this.val;
 	}
 }
 

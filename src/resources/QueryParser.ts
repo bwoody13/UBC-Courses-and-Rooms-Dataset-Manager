@@ -5,9 +5,8 @@ import {
 } from "../objects/query_structure/Filter";
 import {extractKey} from "./Util";
 
-export function parseQuery(queryJSON: string): Query {
+export function parseQuery(queryObj: any): Query {
 	Query.ID = "";
-	const queryObj = JSON.parse(queryJSON);
 	const query = new Query();
 	if (queryObj.OPTIONS) {
 		if(queryObj.OPTIONS.COLUMNS) {

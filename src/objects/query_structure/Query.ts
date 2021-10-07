@@ -41,22 +41,13 @@ export class Query {
 		return filteredSections;
 	}
 
-// {
-// 	"courses_dept": "adhe",
-// 	"courses_id": "329",
-// 	"courses_avg": 90.02
-// },
-	// interface Output {
-	// [key: string]: any
-	// }
-	//
 	public getOutput(sections: Section[]): any[] {
 		let out = [];
 		for(const section of sections) {
 			let sectionObj: {[k: string]: any} = {};
 			for(const key in this.keys) {
-				const queryKey = Query.ID + "_" + key;
-				const queryVal = keyToSectionVal(key, section);
+				const queryKey = Query.ID + "_" + this.keys[key];
+				const queryVal = keyToSectionVal(this.keys[key], section);
 				sectionObj[queryKey] = queryVal;
 			}
 			out.push(sectionObj);

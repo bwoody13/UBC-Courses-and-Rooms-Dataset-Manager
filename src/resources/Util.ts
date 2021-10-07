@@ -104,6 +104,7 @@ export function keyToSectionVal(key: string, section: Section): any {
 	case Key.UUID:
 		return section.id;
 	default:
-		throw new InsightError("Key to Section Error");
+		throw new InsightError("Key to Section Error: " + key);
 	}
 }
+
