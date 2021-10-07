@@ -10,70 +10,21 @@ export abstract class Filter {
 		this.type = "";
 	}
 
-	abstract applyFilter(section: Section): boolean;
+	public abstract applyFilter(section: Section): boolean;
 }
 
-export class LogicFilter extends Filter {
+export abstract class LogicFilter extends Filter {
 	protected components: Filter[];
-	constructor(filters: any[]) {
+	protected constructor(filters: any[]) {
 		super();
 		this.components = [];
-		// console.log("QUERY TESTING: Logic Filter: Filters: " + filters);
 		for(const filterObj of filters) {
 			this.addComponent(makeFilter(filterObj));
 		}
 	}
 
-	public applyFilter(section: Section): boolean {
-		return false;
-	}
-
 	public addComponent(filter: Filter) {
 		this.components.push(filter);
-	}
-}
-
-export class NotFilter extends Filter {
-	protected component: Filter;
-	constructor(filterObj: any) {
-		super();
-		this.type = "NOT";
-		// console.log(filterObj.keys()[0]);
-		this.component = (makeFilter(filterObj));
-	}
-
-	public applyFilter(section: Section): boolean {
-		return false;
-	}
-
-}
-
-export abstract class KeyFilter extends Filter {
-	protected key: Key;
-	protected constructor(filterObj: any) {
-		super();
-		this.key = extractKey(Object.keys(filterObj)[0]);
-	}
-
-	public applyFilter(section: Section): boolean {
-		return false;
-	}
-
-}
-
-export class MFilter extends KeyFilter {
-	protected val: number;
-	constructor(filterObj: any) {
-		super(filterObj);
-		this.val = filterObj[Object.keys(filterObj)[0]];
-	}
-}
-
-export class SFilter extends KeyFilter {
-	protected val: string;
-	constructor(filterObj: any) {
-		super(filterObj);
-		this.val = filterObj[Object.keys(filterObj)[0]];
 	}
 }
 
@@ -82,12 +33,59 @@ export class OrFilter extends LogicFilter {
 		super(filtersObj);
 		this.type = "OR";
 	}
+
+	public applyFilter(section: Section): boolean {
+		for(const c of this.components) {
+			if (c.applyFilter(section)) {
+				return true;
+			}
+		}
+		return false;
+	}
 }
 
 export class AndFilter extends LogicFilter {
 	constructor(filtersObj: any) {
 		super(filtersObj);
 		this.type = "AND";
+	}
+
+	public applyFilter(section: Section): boolean {
+		for(const c of this.components) {
+			if (!c.applyFilter(section)) {
+				return false;
+			}
+		}
+		return true;
+	}
+}
+
+export class NotFilter extends Filter {
+	protected component: Filter;
+	constructor(filterObj: any) {
+		super();
+		this.type = "NOT";
+		this.component = (makeFilter(filterObj));
+	}
+
+	public applyFilter(section: Section): boolean {
+		return !this.component.applyFilter(section);
+	}
+}
+
+export abstract class KeyFilter extends Filter {
+	protected key: string;
+	protected constructor(filterObj: any) {
+		super();
+		this.key = extractKey(Object.keys(filterObj)[0]);
+	}
+}
+
+export abstract class MFilter extends KeyFilter {
+	protected val: number;
+	protected constructor(filterObj: any) {
+		super(filterObj);
+		this.val = filterObj[Object.keys(filterObj)[0]];
 	}
 }
 
@@ -96,12 +94,20 @@ export class EqFilter extends MFilter {
 		super(filterObj);
 		this.type = "EQ";
 	}
+
+	public applyFilter(section: Section): boolean {
+		return section[this.key as keyof Section] === this.val;
+	}
 }
 
 export class GtFilter extends MFilter {
 	constructor(filterObj: any) {
 		super(filterObj);
 		this.type = "GT";
+	}
+
+	public applyFilter(section: Section): boolean {
+		return section[this.key as keyof Section] > this.val;
 	}
 }
 
@@ -110,11 +116,28 @@ export class LtFilter extends MFilter {
 		super(filterObj);
 		this.type = "LT";
 	}
+
+	public applyFilter(section: Section): boolean {
+		return section[this.key as keyof Section] < this.val;
+	}
 }
+
+export abstract class SFilter extends KeyFilter {
+	protected val: string;
+	protected constructor(filterObj: any) {
+		super(filterObj);
+		this.val = filterObj[Object.keys(filterObj)[0]];
+	}
+}
+
 export class IsFilter extends SFilter {
 	constructor(filterObj: any) {
 		super(filterObj);
 		this.type = "IS";
+	}
+
+	public applyFilter(section: Section): boolean {
+		return section[this.key as keyof Section] === this.val;
 	}
 }
 

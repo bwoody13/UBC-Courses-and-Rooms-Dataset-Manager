@@ -29,12 +29,12 @@ export function datasetExistsReject() {
 export function extractKey(key: string): Key {
 	const underscoreLoc: number = key.indexOf("_");
 	if (underscoreLoc === -1) {
-		throw new InsightError("invalid query key: " + key);
+		throw new InsightError("Invalid query key: " + key);
 	}
 	const datasetName = key.substring(0, underscoreLoc);
 	if (Query.ID) {
 		if (Query.ID !== datasetName) {
-			throw new InsightError("Two datasets in query: dst1: " + Query.ID + ", dst2: " + datasetName);
+			throw new InsightError("Invalid ID in query key: " + datasetName + ", Query ID: " + Query.ID);
 		}
 	} else {
 		Query.ID = datasetName;
