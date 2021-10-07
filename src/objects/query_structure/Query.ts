@@ -38,6 +38,20 @@ export class Query {
 				filteredSections.push(section);
 			}
 		}
+
+		if (this.order) {
+			filteredSections.sort((secA, secB) => {
+				const valA = keyToSectionVal(this.order, secA);
+				const valB = keyToSectionVal(this.order, secB);
+				if (valA < valB) {
+					return -1;
+				}
+				if (valA > valB) {
+					return 1;
+				}
+				return 0;
+			});
+		}
 		return filteredSections;
 	}
 
