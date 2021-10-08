@@ -1,9 +1,9 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="test" type="mocha-javascript-test-runner">
-    <node-interpreter>/usr/bin/node</node-interpreter>
+    <node-interpreter>project</node-interpreter>
     <node-options />
     <mocha-package>$PROJECT_DIR$/node_modules/mocha</mocha-package>
-    <working-directory>$PROJECT_DIR$</working-directory>
+    <working-directory>$PROJECT_DIR$/test</working-directory>
     <pass-parent-env>true</pass-parent-env>
     <ui>bdd</ui>
     <extra-mocha-options>--require ts-node/register --timeout 10000</extra-mocha-options>

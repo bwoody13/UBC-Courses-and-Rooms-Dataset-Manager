@@ -1,0 +1,1576 @@
+{
+  "title": "Asterisk Query",
+  "input": {
+    "WHERE": {
+      "IS": {
+        "courses_title": "dev*"
+      }
+    },
+    "OPTIONS": {
+      "COLUMNS": [
+        "courses_title",
+        "courses_uuid",
+        "courses_year"
+      ],
+      "ORDER": "courses_uuid"
+    }
+  },
+  "errorExpected": false,
+  "with": [
+    {
+      "courses_title": "dev rehab prog",
+      "courses_uuid": "10594",
+      "courses_year": 2009
+    },
+    {
+      "courses_title": "dev rehab prog",
+      "courses_uuid": "10595",
+      "courses_year": 2009
+    },
+    {
+      "courses_title": "dev rehab prog",
+      "courses_uuid": "10596",
+      "courses_year": 2009
+    },
+    {
+      "courses_title": "dev rehab prog",
+      "courses_uuid": "10597",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev language dis",
+      "courses_uuid": "11885",
+      "courses_year": 2008
+    },
+    {
+      "courses_title": "dev language dis",
+      "courses_uuid": "11886",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev envnmt thght",
+      "courses_uuid": "11974",
+      "courses_year": 2011
+    },
+    {
+      "courses_title": "dev envnmt thght",
+      "courses_uuid": "11975",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev envnmt thght",
+      "courses_uuid": "14506",
+      "courses_year": 2015
+    },
+    {
+      "courses_title": "dev envnmt thght",
+      "courses_uuid": "14507",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "17258",
+      "courses_year": 2010
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "17259",
+      "courses_year": 2010
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "17260",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "developmtal biol",
+      "courses_uuid": "18129",
+      "courses_year": 2007
+    },
+    {
+      "courses_title": "developmtal biol",
+      "courses_uuid": "18130",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "devlpmt neurbiol",
+      "courses_uuid": "18243",
+      "courses_year": 2007
+    },
+    {
+      "courses_title": "devlpmt neurbiol",
+      "courses_uuid": "18244",
+      "courses_year": 2007
+    },
+    {
+      "courses_title": "devlpmt neurbiol",
+      "courses_uuid": "18245",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "devotional lit",
+      "courses_uuid": "18432",
+      "courses_year": 2015
+    },
+    {
+      "courses_title": "devotional lit",
+      "courses_uuid": "18433",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "19182",
+      "courses_year": 2016
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "19183",
+      "courses_year": 2016
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "19184",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "developmtal biol",
+      "courses_uuid": "19661",
+      "courses_year": 2011
+    },
+    {
+      "courses_title": "developmtal biol",
+      "courses_uuid": "19662",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "devlpmt neurbiol",
+      "courses_uuid": "19761",
+      "courses_year": 2011
+    },
+    {
+      "courses_title": "devlpmt neurbiol",
+      "courses_uuid": "19762",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "1989",
+      "courses_year": 2011
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "1990",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "developmtal biol",
+      "courses_uuid": "20606",
+      "courses_year": 2012
+    },
+    {
+      "courses_title": "developmtal biol",
+      "courses_uuid": "20607",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "devlpmt neurbiol",
+      "courses_uuid": "20714",
+      "courses_year": 2012
+    },
+    {
+      "courses_title": "devlpmt neurbiol",
+      "courses_uuid": "20715",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev rehab prog",
+      "courses_uuid": "21802",
+      "courses_year": 2010
+    },
+    {
+      "courses_title": "dev rehab prog",
+      "courses_uuid": "21803",
+      "courses_year": 2010
+    },
+    {
+      "courses_title": "dev rehab prog",
+      "courses_uuid": "21804",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev effective pr",
+      "courses_uuid": "23817",
+      "courses_year": 2012
+    },
+    {
+      "courses_title": "dev effective pr",
+      "courses_uuid": "23818",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev orign disord",
+      "courses_uuid": "24465",
+      "courses_year": 2015
+    },
+    {
+      "courses_title": "dev orign disord",
+      "courses_uuid": "24466",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "devlpmt neurbiol",
+      "courses_uuid": "24759",
+      "courses_year": 2016
+    },
+    {
+      "courses_title": "devlpmt neurbiol",
+      "courses_uuid": "24760",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "25563",
+      "courses_year": 2007
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "25564",
+      "courses_year": 2007
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "25565",
+      "courses_year": 2007
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "25566",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev rehab prog",
+      "courses_uuid": "25837",
+      "courses_year": 2012
+    },
+    {
+      "courses_title": "dev rehab prog",
+      "courses_uuid": "25838",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "27556",
+      "courses_year": 2013
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "27557",
+      "courses_year": 2013
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "27558",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev language dis",
+      "courses_uuid": "27665",
+      "courses_year": 2010
+    },
+    {
+      "courses_title": "dev language dis",
+      "courses_uuid": "27666",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "27808",
+      "courses_year": 2011
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "27809",
+      "courses_year": 2011
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "27810",
+      "courses_year": 2011
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "27811",
+      "courses_year": 2011
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "27812",
+      "courses_year": 2011
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "27813",
+      "courses_year": 2011
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "27814",
+      "courses_year": 2011
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "27815",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev envnmt thght",
+      "courses_uuid": "28295",
+      "courses_year": 2014
+    },
+    {
+      "courses_title": "dev envnmt thght",
+      "courses_uuid": "28296",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev envnmt thght",
+      "courses_uuid": "28609",
+      "courses_year": 2009
+    },
+    {
+      "courses_title": "dev envnmt thght",
+      "courses_uuid": "28610",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev scale&measur",
+      "courses_uuid": "28975",
+      "courses_year": 2011
+    },
+    {
+      "courses_title": "dev scale&measur",
+      "courses_uuid": "28976",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev neuropsych",
+      "courses_uuid": "29002",
+      "courses_year": 2011
+    },
+    {
+      "courses_title": "dev neuropsych",
+      "courses_uuid": "29003",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev envnmt thght",
+      "courses_uuid": "29142",
+      "courses_year": 2007
+    },
+    {
+      "courses_title": "dev envnmt thght",
+      "courses_uuid": "29143",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev neuropsych",
+      "courses_uuid": "29315",
+      "courses_year": 2012
+    },
+    {
+      "courses_title": "dev neuropsych",
+      "courses_uuid": "29316",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev language dis",
+      "courses_uuid": "29446",
+      "courses_year": 2007
+    },
+    {
+      "courses_title": "dev language dis",
+      "courses_uuid": "29447",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "31395",
+      "courses_year": 2009
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "31396",
+      "courses_year": 2009
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "31397",
+      "courses_year": 2009
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "31398",
+      "courses_year": 2009
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "31399",
+      "courses_year": 2009
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "31400",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev scale&measur",
+      "courses_uuid": "3215",
+      "courses_year": 2013
+    },
+    {
+      "courses_title": "dev scale&measur",
+      "courses_uuid": "3216",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "devl trd chin th",
+      "courses_uuid": "32206",
+      "courses_year": 2012
+    },
+    {
+      "courses_title": "devl trd chin th",
+      "courses_uuid": "32207",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev neuropsych",
+      "courses_uuid": "3245",
+      "courses_year": 2013
+    },
+    {
+      "courses_title": "dev neuropsych",
+      "courses_uuid": "3246",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev effective pr",
+      "courses_uuid": "33512",
+      "courses_year": 2011
+    },
+    {
+      "courses_title": "dev effective pr",
+      "courses_uuid": "33513",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev language dis",
+      "courses_uuid": "33736",
+      "courses_year": 2013
+    },
+    {
+      "courses_title": "dev language dis",
+      "courses_uuid": "33737",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev el sk df&hrd",
+      "courses_uuid": "33808",
+      "courses_year": 2009
+    },
+    {
+      "courses_title": "dev el sk df&hrd",
+      "courses_uuid": "33809",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "developmtal biol",
+      "courses_uuid": "34355",
+      "courses_year": 2008
+    },
+    {
+      "courses_title": "developmtal biol",
+      "courses_uuid": "34356",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "devlpmt neurbiol",
+      "courses_uuid": "34469",
+      "courses_year": 2008
+    },
+    {
+      "courses_title": "devlpmt neurbiol",
+      "courses_uuid": "34470",
+      "courses_year": 2008
+    },
+    {
+      "courses_title": "devlpmt neurbiol",
+      "courses_uuid": "34471",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev envnmt thght",
+      "courses_uuid": "3523",
+      "courses_year": 2010
+    },
+    {
+      "courses_title": "dev envnmt thght",
+      "courses_uuid": "3524",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "36012",
+      "courses_year": 2014
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "36013",
+      "courses_year": 2014
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "36014",
+      "courses_year": 2014
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "36015",
+      "courses_year": 2014
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "36016",
+      "courses_year": 2014
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "36017",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev orign disord",
+      "courses_uuid": "36997",
+      "courses_year": 2013
+    },
+    {
+      "courses_title": "dev orign disord",
+      "courses_uuid": "36998",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev el sk df&hrd",
+      "courses_uuid": "38185",
+      "courses_year": 2015
+    },
+    {
+      "courses_title": "dev el sk df&hrd",
+      "courses_uuid": "38186",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev neuropsych",
+      "courses_uuid": "38222",
+      "courses_year": 2015
+    },
+    {
+      "courses_title": "dev neuropsych",
+      "courses_uuid": "38223",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "devl trd chin th",
+      "courses_uuid": "39475",
+      "courses_year": 2015
+    },
+    {
+      "courses_title": "devl trd chin th",
+      "courses_uuid": "39476",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "devl trd chin th",
+      "courses_uuid": "40218",
+      "courses_year": 2014
+    },
+    {
+      "courses_title": "devl trd chin th",
+      "courses_uuid": "40219",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "developmtal biol",
+      "courses_uuid": "42185",
+      "courses_year": 2014
+    },
+    {
+      "courses_title": "developmtal biol",
+      "courses_uuid": "42186",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "devlpmt neurbiol",
+      "courses_uuid": "42302",
+      "courses_year": 2014
+    },
+    {
+      "courses_title": "devlpmt neurbiol",
+      "courses_uuid": "42303",
+      "courses_year": 2014
+    },
+    {
+      "courses_title": "devlpmt neurbiol",
+      "courses_uuid": "42304",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "devl trd chin th",
+      "courses_uuid": "44502",
+      "courses_year": 2007
+    },
+    {
+      "courses_title": "devl trd chin th",
+      "courses_uuid": "44503",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "46420",
+      "courses_year": 2009
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "46421",
+      "courses_year": 2009
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "46422",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "46504",
+      "courses_year": 2013
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "46505",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev el sk df&hrd",
+      "courses_uuid": "49677",
+      "courses_year": 2011
+    },
+    {
+      "courses_title": "dev el sk df&hrd",
+      "courses_uuid": "49678",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev effective pr",
+      "courses_uuid": "53900",
+      "courses_year": 2013
+    },
+    {
+      "courses_title": "dev effective pr",
+      "courses_uuid": "53901",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "developmtal biol",
+      "courses_uuid": "54094",
+      "courses_year": 2010
+    },
+    {
+      "courses_title": "developmtal biol",
+      "courses_uuid": "54095",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "devlpmt neurbiol",
+      "courses_uuid": "54199",
+      "courses_year": 2010
+    },
+    {
+      "courses_title": "devlpmt neurbiol",
+      "courses_uuid": "54200",
+      "courses_year": 2010
+    },
+    {
+      "courses_title": "devlpmt neurbiol",
+      "courses_uuid": "54201",
+      "courses_year": 2010
+    },
+    {
+      "courses_title": "devlpmt neurbiol",
+      "courses_uuid": "54202",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "54660",
+      "courses_year": 2012
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "54661",
+      "courses_year": 2012
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "54662",
+      "courses_year": 2012
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "54663",
+      "courses_year": 2012
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "54664",
+      "courses_year": 2012
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "54665",
+      "courses_year": 2012
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "54666",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "developmtal biol",
+      "courses_uuid": "55122",
+      "courses_year": 2015
+    },
+    {
+      "courses_title": "developmtal biol",
+      "courses_uuid": "55123",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "devlpmt neurbiol",
+      "courses_uuid": "55235",
+      "courses_year": 2015
+    },
+    {
+      "courses_title": "devlpmt neurbiol",
+      "courses_uuid": "55236",
+      "courses_year": 2015
+    },
+    {
+      "courses_title": "devlpmt neurbiol",
+      "courses_uuid": "55237",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev orign disord",
+      "courses_uuid": "55331",
+      "courses_year": 2014
+    },
+    {
+      "courses_title": "dev orign disord",
+      "courses_uuid": "55332",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev el sk df&hrd",
+      "courses_uuid": "56570",
+      "courses_year": 2013
+    },
+    {
+      "courses_title": "dev el sk df&hrd",
+      "courses_uuid": "56571",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev rehab prog",
+      "courses_uuid": "60933",
+      "courses_year": 2014
+    },
+    {
+      "courses_title": "dev rehab prog",
+      "courses_uuid": "60934",
+      "courses_year": 2014
+    },
+    {
+      "courses_title": "dev rehab prog",
+      "courses_uuid": "60935",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev neuropsych",
+      "courses_uuid": "61459",
+      "courses_year": 2010
+    },
+    {
+      "courses_title": "dev neuropsych",
+      "courses_uuid": "61460",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev language dis",
+      "courses_uuid": "61636",
+      "courses_year": 2012
+    },
+    {
+      "courses_title": "dev language dis",
+      "courses_uuid": "61637",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "62724",
+      "courses_year": 2013
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "62725",
+      "courses_year": 2013
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "62726",
+      "courses_year": 2013
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "62727",
+      "courses_year": 2013
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "62728",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev neuropsych",
+      "courses_uuid": "6374",
+      "courses_year": 2014
+    },
+    {
+      "courses_title": "dev neuropsych",
+      "courses_uuid": "6375",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "66145",
+      "courses_year": 2011
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "66146",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev rehab prog",
+      "courses_uuid": "66165",
+      "courses_year": 2013
+    },
+    {
+      "courses_title": "dev rehab prog",
+      "courses_uuid": "66166",
+      "courses_year": 2013
+    },
+    {
+      "courses_title": "dev rehab prog",
+      "courses_uuid": "66167",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev language dis",
+      "courses_uuid": "66452",
+      "courses_year": 2009
+    },
+    {
+      "courses_title": "dev language dis",
+      "courses_uuid": "66453",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "66476",
+      "courses_year": 2010
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "66477",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "67896",
+      "courses_year": 2014
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "67897",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev language dis",
+      "courses_uuid": "67998",
+      "courses_year": 2014
+    },
+    {
+      "courses_title": "dev language dis",
+      "courses_uuid": "67999",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "68538",
+      "courses_year": 2015
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "68539",
+      "courses_year": 2015
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "68540",
+      "courses_year": 2015
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "68541",
+      "courses_year": 2015
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "68542",
+      "courses_year": 2015
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "68543",
+      "courses_year": 2015
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "68544",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev rehab prog",
+      "courses_uuid": "71605",
+      "courses_year": 2011
+    },
+    {
+      "courses_title": "dev rehab prog",
+      "courses_uuid": "71606",
+      "courses_year": 2011
+    },
+    {
+      "courses_title": "dev rehab prog",
+      "courses_uuid": "71607",
+      "courses_year": 2011
+    },
+    {
+      "courses_title": "dev rehab prog",
+      "courses_uuid": "71608",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "developmtal biol",
+      "courses_uuid": "72121",
+      "courses_year": 2013
+    },
+    {
+      "courses_title": "developmtal biol",
+      "courses_uuid": "72122",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "devlpmt neurbiol",
+      "courses_uuid": "72236",
+      "courses_year": 2013
+    },
+    {
+      "courses_title": "devlpmt neurbiol",
+      "courses_uuid": "72237",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev effective pr",
+      "courses_uuid": "74543",
+      "courses_year": 2008
+    },
+    {
+      "courses_title": "dev effective pr",
+      "courses_uuid": "74544",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "devl trd chin th",
+      "courses_uuid": "74623",
+      "courses_year": 2010
+    },
+    {
+      "courses_title": "devl trd chin th",
+      "courses_uuid": "74624",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "75623",
+      "courses_year": 2011
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "75624",
+      "courses_year": 2011
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "75625",
+      "courses_year": 2011
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "75626",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev language dis",
+      "courses_uuid": "75774",
+      "courses_year": 2015
+    },
+    {
+      "courses_title": "dev language dis",
+      "courses_uuid": "75775",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev scale&measur",
+      "courses_uuid": "76302",
+      "courses_year": 2009
+    },
+    {
+      "courses_title": "dev scale&measur",
+      "courses_uuid": "76303",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev neuropsych",
+      "courses_uuid": "76334",
+      "courses_year": 2009
+    },
+    {
+      "courses_title": "dev neuropsych",
+      "courses_uuid": "76335",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev rehab prog",
+      "courses_uuid": "76501",
+      "courses_year": 2008
+    },
+    {
+      "courses_title": "dev rehab prog",
+      "courses_uuid": "76502",
+      "courses_year": 2008
+    },
+    {
+      "courses_title": "dev rehab prog",
+      "courses_uuid": "76503",
+      "courses_year": 2008
+    },
+    {
+      "courses_title": "dev rehab prog",
+      "courses_uuid": "76504",
+      "courses_year": 2008
+    },
+    {
+      "courses_title": "dev rehab prog",
+      "courses_uuid": "76505",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "78072",
+      "courses_year": 2015
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "78073",
+      "courses_year": 2015
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "78074",
+      "courses_year": 2015
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "78075",
+      "courses_year": 2015
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "78076",
+      "courses_year": 2015
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "78077",
+      "courses_year": 2015
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "78078",
+      "courses_year": 2015
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "78079",
+      "courses_year": 2015
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "78080",
+      "courses_year": 2015
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "78081",
+      "courses_year": 2015
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "78082",
+      "courses_year": 2015
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "78083",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "78587",
+      "courses_year": 2008
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "78588",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "78868",
+      "courses_year": 2007
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "78869",
+      "courses_year": 2007
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "78870",
+      "courses_year": 2007
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "78871",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "78909",
+      "courses_year": 2009
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "78910",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "79474",
+      "courses_year": 2012
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "79475",
+      "courses_year": 2012
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "79476",
+      "courses_year": 2012
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "79477",
+      "courses_year": 2012
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "79478",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "80341",
+      "courses_year": 2008
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "80342",
+      "courses_year": 2008
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "80343",
+      "courses_year": 2008
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "80344",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "80824",
+      "courses_year": 2014
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "80825",
+      "courses_year": 2014
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "80826",
+      "courses_year": 2014
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "80827",
+      "courses_year": 2014
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "80828",
+      "courses_year": 2014
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "80829",
+      "courses_year": 2014
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "80830",
+      "courses_year": 2014
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "80831",
+      "courses_year": 2014
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "80832",
+      "courses_year": 2014
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "80833",
+      "courses_year": 2014
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "80834",
+      "courses_year": 2014
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "80835",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev effective pr",
+      "courses_uuid": "81367",
+      "courses_year": 2009
+    },
+    {
+      "courses_title": "dev effective pr",
+      "courses_uuid": "81368",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev envnmt thght",
+      "courses_uuid": "82717",
+      "courses_year": 2008
+    },
+    {
+      "courses_title": "dev envnmt thght",
+      "courses_uuid": "82718",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "85071",
+      "courses_year": 2012
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "85072",
+      "courses_year": 2012
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "85073",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev effective pr",
+      "courses_uuid": "85281",
+      "courses_year": 2010
+    },
+    {
+      "courses_title": "dev effective pr",
+      "courses_uuid": "85282",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "8675",
+      "courses_year": 2008
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "8676",
+      "courses_year": 2008
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "8677",
+      "courses_year": 2008
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "8678",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev neuropsych",
+      "courses_uuid": "86948",
+      "courses_year": 2007
+    },
+    {
+      "courses_title": "dev neuropsych",
+      "courses_uuid": "86949",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev envnmt thght",
+      "courses_uuid": "87049",
+      "courses_year": 2012
+    },
+    {
+      "courses_title": "dev envnmt thght",
+      "courses_uuid": "87050",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev rehab prog",
+      "courses_uuid": "87121",
+      "courses_year": 2015
+    },
+    {
+      "courses_title": "dev rehab prog",
+      "courses_uuid": "87122",
+      "courses_year": 2015
+    },
+    {
+      "courses_title": "dev rehab prog",
+      "courses_uuid": "87123",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "88897",
+      "courses_year": 2009
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "88898",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "developmtal biol",
+      "courses_uuid": "89014",
+      "courses_year": 2009
+    },
+    {
+      "courses_title": "developmtal biol",
+      "courses_uuid": "89015",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "devlpmt neurbiol",
+      "courses_uuid": "89131",
+      "courses_year": 2009
+    },
+    {
+      "courses_title": "devlpmt neurbiol",
+      "courses_uuid": "89132",
+      "courses_year": 2009
+    },
+    {
+      "courses_title": "devlpmt neurbiol",
+      "courses_uuid": "89133",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "89668",
+      "courses_year": 2013
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "89669",
+      "courses_year": 2013
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "89670",
+      "courses_year": 2013
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "89671",
+      "courses_year": 2013
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "89672",
+      "courses_year": 2013
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "89673",
+      "courses_year": 2013
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "89674",
+      "courses_year": 2013
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "89675",
+      "courses_year": 2013
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "89676",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "91249",
+      "courses_year": 2010
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "91250",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "91927",
+      "courses_year": 2014
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "91928",
+      "courses_year": 2014
+    },
+    {
+      "courses_title": "dev wkshp/sem",
+      "courses_uuid": "91929",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "94729",
+      "courses_year": 2010
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "94730",
+      "courses_year": 2010
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "94731",
+      "courses_year": 2010
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "94732",
+      "courses_year": 2010
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "94733",
+      "courses_year": 2010
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "94734",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "devotional lit",
+      "courses_uuid": "96775",
+      "courses_year": 2008
+    },
+    {
+      "courses_title": "devotional lit",
+      "courses_uuid": "96776",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev envnmt thght",
+      "courses_uuid": "97157",
+      "courses_year": 2013
+    },
+    {
+      "courses_title": "dev envnmt thght",
+      "courses_uuid": "97158",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev effective pr",
+      "courses_uuid": "98225",
+      "courses_year": 2014
+    },
+    {
+      "courses_title": "dev effective pr",
+      "courses_uuid": "98226",
+      "courses_year": 1900
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "98231",
+      "courses_year": 2012
+    },
+    {
+      "courses_title": "dev soc cli psy",
+      "courses_uuid": "98232",
+      "courses_year": 1900
+    }
+  ]
+}

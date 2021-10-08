@@ -1,0 +1,15 @@
+{
+  "title": "empty WHERE",
+  "input": {
+    "WHERE": {},
+    "OPTIONS": {
+      "COLUMNS": [
+        "class_dept",
+        "class_id"
+      ],
+      "ORDER": "class_dept"
+    }
+  },
+  "errorExpected": false,
+  "with": [{"class_dept": "comm", "class_id": "204"},{"class_dept": "comm", "class_id": "204"},{"class_dept": "comm", "class_id": "204"}]
+}

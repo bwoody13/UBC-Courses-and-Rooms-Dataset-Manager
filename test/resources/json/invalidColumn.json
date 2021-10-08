@@ -1,0 +1,21 @@
+{
+  "errorMsg": "Invalid key this is not a column in COLUMNS",
+  "title": "invalid column",
+  "input": {
+    "WHERE": {
+      "GT": {
+        "courses_avg": 98
+      }
+    },
+    "OPTIONS": {
+      "COLUMNS": [
+        "courses_dept",
+        "courses_avg",
+        "this is not a column"
+      ],
+      "ORDER": "courses_avg"
+    }
+  },
+  "errorExpected": true,
+  "with": "InsightError"
+}
