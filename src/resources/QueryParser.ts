@@ -59,10 +59,14 @@ function parseKey(keyStr: string, query: Query) {
 }
 
 function parseOrder(orderKey: string, query: Query) {
+	let key: string;
 	try {
-		const key = extractKey(orderKey);
-		query.setOrder(key);
+		key = extractKey(orderKey);
 	} catch (e) {
 		throw new InsightError("Error parsing order key: " + e);
 	}
+	if (!query.keys.includes(key)) {
+		throw new InsightError("query key: " + key + " is not in COLUMNS");
+	}
+	query.setOrder(key);
 }

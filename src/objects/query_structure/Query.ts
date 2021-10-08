@@ -1,55 +1,66 @@
 import {Filter} from "./Filter";
-import {Key} from "./Key";
 import {Dataset} from "../Dataset";
 import {Section} from "../Section";
-import {keyToSectionVal} from "../../resources/Util";
+import {ResultTooLargeError} from "../../controller/IInsightFacade";
 
 export class Query {
 	public static ID: string;
 
 	private filter?: Filter;
-	private readonly keys: Key[];
-	private order: Key;
+	private readonly _keys: string[];
+	private order: string;
 
 	constructor() {
-		this.keys = [];
-		this.order = Key.NULL;
+		this._keys = [];
+		this.order = "";
+	}
+
+	public get keys(): string[] {
+		return this._keys;
 	}
 
 	public setFilter(filter: Filter) {
 		this.filter = filter;
 	}
 
-	public addKey(key: Key) {
-		this.keys.push(key);
+	public addKey(key: string) {
+		this._keys.push(key);
 	}
 
-	public setOrder(order: Key) {
+	public setOrder(order: string) {
 		this.order = order;
 	}
 
 	public performFilter(dataset: Dataset): Section[] {
-		if(!this.filter) {
-			return [];
-		}
 		let filteredSections = [];
-		for(const section of dataset.sections) {
-			if(this.filter.applyFilter(section)) {
-				filteredSections.push(section);
+		if(!this.filter) {
+			filteredSections = dataset.sections;
+		} else {
+			for(const section of dataset.sections) {
+				if(this.filter.applyFilter(section)) {
+					filteredSections.push(section);
+				}
 			}
 		}
-
+		if (filteredSections.length > 5000) {
+			throw new ResultTooLargeError("Returned too many results: " + filteredSections.length);
+		}
 		if (this.order) {
 			filteredSections.sort((secA, secB) => {
-				const valA = keyToSectionVal(this.order, secA);
-				const valB = keyToSectionVal(this.order, secB);
-				if (valA < valB) {
+				const valA = secA[this.order as keyof Section];
+				const valB = secB[this.order as keyof Section];
+				if (typeof valA === "string" && typeof valB === "string") {
+					return valA.localeCompare(valB);
+				} else {
+					if (valA < valB) {
+						return -1;
+					}
+					if (valA > valB) {
+						return 1;
+					}
 					return -1;
 				}
-				if (valA > valB) {
-					return 1;
-				}
-				return 0;
+
 			});
 		}
 		return filteredSections;
@@ -59,10 +70,9 @@ export class Query {
 		let out = [];
 		for(const section of sections) {
 			let sectionObj: {[k: string]: any} = {};
-			for(const key in this.keys) {
-				const queryKey = Query.ID + "_" + this.keys[key];
-				const queryVal = keyToSectionVal(this.keys[key], section);
-				sectionObj[queryKey] = queryVal;
+			for(const key in this._keys) {
+				const queryKey = Query.ID + "_" + this._keys[key];
+				sectionObj[queryKey] = section[this._keys[key] as keyof Section];
 			}
 			out.push(sectionObj);
 		}

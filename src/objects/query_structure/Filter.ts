@@ -1,15 +1,8 @@
-import {Dataset} from "../Dataset";
 import {InsightError} from "../../controller/IInsightFacade";
-import {Key} from "./Key";
-import {extractKey, keyToSectionVal} from "../../resources/Util";
+import {extractKey} from "../../resources/Util";
 import {Section} from "../Section";
 
 export abstract class Filter {
-	protected type: string;
-	protected constructor() {
-		this.type = "";
-	}
-
 	public abstract applyFilter(section: Section): boolean;
 }
 
@@ -21,6 +14,9 @@ export abstract class LogicFilter extends Filter {
 		for(const filterObj of filters) {
 			this.addComponent(makeFilter(filterObj));
 		}
+		if (this.components.length === 0) {
+			throw new InsightError("Empty logic block");
+		}
 	}
 
 	public addComponent(filter: Filter) {
@@ -31,7 +27,6 @@ export abstract class LogicFilter extends Filter {
 export class OrFilter extends LogicFilter {
 	constructor(filtersObj: any) {
 		super(filtersObj);
-		this.type = "OR";
 	}
 
 	public applyFilter(section: Section): boolean {
@@ -47,7 +42,6 @@ export class OrFilter extends LogicFilter {
 export class AndFilter extends LogicFilter {
 	constructor(filtersObj: any) {
 		super(filtersObj);
-		this.type = "AND";
 	}
 
 	public applyFilter(section: Section): boolean {
@@ -64,7 +58,6 @@ export class NotFilter extends Filter {
 	protected component: Filter;
 	constructor(filterObj: any) {
 		super();
-		this.type = "NOT";
 		this.component = (makeFilter(filterObj));
 	}
 
@@ -82,62 +75,81 @@ export abstract class KeyFilter extends Filter {
 }
 
 export abstract class MFilter extends KeyFilter {
+	private _M_KEYS: string[] = ["avg", "pass", "fail", "audit", "year"];
 	protected val: number;
 	protected constructor(filterObj: any) {
 		super(filterObj);
-		this.val = filterObj[Object.keys(filterObj)[0]];
+		if (!(this._M_KEYS.includes(this.key))) {
+			throw new InsightError(this.key + " is not a valid MKey");
+		}
+		const v = filterObj[Object.keys(filterObj)[0]];
+		if(!(typeof v === "number")) {
+			throw new InsightError(v + " is not a valid MComparator value");
+		}
+		this.val = v;
 	}
 }
 
 export class EqFilter extends MFilter {
 	constructor(filterObj: any) {
 		super(filterObj);
-		this.type = "EQ";
 	}
 
 	public applyFilter(section: Section): boolean {
-		return keyToSectionVal(this.key, section) === this.val;
+		return section[this.key as keyof Section] === this.val;
 	}
 }
 
 export class GtFilter extends MFilter {
 	constructor(filterObj: any) {
 		super(filterObj);
-		this.type = "GT";
 	}
 
 	public applyFilter(section: Section): boolean {
-		return keyToSectionVal(this.key, section) > this.val;
+		return section[this.key as keyof Section] > this.val;
 	}
 }
 
 export class LtFilter extends MFilter {
 	constructor(filterObj: any) {
 		super(filterObj);
-		this.type = "LT";
 	}
 
 	public applyFilter(section: Section): boolean {
-		return keyToSectionVal(this.key, section) < this.val;
+		return section[this.key as keyof Section] < this.val;
 	}
 }
 
 export abstract class SFilter extends KeyFilter {
+	private _S_KEYS: string[] = ["dept", "id", "instructor", "title", "uuid"];
 	protected val: string;
 	protected constructor(filterObj: any) {
 		super(filterObj);
-		this.val = filterObj[Object.keys(filterObj)[0]];
+		if (!(this._S_KEYS.includes(this.key))) {
+			throw new InsightError(this.key + " is not a valid SKey");
+		}
+		const v = filterObj[Object.keys(filterObj)[0]];
+		if(!(typeof v === "string")) {
+			throw new InsightError(v + " is not a valid SComparator value");
+		}
+		this.val = v;
 	}
 }
 
 export class IsFilter extends SFilter {
 	constructor(filterObj: any) {
 		super(filterObj);
-		this.type = "IS";
 	}
 
 	public applyFilter(section: Section): boolean {
-		return keyToSectionVal(this.key, section) === this.val;
+		for(let i = 1; i < this.val.length - 1; i++) {
+			if (this.val[i] === "*") {
+				throw new InsightError("Invalid InputString to IS containing an astrix: " + this.val);
+			}
+		}
+		let regExStr: string = this.val.replace(/\*/gi, ".*");
+		let re: RegExp = new RegExp("^" + regExStr + "$");
+		return re.test(section[this.key as keyof Section].toString());
 	}
 }
 

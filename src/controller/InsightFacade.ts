@@ -1,7 +1,10 @@
-import {IInsightFacade, InsightDataset, InsightDatasetKind, InsightError, NotFoundError} from "./IInsightFacade";
+import {IInsightFacade,
+	InsightDataset,
+	InsightDatasetKind,
+	InsightError,
+	NotFoundError} from "./IInsightFacade";
 import * as fs from "fs-extra";
-import {Dataset, DatasetData} from "../objects/Dataset";
-import {Course} from "../objects/Course";
+import {Dataset} from "../objects/Dataset";
 import JSZip from "jszip";
 import {datasetExistsReject, datasetExists, invalidIDReject, invalidID} from "../resources/Util";
 import {Query} from "../objects/query_structure/Query";
@@ -17,7 +20,6 @@ export const DATASETS_DIRECTORY = "data/";
  *
  */
 export default class InsightFacade implements IInsightFacade {
-
 
 	public async addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
 		// reject if ID is invalid
@@ -59,21 +61,7 @@ export default class InsightFacade implements IInsightFacade {
 		// parse the course file string data into Course objects
 		for(const courseFileData of courseFiles) {
 			try {
-				const jsonObj = JSON.parse(courseFileData);
-				// skip file if JSON could not be parsed
-				if(jsonObj) {
-					try {
-						// TODO: check for properties within the Json Object to ensure safe casting
-						//		 https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/in
-						let course: Course = jsonObj as Course;
-						dataset.addCourse(course);
-					} catch(e) {
-						// skip file if it could not be cast
-						console.warn("Failed to cast JSON Object to Course: " + e);
-					}
-				} else {
-					console.warn("Failed to parse JSON file.");
-				}
+				dataset.addSections(JSON.parse(courseFileData));
 			} catch(e) {
 				console.warn("Failed to parse JSON file: " + e);
 			}
@@ -126,7 +114,7 @@ export default class InsightFacade implements IInsightFacade {
 		try {
 			filteredSections = queryObj.performFilter(dataset);
 		} catch(e) {
-			return Promise.reject(new InsightError("Error filtering sections: " + e));
+			return Promise.reject(e);
 		}
 		let out: any[];
 		try {
@@ -134,7 +122,7 @@ export default class InsightFacade implements IInsightFacade {
 		} catch(e) {
 			return Promise.reject(new InsightError("Error getting output: " + e));
 		}
-		console.log(out);
+		// console.log(out);
 		return Promise.resolve(out);
 	}
 
