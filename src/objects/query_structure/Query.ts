@@ -1,5 +1,5 @@
 import {Filter} from "./Filter";
-import {Dataset} from "../Dataset";
+import {SectionDataset} from "../Dataset";
 import {Section} from "../Section";
 import {ResultTooLargeError} from "../../controller/IInsightFacade";
 
@@ -31,7 +31,7 @@ export class Query {
 		this.order = order;
 	}
 
-	public performFilter(dataset: Dataset): Section[] {
+	public performFilter(dataset: SectionDataset): Section[] {
 		let filteredSections = [];
 		if(!this.filter) {
 			filteredSections = dataset.sections;

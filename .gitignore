@@ -12,6 +12,7 @@ dist/
 
 # Persist Dir
 data/
+.nyc_output/
 
 # Normal Things
 .DS_Store

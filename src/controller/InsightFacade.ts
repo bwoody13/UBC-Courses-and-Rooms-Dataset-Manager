@@ -4,15 +4,16 @@ import {IInsightFacade,
 	InsightError,
 	NotFoundError} from "./IInsightFacade";
 import * as fs from "fs-extra";
-import {Dataset} from "../objects/Dataset";
+import {Dataset, SectionDataset} from "../objects/Dataset";
 import JSZip from "jszip";
 import {datasetExistsReject, datasetExists, invalidIDReject, invalidID} from "../resources/Util";
 import {Query} from "../objects/query_structure/Query";
 import {parseQuery} from "../resources/QueryParser";
 import {Section} from "../objects/Section";
 
-const COURSES_DIR_NAME = "courses/";
 export const DATASETS_DIRECTORY = "data/";
+const COURSES_DIR_NAME = "courses/";
+const ROOMS_DIR_NAME = "rooms/";
 
 /**
  * This is the main programmatic entry point for the project.
@@ -26,11 +27,7 @@ export default class InsightFacade implements IInsightFacade {
 		if (invalidID(id)) {
 			return invalidIDReject();
 		}
-		// reject if kind is InsightDatasetKind Rooms
-		// TODO: Remove this code in future checkpoints
-		if (kind === InsightDatasetKind.Rooms) {
-			return Promise.reject(new InsightError("Invalid InsightDatasetKind: Rooms"));
-		}
+
 		// ensure there are no other datasets with the same id
 		if (await datasetExists(id)) {
 			return datasetExistsReject();
@@ -43,28 +40,12 @@ export default class InsightFacade implements IInsightFacade {
 			return Promise.reject(new InsightError("Error loading zip file: " +
 				"invalid zip data or using unsupported features."));
 		}
-		// reject if 'courses' directory is missing
-		const coursesFile = dir.files[COURSES_DIR_NAME];
-		if (!coursesFile || !coursesFile.dir) {
-			return Promise.reject(new InsightError("Courses folder is missing or not in the root directory."));
-		}
-		const courseFilePromises: Array<Promise<string>> = [];
-		// convert course files to strings to prepare for parsing
-		dir.folder("courses")?.forEach(function (relativePath, file) {
-			if(!file.dir) {
-				courseFilePromises.push(file.async("string"));
-			}
-		});
-		const courseFiles = await Promise.all(courseFilePromises);
-		// setup the dataset object
-		let dataset = new Dataset(id, kind);
-		// parse the course file string data into Course objects
-		for(const courseFileData of courseFiles) {
-			try {
-				dataset.addSections(JSON.parse(courseFileData));
-			} catch(e) {
-				console.warn("Failed to parse JSON file: " + e);
-			}
+
+		let dataset: Dataset;
+		if (kind === InsightDatasetKind.Courses) {
+			dataset = await this.addCoursesDataset(id, dir);
+		} else {
+			dataset = await this.addRoomsDataset(id, dir);
 		}
 		// reject if there are no valid course sections in the dataset
 		if (!dataset.numRows) {
@@ -73,12 +54,98 @@ export default class InsightFacade implements IInsightFacade {
 		// save the dataset to disk
 		await fs.ensureDir(DATASETS_DIRECTORY);
 		await fs.writeJSON(DATASETS_DIRECTORY + id + ".json", dataset.toJSONObject());
+
 		// return an array of strings of the names of all added datasets
 		const datasetFileNames = await fs.readdir(DATASETS_DIRECTORY);
 		const datasetIDs = datasetFileNames.map(function(fileName) {
 			return fileName.replace(".json", "");
 		});
+
 		return Promise.resolve(datasetIDs);
+	}
+
+	private async addCoursesDataset(id: string, dir: JSZip): Promise<Dataset> {
+		// reject if 'courses' directory is missing
+		const coursesFile = dir.files[COURSES_DIR_NAME];
+		if (!coursesFile || !coursesFile.dir) {
+			return Promise.reject(new InsightError("Courses folder is missing or not in the root directory."));
+		}
+		const courseFilePromises: Array<Promise<string>> = [];
+		// convert course files to strings to prepare for parsing
+		dir.folder("courses")?.forEach(function (relativePath,file) {
+			if(!file.dir) {
+				courseFilePromises.push(file.async("string"));
+			}
+		});
+		const courseFiles = await Promise.all(courseFilePromises);
+		// setup the dataset object
+		let dataset = new SectionDataset(id);
+		// parse the course file string data into Course objects
+		for(const courseFileData of courseFiles) {
+			try {
+				dataset.addSections(JSON.parse(courseFileData));
+			} catch(e) {
+				console.warn("Failed to parse JSON file: " + e);
+			}
+		}
+		return Promise.resolve(dataset);
+
+	}
+
+	private async addRoomsDataset(id: string, dir: JSZip): Promise<Dataset> {
+		// reject if 'rooms' directory is missing
+		const coursesFile = dir.files[ROOMS_DIR_NAME];
+		if (!coursesFile || !coursesFile.dir) {
+			return Promise.reject(new InsightError("Rooms folder is missing or not in the root directory."));
+		}
+		// parse the index.htm file
+		const parse5 = require("parse5");
+		const indexFile = dir.folder("rooms")?.file("index.htm");
+		if(!indexFile) {
+			throw new InsightError("Missing index.htm file in Rooms folder.");
+		}
+		const indexString = await indexFile.async("string");
+		const document = parse5.parse(indexString);
+		this.parseRoomsDocument(document);
+
+		return Promise.reject("not implemented");
+	}
+
+	// No assumptions -- parsing Room Document by traversing the json tree to find
+	// 					 all valid td elements
+	private parseRoomsDocument(document: any) {
+		// traverse the document to find td tags
+		let tdElements = [];
+		let stack = [];
+		stack.push(document);
+		while(stack.length !== 0) {
+			const currentElement = stack.pop();
+			if(currentElement.nodeName === "td") {
+				tdElements.push(currentElement);
+			}
+			if(currentElement.childNodes != null) {
+				stack.push(currentElement.childNodes);
+			}
+		}
+		const TD_ROOM_PATH_ATTRIBUTE = "views-field views-field-nothing";
+		// traverse all the table elements to find valid td tags
+		// for(const tableElement of tableElements) {
+		// 	let tbody = tableElement.childNodes["tbody"];
+		// 	for(const tbodyElement of tbody.childNodes) {
+		// 		if(tbodyElement.nodeName === "tr") {
+		// 			for(const trElement of tbodyElement.childNodes) {
+		// 				if(trElement.nodeName === "td") {
+		//
+		// 				}
+		// 			}
+		// 		}
+		// 	}
+		// }
+
+	}
+
+	private isValidTDElement(tdElement: any): boolean {
+		return true;
 	}
 
 	public async removeDataset(id: string): Promise<string> {
@@ -90,7 +157,6 @@ export default class InsightFacade implements IInsightFacade {
 		if(await datasetExists(id)) {
 			// remove from disk
 			fs.removeSync(DATASETS_DIRECTORY + id + ".json");
-			// TODO: remove from memory cache?
 			// return id upon successful remove
 			return Promise.resolve(id);
 		}
@@ -104,7 +170,7 @@ export default class InsightFacade implements IInsightFacade {
 		} catch(e) {
 			return Promise.reject(new InsightError("Error parsing Query: " + e));
 		}
-		let dataset: Dataset;
+		let dataset: SectionDataset;
 		try {
 			dataset = await fs.readJSON(DATASETS_DIRECTORY + Query.ID + ".json");
 		} catch(e) {

@@ -1,36 +1,51 @@
 import {Section} from "./Section";
 import {InsightDatasetKind} from "../controller/IInsightFacade";
+import {Room} from "./Room";
 
-export interface DatasetData {
-	id: string;
-	kind: InsightDatasetKind;
-	numRows: number;
-	sections: Section[];
-}
+export abstract class Dataset {
+	protected readonly _id: string;
+	protected _numRows: number;
 
-export class Dataset {
-	private readonly _id: string;
-	private readonly _kind: InsightDatasetKind;
-	private _numRows: number;
-	private readonly _sections: Section[];
-
-	constructor(id: string, kind: InsightDatasetKind, numRows?: number, sections?: Section[]) {
+	protected constructor(id: string, numRows?: number) {
 		this._id = id;
-		this._kind = kind;
 		this._numRows = numRows || 0;
-		this._sections = sections || [];
 	}
 
 	public get id(): string {
 		return this._id;
 	}
 
-	public get kind(): InsightDatasetKind {
-		return this._kind;
-	}
-
 	public get numRows(): number {
 		return this._numRows;
+	}
+
+	public abstract toJSONObject(): any;
+}
+
+export class RoomDataset extends Dataset {
+	private readonly _rooms: Room[];
+
+	constructor(id: string, numRows?: number, rooms?: Room[]) {
+		super(id, numRows);
+		this._rooms = rooms || [];
+	}
+
+	public get rooms(): Room[] {
+		return this._rooms;
+	}
+
+	public toJSONObject() {
+		return {};
+	}
+}
+
+
+export class SectionDataset extends Dataset {
+	private readonly _sections: Section[];
+
+	constructor(id: string, numRows?: number, sections?: Section[]) {
+		super(id, numRows);
+		this._sections = sections || [];
 	}
 
 	public get sections(): Section[] {
@@ -91,7 +106,7 @@ export class Dataset {
 	public toJSONObject() {
 		return {
 			id: this._id,
-			kind: this._kind,
+			kind: InsightDatasetKind.Courses,
 			numRows: this._numRows,
 			sections: this.sections
 		};
