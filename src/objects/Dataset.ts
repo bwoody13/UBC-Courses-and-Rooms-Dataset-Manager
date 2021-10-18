@@ -2,6 +2,7 @@ import {Section} from "./Section";
 import {InsightDatasetKind} from "../controller/IInsightFacade";
 import {Room} from "./Room";
 import parse5 from "parse5";
+import {BuildingInfo} from "./BuildingInfo";
 
 export abstract class Dataset {
 	protected readonly _id: string;
@@ -35,8 +36,30 @@ export class RoomDataset extends Dataset {
 		return this._rooms;
 	}
 
-	public addRooms(buildingDocument: parse5.Document) {
-		// Implement
+	public addRooms(building: BuildingInfo, document: parse5.Document) {
+		// let buildingFilePaths: string[] = [];
+		// let stack = [];
+		// stack.push(document);
+		// while(stack.length !== 0) {
+		// 	const currentElement = stack.pop();
+		// 	try {
+		// 		if (currentElement.nodeName === "td" && this.isValidTDElement(currentElement)) {
+		// 			const buildingFilePath = this.getBuildingFilePath(currentElement);
+		// 			if (buildingFilePath !== "") {
+		// 				if(!buildingFilePaths.includes(buildingFilePath)) {
+		// 					buildingFilePaths.push(buildingFilePath);
+		// 				}
+		// 			}
+		// 		}
+		// 	} catch(e) {
+		// 		// skip invalid td element (don't throw error)
+		// 	}
+		// 	if(currentElement.childNodes != null) {
+		// 		for(const childNodesKey in currentElement.childNodes) {
+		// 			stack.push(currentElement.childNodes[childNodesKey]);
+		// 		}
+		// 	}
+		// }
 	}
 
 	public toJSONObject() {

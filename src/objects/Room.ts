@@ -1,9 +1,9 @@
 export interface Room {
 	fullname: string, // index/info (building name)
 	shortname: string, // index/filename (code)
+	address: string, // index/info (building address)
 	number: string, // info (room #)
 	name: string, // shortname_number
-	address: string, // index/info (building address)
 	lat: number, // latitude from http request
 	lon: number, // longitude from http request
 	seats: number, // index/info (capacity) default 0

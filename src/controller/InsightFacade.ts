@@ -12,6 +12,8 @@ import {parseQuery} from "../resources/QueryParser";
 import {Section} from "../objects/Section";
 import parse5 from "parse5";
 import {Room} from "../objects/Room";
+import {BuildingInfo} from "../objects/BuildingInfo";
+import {parseIndex} from "../resources/RoomParser";
 
 export const DATASETS_DIRECTORY = "data/";
 const COURSES_DIR_NAME = "courses/";
@@ -118,20 +120,22 @@ export default class InsightFacade implements IInsightFacade {
 		}
 
 		let dataset = new RoomDataset(id);
-		const buildingFilePaths = this.parseIndex(indexDocument);
-		if(buildingFilePaths.length === 0) {
-			throw new InsightError("No valid building file paths found within index.");
+		const buildings = parseIndex(indexDocument);
+		if(buildings.length === 0) {
+			throw new InsightError("No valid building info found within index.");
 		}
 
-		for(const buildingFilePath of buildingFilePaths) {
-			const path = ROOMS_DIR_NAME + buildingFilePath.substr(2, buildingFilePath.length);
+		for(const buildingInfo of buildings) {
+			const path = ROOMS_DIR_NAME + buildingInfo.path.substr(2, buildingInfo.path.length);
 			const buildingFile = dir.file(path);
 			if(buildingFile != null) {
 				const buildingFileString = await buildingFile.async("string");
 				try {
 					const buildingDocument = parse5.parse(buildingFileString);
 					if(buildingDocument != null) {
-						dataset.addRooms(buildingDocument);
+						// const buildingCode = buildingFilePath.substring(buildingFilePath.lastIndexOf("/") + 1,
+						// 	buildingFilePath.length);
+						dataset.addRooms(buildingInfo, buildingDocument);
 					}
 				} catch(e) {
 					// skip building if it failed to parse
@@ -139,67 +143,6 @@ export default class InsightFacade implements IInsightFacade {
 			}
 		}
 		return dataset;
-	}
-
-	// parse Index document by traversing the json tree to find td elements that link
-	// to building files
-	private parseIndex(document: any): string[] {
-		let buildingFilePaths: string[] = [];
-		let stack = [];
-		stack.push(document);
-		while(stack.length !== 0) {
-			const currentElement = stack.pop();
-			try {
-				if (currentElement.nodeName === "td" && this.isValidTDElement(currentElement)) {
-					const buildingFilePath = this.getBuildingFilePath(currentElement);
-					if (buildingFilePath !== "") {
-						if(!buildingFilePaths.includes(buildingFilePath)) {
-							buildingFilePaths.push(buildingFilePath);
-						}
-					}
-				}
-			} catch(e) {
-				// skip invalid td element (don't throw error)
-			}
-			if(currentElement.childNodes != null) {
-				for(const childNodesKey in currentElement.childNodes) {
-					stack.push(currentElement.childNodes[childNodesKey]);
-				}
-			}
-		}
-		return buildingFilePaths;
-	}
-
-	private getBuildingFilePath(tdElement: any): string {
-		for(const tdChildNodeKey in tdElement.childNodes) {
-			const tdChildNode = tdElement.childNodes[tdChildNodeKey];
-			if(tdChildNode.nodeName === "a") {
-				for(const aAttributeKey in tdChildNode.attrs) {
-					if(tdChildNode.attrs[aAttributeKey].name === "href") {
-						return tdChildNode.attrs[aAttributeKey].value;
-					}
-				}
-			}
-		}
-		return "";
-	}
-
-	// "nodeName": "td",
-	// "tagName": "td",
-	// "attrs": [
-	// 	{
-	// 		"name": "class",
-	// 		"value": "views-field views-field-title"
-	// 	}
-	// ],
-	// FROM SPEC:
-	// 		All <td/>s associated with target data will have attributes present in the same
-	// 		forms as in the provided zip file. For example, a <td/> with the class "room-data"
-	// 		surrounding target fields will always be present in a valid dataset if it is present
-	// 		in the original dataset.
-	private isValidTDElement(tdElement: any): boolean {
-		const validTDElementClass = "views-field views-field-title";
-		return tdElement.attrs[0].name === "class" && tdElement.attrs[0].value === validTDElementClass;
 	}
 
 	public async removeDataset(id: string): Promise<string> {
