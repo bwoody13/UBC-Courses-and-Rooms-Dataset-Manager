@@ -1,7 +1,0 @@
-{
-  "errorMsg": "Missing WHERE",
-  "title": "Empty Query",
-  "input": {},
-  "errorExpected": true,
-  "with": "InsightError"
-}
