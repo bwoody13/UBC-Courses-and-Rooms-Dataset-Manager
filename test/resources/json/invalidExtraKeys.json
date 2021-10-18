@@ -1,0 +1,27 @@
+{
+	"errorMsg": "Extra json keys",
+	"title": "Extra json keys",
+	"input": {
+		"WHERE": {
+			"IS": {
+				"courses_dept": "adhe"
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"courses_dept",
+				"courses_nop",
+				"courses_avg"
+			],
+			"ORDER": "courses_avg"
+		},
+		"INVALID": {
+			"ERROR": [
+				"error1",
+				"error2"
+			]
+		}
+	},
+	"errorExpected": true,
+	"with": "InsightError"
+}
