@@ -1,6 +1,7 @@
 import {Section} from "./Section";
 import {InsightDatasetKind} from "../controller/IInsightFacade";
 import {Room} from "./Room";
+import parse5 from "parse5";
 
 export abstract class Dataset {
 	protected readonly _id: string;
@@ -34,8 +35,17 @@ export class RoomDataset extends Dataset {
 		return this._rooms;
 	}
 
+	public addRooms(buildingDocument: parse5.Document) {
+		// Implement
+	}
+
 	public toJSONObject() {
-		return {};
+		return {
+			id: this._id,
+			kind: InsightDatasetKind.Rooms,
+			numRows: this._numRows,
+			rooms: this._rooms
+		};
 	}
 }
 
@@ -108,7 +118,7 @@ export class SectionDataset extends Dataset {
 			id: this._id,
 			kind: InsightDatasetKind.Courses,
 			numRows: this._numRows,
-			sections: this.sections
+			sections: this._sections
 		};
 	}
 }

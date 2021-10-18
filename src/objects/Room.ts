@@ -1,6 +1,6 @@
 export interface Room {
 	fullname: string, // index/info (building name)
-	shortname: string, // index (code)
+	shortname: string, // index/filename (code)
 	number: string, // info (room #)
 	name: string, // shortname_number
 	address: string, // index/info (building address)
