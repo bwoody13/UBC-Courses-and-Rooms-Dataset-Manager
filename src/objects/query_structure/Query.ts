@@ -1,18 +1,21 @@
 import {Filter} from "./Filter";
-import {SectionDataset} from "../Dataset";
+import {Dataset, DatasetItem, SectionDataset} from "../Dataset";
 import {Section} from "../Section";
 import {ResultTooLargeError} from "../../controller/IInsightFacade";
+import {Order} from "./Order";
+import {Room} from "../Room";
 
 export class Query {
 	public static ID: string;
+	public static TYPE: string;
 
 	private filter?: Filter;
 	private readonly _keys: string[];
-	private order: string;
+	private order: Order | null;
 
 	constructor() {
 		this._keys = [];
-		this.order = "";
+		this.order = null;
 	}
 
 	public get keys(): string[] {
@@ -27,48 +30,39 @@ export class Query {
 		this._keys.push(key);
 	}
 
-	public setOrder(order: string) {
+	public setOrder(order: Order | null) {
 		this.order = order;
 	}
 
-	public performFilter(dataset: SectionDataset): Section[] {
-		let filteredSections = [];
+
+	private sort(data: DatasetItem[]): DatasetItem[] {
+		if (this.order) {
+			data.sort(this.order.compare);
+		}
+		return data;
+	}
+
+	public performFilter(dataset: Dataset): DatasetItem[] {
+		let filteredResults = [];
 		if(!this.filter) {
-			filteredSections = dataset.sections;
+			filteredResults = dataset.getData();
 		} else {
-			for(const section of dataset.sections) {
-				if(this.filter.applyFilter(section)) {
-					filteredSections.push(section);
+			for(const dataItem of dataset.getData()) {
+				if(this.filter.applyFilter(dataItem)) {
+					filteredResults.push(dataItem);
 				}
 			}
 		}
-		if (filteredSections.length > 5000) {
-			throw new ResultTooLargeError("Returned too many results: " + filteredSections.length);
+		if (filteredResults.length > 5000) {
+			throw new ResultTooLargeError("Returned too many results: " + filteredResults.length);
 		}
-		if (this.order) {
-			filteredSections.sort((secA, secB) => {
-				const valA = secA[this.order as keyof Section];
-				const valB = secB[this.order as keyof Section];
-				if (typeof valA === "string" && typeof valB === "string") {
-					return valA.localeCompare(valB);
-				} else {
-					if (valA < valB) {
-						return -1;
-					}
-					if (valA > valB) {
-						return 1;
-					}
-					return -1;
-				}
-
-			});
-		}
-		return filteredSections;
+		filteredResults = this.sort(filteredResults);
+		return filteredResults;
 	}
 
-	public getOutput(sections: Section[]): any[] {
+	public getOutput(results: Section[]): any[] {
 		let out = [];
-		for(const section of sections) {
+		for(const section of results) {
 			let sectionObj: {[k: string]: any} = {};
 			for(const key in this._keys) {
 				const queryKey = Query.ID + "_" + this._keys[key];

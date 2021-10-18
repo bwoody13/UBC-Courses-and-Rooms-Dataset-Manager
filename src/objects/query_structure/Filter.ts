@@ -1,9 +1,11 @@
 import {InsightError} from "../../controller/IInsightFacade";
 import {extractKey} from "../../resources/Util";
 import {Section} from "../Section";
+import {DatasetItem} from "../Dataset";
+
 
 export abstract class Filter {
-	public abstract applyFilter(section: Section): boolean;
+	public abstract applyFilter(dataItem: DatasetItem): boolean;
 }
 
 export abstract class LogicFilter extends Filter {
@@ -29,9 +31,9 @@ export class OrFilter extends LogicFilter {
 		super(filtersObj);
 	}
 
-	public applyFilter(section: Section): boolean {
+	public applyFilter(dataItem: DatasetItem): boolean {
 		for(const c of this.components) {
-			if (c.applyFilter(section)) {
+			if (c.applyFilter(dataItem)) {
 				return true;
 			}
 		}
@@ -44,9 +46,9 @@ export class AndFilter extends LogicFilter {
 		super(filtersObj);
 	}
 
-	public applyFilter(section: Section): boolean {
+	public applyFilter(dataItem: DatasetItem): boolean {
 		for(const c of this.components) {
-			if (!c.applyFilter(section)) {
+			if (!c.applyFilter(dataItem)) {
 				return false;
 			}
 		}
@@ -61,8 +63,8 @@ export class NotFilter extends Filter {
 		this.component = (makeFilter(filterObj));
 	}
 
-	public applyFilter(section: Section): boolean {
-		return !this.component.applyFilter(section);
+	public applyFilter(dataItem: DatasetItem): boolean {
+		return !this.component.applyFilter(dataItem);
 	}
 }
 
@@ -75,7 +77,7 @@ export abstract class KeyFilter extends Filter {
 }
 
 export abstract class MFilter extends KeyFilter {
-	private _M_KEYS: string[] = ["avg", "pass", "fail", "audit", "year"];
+	private _M_KEYS: string[] = ["avg", "pass", "fail", "audit", "year", "lat", "lon", "seats"];
 	protected val: number;
 	protected constructor(filterObj: any) {
 		super(filterObj);
@@ -95,8 +97,8 @@ export class EqFilter extends MFilter {
 		super(filterObj);
 	}
 
-	public applyFilter(section: Section): boolean {
-		return section[this.key as keyof Section] === this.val;
+	public applyFilter(dataItem: DatasetItem): boolean {
+		return dataItem[this.key as keyof DatasetItem] === this.val; // TODO: fix
 	}
 }
 
@@ -105,8 +107,8 @@ export class GtFilter extends MFilter {
 		super(filterObj);
 	}
 
-	public applyFilter(section: Section): boolean {
-		return section[this.key as keyof Section] > this.val;
+	public applyFilter(dataItem: DatasetItem): boolean {
+		return dataItem[this.key as keyof DatasetItem] > this.val; // TODO: fix
 	}
 }
 
@@ -115,13 +117,14 @@ export class LtFilter extends MFilter {
 		super(filterObj);
 	}
 
-	public applyFilter(section: Section): boolean {
-		return section[this.key as keyof Section] < this.val;
+	public applyFilter(dataItem: DatasetItem): boolean {
+		return dataItem[this.key as keyof DatasetItem] < this.val;
 	}
 }
 
 export abstract class SFilter extends KeyFilter {
-	private _S_KEYS: string[] = ["dept", "id", "instructor", "title", "uuid"];
+	private _S_KEYS: string[] = ["dept", "id", "instructor", "title", "uuid", "fullname", "shortname", "number",
+		"name", "address", "type", "furniture", "href"];
 	protected val: string;
 	protected constructor(filterObj: any) {
 		super(filterObj);
@@ -141,7 +144,7 @@ export class IsFilter extends SFilter {
 		super(filterObj);
 	}
 
-	public applyFilter(section: Section): boolean {
+	public applyFilter(dataItem: DatasetItem): boolean {
 		for(let i = 1; i < this.val.length - 1; i++) {
 			if (this.val[i] === "*") {
 				throw new InsightError("Invalid InputString to IS containing an astrix: " + this.val);
@@ -149,7 +152,7 @@ export class IsFilter extends SFilter {
 		}
 		let regExStr: string = this.val.replace(/\*/gi, ".*");
 		let re: RegExp = new RegExp("^" + regExStr + "$");
-		return re.test(section[this.key as keyof Section].toString());
+		return re.test(dataItem[this.key as keyof DatasetItem].toString()); // TODO: fix
 	}
 }
 

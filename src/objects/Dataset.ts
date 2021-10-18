@@ -2,6 +2,8 @@ import {Section} from "./Section";
 import {InsightDatasetKind} from "../controller/IInsightFacade";
 import {Room} from "./Room";
 
+export type DatasetItem = Room | Section;
+
 export abstract class Dataset {
 	protected readonly _id: string;
 	protected _numRows: number;
@@ -19,6 +21,8 @@ export abstract class Dataset {
 		return this._numRows;
 	}
 
+	public abstract getData(): DatasetItem[];
+
 	public abstract toJSONObject(): any;
 }
 
@@ -34,8 +38,20 @@ export class RoomDataset extends Dataset {
 		return this._rooms;
 	}
 
+	public addRooms() {
+		return;
+	}
+
+	public getData(): DatasetItem[] {
+		return this._rooms;
+	}
+
 	public toJSONObject() {
-		return {};
+		return {
+			id: this._id,
+			kind: InsightDatasetKind.Courses,
+			numRows: this._numRows,
+			rooms: this._rooms};
 	}
 }
 
@@ -101,6 +117,10 @@ export class SectionDataset extends Dataset {
 			}
 		}
 		this._numRows += numValidSections;
+	}
+
+	public getData(): DatasetItem[] {
+		return this._sections;
 	}
 
 	public toJSONObject() {

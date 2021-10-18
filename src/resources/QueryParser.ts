@@ -4,6 +4,7 @@ import {
 	makeFilter
 } from "../objects/query_structure/Filter";
 import {extractKey} from "./Util";
+import {Order} from "../objects/query_structure/Order";
 
 export function parseQuery(queryObj: any): Query {
 	Query.ID = "";
@@ -58,15 +59,21 @@ function parseKey(keyStr: string, query: Query) {
 	}
 }
 
-function parseOrder(orderKey: string, query: Query) {
-	let key: string;
-	try {
-		key = extractKey(orderKey);
-	} catch (e) {
-		throw new InsightError("Error parsing order key: " + e);
+function parseOrder(orderObj: any, query: Query) {
+	let order: Order | null = null;
+	if (orderObj.keys && orderObj.dir) {
+		for (let key of orderObj.keys.reverse()) {
+			if (!query.keys.includes(key)) {
+				throw new InsightError("query key: " + key + " is not in COLUMNS");
+			}
+			if (order) {
+				order = new Order(key, orderObj.dir, order);
+			} else {
+				order = new Order(key, orderObj.dir);
+			}
+		}
+	} else {
+		throw new InsightError("Error parsing order. No keys or dir.");
 	}
-	if (!query.keys.includes(key)) {
-		throw new InsightError("query key: " + key + " is not in COLUMNS");
-	}
-	query.setOrder(key);
+	query.setOrder(order);
 }

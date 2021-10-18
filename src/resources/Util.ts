@@ -3,6 +3,7 @@ import {InsightError} from "../controller/IInsightFacade";
 import {DATASETS_DIRECTORY} from "../controller/InsightFacade";
 import {Query} from "../objects/query_structure/Query";
 
+
 export function invalidID(id: string): boolean {
 	return (id.includes("_") || !id.trim());
 }
@@ -31,8 +32,15 @@ export function extractKey(key: string): string {
 	}
 
 	const k = key.substring(underscoreLoc + 1);
-	const validQueryKeys = ["avg", "dept", "instructor", "title", "uuid", "pass", "fail", "audit", "year", "id"];
-	if (!validQueryKeys.includes(k)) {
+	let type: string;
+	const validCourseQueryKeys = ["avg", "dept", "instructor", "title", "uuid", "pass", "fail", "audit", "year", "id"];
+	const validRoomQueryKeys = ["fullname", "shortname", "number", "name", "address", "type", "furniture", "href",
+		"lat", "lon", "seats"];
+	if (validCourseQueryKeys.includes(k)) {
+		type = "COURSE";
+	} else if (validRoomQueryKeys.includes(k)) {
+		type = "ROOM";
+	} else {
 		throw new InsightError("Invalid query key: " + key);
 	}
 
@@ -41,11 +49,16 @@ export function extractKey(key: string): string {
 		if (Query.ID !== datasetID) {
 			throw new InsightError("Invalid ID in query key: " + datasetID + ", Query ID: " + Query.ID);
 		}
+		if (Query.TYPE !== type) {
+			throw new InsightError("Invalid query. Use of both rooms and course fields in query.");
+		}
 	} else {
 		Query.ID = datasetID;
+		Query.TYPE = type;
 	}
 	return k;
 }
+
 
 // export function stringToKey(str: string): Key {
 // 	let key: Key;
