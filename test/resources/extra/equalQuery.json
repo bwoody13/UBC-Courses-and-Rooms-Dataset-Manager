@@ -1,0 +1,36 @@
+{
+  "title": "Equal Test Query",
+  "input": {
+    "WHERE": {
+      "EQ": {
+        "courses_avg": 50
+      }
+    },
+    "OPTIONS": {
+      "COLUMNS": [
+        "courses_title",
+        "courses_uuid",
+        "courses_year"
+      ],
+      "ORDER": "courses_uuid"
+    }
+  },
+  "errorExpected": false,
+  "with": [
+    {
+      "courses_title": "rl es manage i",
+      "courses_uuid": "11135",
+      "courses_year": 2013
+    },
+    {
+      "courses_title": "proc ctrl eng",
+      "courses_uuid": "56484",
+      "courses_year": 2012
+    },
+    {
+      "courses_title": "childhood & adol",
+      "courses_uuid": "78941",
+      "courses_year": 2009
+    }
+  ]
+}
