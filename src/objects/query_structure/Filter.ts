@@ -158,29 +158,29 @@ export function makeFilter(filterObj: any): Filter {
 	let filter: Filter;
 	// console.log("QUERY TESTING: Filter: " + key);
 	switch (key) {
-	case "OR":
-		filter = new OrFilter(filterObj.OR);
-		break;
-	case "AND":
-		filter = new AndFilter(filterObj.AND);
-		break;
-	case "NOT":
-		filter = new NotFilter(filterObj.NOT);
-		break;
-	case "EQ":
-		filter = new EqFilter(filterObj.EQ);
-		break;
-	case "GT":
-		filter = new GtFilter(filterObj.GT);
-		break;
-	case "LT":
-		filter = new LtFilter(filterObj.LT);
-		break;
-	case "IS":
-		filter = new IsFilter(filterObj.IS);
-		break;
-	default:
-		throw new InsightError("Invalid Filter: " + key);
+		case "OR":
+			filter = new OrFilter(filterObj.OR);
+			break;
+		case "AND":
+			filter = new AndFilter(filterObj.AND);
+			break;
+		case "NOT":
+			filter = new NotFilter(filterObj.NOT);
+			break;
+		case "EQ":
+			filter = new EqFilter(filterObj.EQ);
+			break;
+		case "GT":
+			filter = new GtFilter(filterObj.GT);
+			break;
+		case "LT":
+			filter = new LtFilter(filterObj.LT);
+			break;
+		case "IS":
+			filter = new IsFilter(filterObj.IS);
+			break;
+		default:
+			throw new InsightError("Invalid Filter: " + key);
 	}
 	return filter;
 }
