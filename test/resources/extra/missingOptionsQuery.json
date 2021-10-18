@@ -1,0 +1,13 @@
+{
+  "errorMsg": "Missing OPTIONS",
+  "title": "Missing Options",
+  "input": {
+    "WHERE": {
+      "IS": {
+        "courses_dept": "adhe"
+      }
+    }
+  },
+  "errorExpected": true,
+  "with": "InsightError"
+}

@@ -1,0 +1,21 @@
+{
+  "errorMsg": "Invalid value type in EQ, should be number",
+  "title": "Invalid Value Type",
+  "input": {
+    "WHERE": {
+      "EQ": {
+        "courses_avg": "10"
+      }
+    },
+    "OPTIONS": {
+      "COLUMNS": [
+        "courses_title",
+        "courses_uuid",
+        "courses_year"
+      ],
+      "ORDER": "courses_uuid"
+    }
+  },
+  "errorExpected": true,
+  "with": "InsightError"
+}

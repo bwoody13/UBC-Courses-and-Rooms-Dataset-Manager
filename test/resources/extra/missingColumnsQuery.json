@@ -1,0 +1,14 @@
+{
+  "errorMsg": "OPTIONS missing COLUMNS",
+  "title": "Missing Columns",
+  "input": {
+    "WHERE": {
+      "IS": {
+        "courses_dept": "adhe"
+      }
+    },
+    "OPTIONS": {}
+  },
+  "errorExpected": true,
+  "with": "InsightError"
+}
