@@ -1,4 +1,4 @@
-import {extractKey} from "../../resources/Util";
+import {extractKey, getSectionRoomKey} from "../../resources/Util";
 import {InsightError} from "../../controller/IInsightFacade";
 import {DatasetItem} from "../Dataset";
 
@@ -24,8 +24,8 @@ export class Order {
 	}
 
 	public compare(dataA: DatasetItem, dataB: DatasetItem): number {
-		const valA = dataA[this.key as keyof DatasetItem];
-		const valB = dataB[this.key as keyof DatasetItem];
+		const valA = getSectionRoomKey(this.key, dataA);
+		const valB = getSectionRoomKey(this.key, dataB);
 		if (valA === valB && this.nextOrder) {
 			return this.nextOrder.compare(dataA, dataB);
 		}

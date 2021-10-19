@@ -167,26 +167,57 @@ export default class InsightFacade implements IInsightFacade {
 		} catch(e) {
 			return Promise.reject(new InsightError("Error parsing Query: " + e));
 		}
+		let out: any[];
+		if (Query.TYPE === "COURSE") {
+			out = await this.performSectionQuery(queryObj);
+		} else {
+			out = await this.performRoomQuery(queryObj);
+		}
+		return Promise.resolve(out);
+	}
+
+	private async performSectionQuery(query: Query): Promise<any[]> {
 		let dataset: SectionDataset;
+		let out: any[];
 		try {
 			dataset = await fs.readJSON(DATASETS_DIRECTORY + Query.ID + ".json");
 		} catch(e) {
 			return Promise.reject(new InsightError("Error reading dataset: " + e));
 		}
-		let filteredSections: DatasetItem[];
+		let filteredSections: Section[];
 		try {
-			filteredSections = queryObj.performFilter(dataset);
+			filteredSections = query.performSectionFilter(dataset);
 		} catch(e) {
 			return Promise.reject(e);
 		}
-		let out: any[];
 		try {
-			out = queryObj.getOutput(filteredSections);
+			out = query.getOutput(filteredSections);
 		} catch(e) {
 			return Promise.reject(new InsightError("Error getting output: " + e));
 		}
-		// console.log(out);
-		return Promise.resolve(out);
+		return out;
+	}
+
+	private async performRoomQuery(query: Query):  Promise<any[]> {
+		let dataset: RoomDataset;
+		let out: any[];
+		try {
+			dataset = await fs.readJSON(DATASETS_DIRECTORY + Query.ID + ".json");
+		} catch(e) {
+			return Promise.reject(new InsightError("Error reading dataset: " + e));
+		}
+		let filteredRooms: Room[];
+		try {
+			filteredRooms = query.performRoomFilter(dataset);
+		} catch(e) {
+			return Promise.reject(e);
+		}
+		try {
+			out = query.getOutput(filteredRooms);
+		} catch(e) {
+			return Promise.reject(new InsightError("Error getting output: " + e));
+		}
+		return out;
 	}
 
 	public async listDatasets(): Promise<InsightDataset[]> {

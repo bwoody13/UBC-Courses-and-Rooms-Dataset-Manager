@@ -67,9 +67,6 @@ function parseOrder(orderObj: any, query: Query) {
 		order = new Order(key, "UP");
 	} else if (orderObj.keys && orderObj.dir) {
 		for (let key of orderObj.keys.reverse()) {
-			if (!query.keys.includes(key)) {
-				throw new InsightError("query key: " + key + " is not in COLUMNS");
-			}
 			if (order) {
 				order = new Order(key, orderObj.dir, order);
 			} else {
@@ -78,6 +75,9 @@ function parseOrder(orderObj: any, query: Query) {
 		}
 	} else {
 		throw new InsightError("Error parsing order. No keys or dir.");
+	}
+	if (order && !query.keys.includes(order.key)) {
+		throw new InsightError("query key: " + order.key + " is not in COLUMNS");
 	}
 	query.setOrder(order);
 }

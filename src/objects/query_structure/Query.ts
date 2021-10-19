@@ -1,7 +1,7 @@
 import {Filter} from "./Filter";
-import {Dataset, DatasetItem, SectionDataset} from "../Dataset";
+import {Dataset, DatasetItem, RoomDataset, SectionDataset} from "../Dataset";
 import {Section} from "../Section";
-import {ResultTooLargeError} from "../../controller/IInsightFacade";
+import {InsightError, ResultTooLargeError} from "../../controller/IInsightFacade";
 import {Order} from "./Order";
 import {Room} from "../Room";
 import {getSectionRoomKey} from "../../resources/Util";
@@ -36,31 +36,70 @@ export class Query {
 	}
 
 
-	private sort(data: DatasetItem[]): DatasetItem[] {
+	private sortSections(data: Section[]): Section[] {
+		if (this.order) {
+			data.sort((secA, secB) => {
+				if (this.order) {
+					return this.order.compare(secA, secB);
+				}
+				return 1;
+			});
+		}
+		return data;
+	}
+
+	private sortRooms(data: Room[]): Room[] {
 		if (this.order) {
 			data.sort(this.order.compare);
 		}
 		return data;
 	}
 
-	public performFilter(dataset: Dataset): DatasetItem[] {
-		let filteredResults: DatasetItem[] = [];
+	// public performFilter(dataset: SectionDataset | RoomDataset): Section[] | Room[] {
+	// 	console.log(dataset.constructor.name);
+	// 	console.log(dataset instanceof SectionDataset || dataset instanceof RoomDataset);
+	// 	if (dataset instanceof SectionDataset) {
+	// 		return this.performSectionFilter(dataset);
+	// 	} else if (dataset instanceof RoomDataset) {
+	// 		return this.performRoomFilter(dataset);
+	// 	}
+	// 	throw new InsightError("not instance of room or section dataset");
+	// }
+
+	public performSectionFilter (dataset: SectionDataset): Section [] {
+		let filteredSections: Section[] = [];
 		if(!this.filter) {
-			filteredResults = dataset.data;
+			filteredSections = dataset.sections;
 		} else {
-			let data: DatasetItem[] = dataset.data;
-			console.log(data);
-			for(const dataItem of data) {
-				if(this.filter.applyFilter(dataItem)) {
-					filteredResults.push(dataItem);
+			for(const section of dataset.sections) {
+				if(this.filter.applyFilter(section)) {
+					filteredSections.push(section);
 				}
 			}
 		}
-		if (filteredResults.length > 5000) {
-			throw new ResultTooLargeError("Returned too many results: " + filteredResults.length);
+		if (filteredSections.length > 5000) {
+			throw new ResultTooLargeError("Returned too many results: " + filteredSections.length);
 		}
-		filteredResults = this.sort(filteredResults);
-		return filteredResults;
+		filteredSections = this.sortSections(filteredSections);
+		return filteredSections;
+	}
+
+	public performRoomFilter (dataset: RoomDataset): Room[] {
+		let filteredRooms: Room[] = [];
+		if(!this.filter) {
+			filteredRooms = dataset.rooms;
+		} else {
+			for(const section of dataset.rooms) {
+				if(this.filter.applyFilter(section)) {
+					filteredRooms.push(section);
+				}
+			}
+		}
+		if (filteredRooms.length > 5000) {
+			throw new ResultTooLargeError("Returned too many results: " + filteredRooms.length);
+		}
+		filteredRooms = this.sortRooms(filteredRooms);
+		return filteredRooms;
 	}
 
 	public getOutput(results: DatasetItem[]): any[] {
