@@ -50,7 +50,12 @@ export class Query {
 
 	private sortRooms(data: Room[]): Room[] {
 		if (this.order) {
-			data.sort(this.order.compare);
+			data.sort((secA, secB) => {
+				if (this.order) {
+					return this.order.compare(secA, secB);
+				}
+				return 1;
+			});
 		}
 		return data;
 	}

@@ -1,7 +1,7 @@
 import {
-	IInsightFacade, InsightDataset,
+	IInsightFacade,
 	InsightDatasetKind,
-	InsightError, NotFoundError,
+	InsightError,
 	ResultTooLargeError
 } from "../../src/controller/IInsightFacade";
 import InsightFacade from "../../src/controller/InsightFacade";
@@ -9,7 +9,8 @@ import InsightFacade from "../../src/controller/InsightFacade";
 import {testFolder} from "@ubccpsc310/folder-test";
 import {expect, use} from "chai";
 import chaiAsPromised from "chai-as-promised";
-import {getContentFromArchives, clearDisk} from "../resources/TestUtil";
+import {clearDisk, getContentFromArchives} from "../resources/TestUtil";
+
 use(chaiAsPromised);
 
 type Error = "InsightError" | "ResultTooLargeError";
@@ -25,29 +26,29 @@ describe("InsightFacade", function () {
 		coursesFull = getContentFromArchives("courses.zip", InsightDatasetKind.Courses);
 	});
 
-	describe("Add/Remove/List", function () {
-		let facade: IInsightFacade;
-
-		beforeEach(function () {
-			clearDisk();
-			facade = new InsightFacade();
-		});
-
-		describe("Add Datasets Room", function() {
-
-			it("should add valid rooms dataset",  async function () {
-				await facade.addDataset("rooms", rooms, InsightDatasetKind.Rooms);
-				const insightDatasets = await facade.listDatasets();
-				expect(insightDatasets).to.be.an.instanceOf(Array);
-				expect(insightDatasets).to.have.length(1);
-				expect(insightDatasets).to.deep.equal([{
-					id: "rooms",
-					kind: InsightDatasetKind.Rooms,
-					numRows: 364
-				}]);
-
-			});
-		});
+	// describe("Add/Remove/List", function () {
+	// 	let facade: IInsightFacade;
+	//
+	// 	beforeEach(function () {
+	// 		clearDisk();
+	// 		facade = new InsightFacade();
+	// 	});
+	//
+	// 	describe("Add Datasets Room", function() {
+	//
+	// 		it("should add valid rooms dataset",  async function () {
+	// 			await facade.addDataset("rooms", rooms, InsightDatasetKind.Rooms);
+	// 			const insightDatasets = await facade.listDatasets();
+	// 			expect(insightDatasets).to.be.an.instanceOf(Array);
+	// 			expect(insightDatasets).to.have.length(1);
+	// 			expect(insightDatasets).to.deep.equal([{
+	// 				id: "rooms",
+	// 				kind: InsightDatasetKind.Rooms,
+	// 				numRows: 364
+	// 			}]);
+	//
+	// 		});
+	// 	});
 		//
 		// describe("Add Datasets", function () {
 		//
@@ -704,73 +705,74 @@ describe("InsightFacade", function () {
 	// 			}
 	// 		});
 	// 	});
-	});
-
-	// describe("Perform Query", function () {
-	//
-	// 	let facade: IInsightFacade;
-	//
-	// 	before(async function () {
-	// 		clearDisk();
-	// 		facade = new InsightFacade();
-	// 		await facade.addDataset("courses", coursesFull, InsightDatasetKind.Courses);
-	// 		await facade.addDataset("courses-small", courses, InsightDatasetKind.Courses);
-	// 		await facade.addDataset("class",
-	// 			getContentFromArchives("oneclass.zip", InsightDatasetKind.Courses), InsightDatasetKind.Courses);
-	// 	});
-	//
-	// 	it("should fail to query invalid json", async function () {
-	// 		try {
-	// 			await facade.performQuery("Invalid Json");
-	// 			expect.fail("Should have thrown error");
-	// 		} catch(e) {
-	// 			expect(e).to.be.instanceOf(InsightError);
-	// 		}
-	// 		try {
-	// 			await facade.performQuery("");
-	// 			expect.fail("Should have thrown error");
-	// 		} catch(e) {
-	// 			expect(e).to.be.instanceOf(InsightError);
-	// 		}
-	// 	});
-	//
-	// 	testFolder<any, any[], Error>(
-	// 		"Perform Query (Dynamic Tests)",
-	// 		(input: any): Promise<any[]> => {
-	// 			return facade.performQuery(input);
-	// 		},
-	// 		"./test/resources/json",
-	// 		{
-	// 			errorValidator: (error): error is Error =>
-	// 				error === "InsightError" || error === "ResultTooLargeError",
-	// 			assertOnResult(expected: any[], actual: any, input: any) {
-	// 				const orderKey = input.OPTIONS.ORDER;
-	// 				expect(actual).to.be.an.instanceof(Array);
-	// 				expect(actual).to.have.length(expected.length);
-	// 				expect(actual).to.have.deep.members(expected);
-	// 				if(orderKey !== undefined) {
-	// 					// check the order of the actual array
-	// 					let ordered = true;
-	// 					for(let i = 1; i < actual.length; i++) {
-	// 						if(actual[i - 1][orderKey] > actual[i][orderKey]) {
-	// 							ordered = false;
-	// 							break;
-	// 						}
-	// 					}
-	// 					expect(ordered).to.be.true;
-	// 				}
-	// 			},
-	// 			assertOnError: (expected, actual) => {
-	// 				if (expected === "InsightError") {
-	// 					expect(actual).to.be.instanceof(InsightError);
-	// 				} else if (expected === "ResultTooLargeError") {
-	// 					expect(actual).to.be.instanceof(ResultTooLargeError);
-	// 				} else {
-	// 					// should not happen
-	// 					expect.fail("UNEXPECTED ERROR");
-	// 				}
-	// 			}
-	// 		}
-	// 	);
 	// });
+
+	describe("Perform Query", function () {
+
+		let facade: IInsightFacade;
+
+		before(async function () {
+			clearDisk();
+			facade = new InsightFacade();
+			await facade.addDataset("courses", coursesFull, InsightDatasetKind.Courses);
+			await facade.addDataset("courses-small", courses, InsightDatasetKind.Courses);
+			await facade.addDataset("class",
+				getContentFromArchives("oneclass.zip", InsightDatasetKind.Courses), InsightDatasetKind.Courses);
+			await facade.addDataset("rooms", rooms, InsightDatasetKind.Rooms);
+		});
+
+		it("should fail to query invalid json", async function () {
+			try {
+				await facade.performQuery("Invalid Json");
+				expect.fail("Should have thrown error");
+			} catch(e) {
+				expect(e).to.be.instanceOf(InsightError);
+			}
+			try {
+				await facade.performQuery("");
+				expect.fail("Should have thrown error");
+			} catch(e) {
+				expect(e).to.be.instanceOf(InsightError);
+			}
+		});
+
+		testFolder<any, any[], Error>(
+			"Perform Query (Dynamic Tests)",
+			(input: any): Promise<any[]> => {
+				return facade.performQuery(input);
+			},
+			"./test/resources/json",
+			{
+				errorValidator: (error): error is Error =>
+					error === "InsightError" || error === "ResultTooLargeError",
+				assertOnResult(expected: any[], actual: any, input: any) {
+					const orderKey = input.OPTIONS.ORDER;
+					expect(actual).to.be.an.instanceof(Array);
+					expect(actual).to.have.length(expected.length);
+					expect(actual).to.have.deep.members(expected);
+					if(orderKey !== undefined) {
+						// check the order of the actual array
+						let ordered = true;
+						for(let i = 1; i < actual.length; i++) {
+							if(actual[i - 1][orderKey] > actual[i][orderKey]) {
+								ordered = false;
+								break;
+							}
+						}
+						expect(ordered).to.be.true;
+					}
+				},
+				assertOnError: (expected, actual) => {
+					if (expected === "InsightError") {
+						expect(actual).to.be.instanceof(InsightError);
+					} else if (expected === "ResultTooLargeError") {
+						expect(actual).to.be.instanceof(ResultTooLargeError);
+					} else {
+						// should not happen
+						expect.fail("UNEXPECTED ERROR");
+					}
+				}
+			}
+		);
+	});
 });
