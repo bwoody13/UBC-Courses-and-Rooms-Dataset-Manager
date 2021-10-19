@@ -4,6 +4,7 @@ import {Section} from "../Section";
 import {ResultTooLargeError} from "../../controller/IInsightFacade";
 import {Order} from "./Order";
 import {Room} from "../Room";
+import {getSectionRoomKey} from "../../resources/Util";
 
 export class Query {
 	public static ID: string;
@@ -43,11 +44,13 @@ export class Query {
 	}
 
 	public performFilter(dataset: Dataset): DatasetItem[] {
-		let filteredResults = [];
+		let filteredResults: DatasetItem[] = [];
 		if(!this.filter) {
-			filteredResults = dataset.getData();
+			filteredResults = dataset.data;
 		} else {
-			for(const dataItem of dataset.getData()) {
+			let data: DatasetItem[] = dataset.data;
+			console.log(data);
+			for(const dataItem of data) {
 				if(this.filter.applyFilter(dataItem)) {
 					filteredResults.push(dataItem);
 				}
@@ -60,15 +63,15 @@ export class Query {
 		return filteredResults;
 	}
 
-	public getOutput(results: Section[]): any[] {
+	public getOutput(results: DatasetItem[]): any[] {
 		let out = [];
-		for(const section of results) {
-			let sectionObj: {[k: string]: any} = {};
+		for(const dataItem of results) {
+			let dataObj: {[k: string]: any} = {};
 			for(const key in this._keys) {
 				const queryKey = Query.ID + "_" + this._keys[key];
-				sectionObj[queryKey] = section[this._keys[key] as keyof Section];
+				dataObj[queryKey] = getSectionRoomKey(this._keys[key], dataItem);
 			}
-			out.push(sectionObj);
+			out.push(dataObj);
 		}
 		return out;
 	}

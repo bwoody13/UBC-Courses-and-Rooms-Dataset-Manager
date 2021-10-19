@@ -2,6 +2,8 @@ import * as fs from "fs-extra";
 import {InsightError} from "../controller/IInsightFacade";
 import {DATASETS_DIRECTORY} from "../controller/InsightFacade";
 import {Query} from "../objects/query_structure/Query";
+import {Section} from "../objects/Section";
+import {Room} from "../objects/Room";
 
 
 export function invalidID(id: string): boolean {
@@ -23,6 +25,14 @@ export function invalidIDReject() {
 
 export function datasetExistsReject() {
 	return Promise.reject(new InsightError("A dataset with that ID already exists."));
+}
+
+export function getSectionRoomKey(key: string, dataItem: any) {
+	if (Query.TYPE === "SECTION") {
+		return dataItem[key as keyof Section];
+	} else {
+		return dataItem[key as keyof Room];
+	}
 }
 
 export function extractKey(key: string): string {

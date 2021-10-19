@@ -1,7 +1,8 @@
 import {InsightError} from "../../controller/IInsightFacade";
-import {extractKey} from "../../resources/Util";
+import {extractKey, getSectionRoomKey} from "../../resources/Util";
 import {Section} from "../Section";
 import {DatasetItem} from "../Dataset";
+import {Room} from "../Room";
 
 
 export abstract class Filter {
@@ -98,7 +99,7 @@ export class EqFilter extends MFilter {
 	}
 
 	public applyFilter(dataItem: DatasetItem): boolean {
-		return dataItem[this.key as keyof DatasetItem] === this.val; // TODO: fix
+		return getSectionRoomKey(this.key, dataItem) === this.val;
 	}
 }
 
@@ -108,7 +109,7 @@ export class GtFilter extends MFilter {
 	}
 
 	public applyFilter(dataItem: DatasetItem): boolean {
-		return dataItem[this.key as keyof DatasetItem] > this.val; // TODO: fix
+		return getSectionRoomKey(this.key, dataItem) > this.val;
 	}
 }
 
@@ -118,13 +119,14 @@ export class LtFilter extends MFilter {
 	}
 
 	public applyFilter(dataItem: DatasetItem): boolean {
-		return dataItem[this.key as keyof DatasetItem] < this.val;
+		return getSectionRoomKey(this.key, dataItem) < this.val;
 	}
 }
 
 export abstract class SFilter extends KeyFilter {
 	private _S_KEYS: string[] = ["dept", "id", "instructor", "title", "uuid", "fullname", "shortname", "number",
 		"name", "address", "type", "furniture", "href"];
+
 	protected val: string;
 	protected constructor(filterObj: any) {
 		super(filterObj);
@@ -152,7 +154,7 @@ export class IsFilter extends SFilter {
 		}
 		let regExStr: string = this.val.replace(/\*/gi, ".*");
 		let re: RegExp = new RegExp("^" + regExStr + "$");
-		return re.test(dataItem[this.key as keyof DatasetItem].toString()); // TODO: fix
+		return re.test(getSectionRoomKey(this.key, dataItem).toString());
 	}
 }
 

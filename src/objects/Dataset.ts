@@ -1,16 +1,20 @@
 import {Section} from "./Section";
 import {InsightDatasetKind} from "../controller/IInsightFacade";
 import {Room} from "./Room";
+import {Query} from "./query_structure/Query";
 
-export type DatasetItem = Room | Section;
+export type DatasetItem = Section | Room;
+export type Results = Section[] | Room[];
 
 export abstract class Dataset {
 	protected readonly _id: string;
 	protected _numRows: number;
+	protected _data: Results;
 
-	protected constructor(id: string, numRows?: number) {
+	protected constructor(id: string, numRows?: number, data?: Results) {
 		this._id = id;
 		this._numRows = numRows || 0;
+		this._data = data || [];
 	}
 
 	public get id(): string {
@@ -21,29 +25,27 @@ export abstract class Dataset {
 		return this._numRows;
 	}
 
-	public abstract getData(): DatasetItem[];
+	public get data(): Results {
+		return this._data;
+	}
 
 	public abstract toJSONObject(): any;
 }
 
 export class RoomDataset extends Dataset {
-	private readonly _rooms: Room[];
+	// private readonly _rooms: Room[];
 
 	constructor(id: string, numRows?: number, rooms?: Room[]) {
-		super(id, numRows);
-		this._rooms = rooms || [];
+		super(id, numRows, rooms);
+		// this._rooms = rooms || [];
 	}
 
-	public get rooms(): Room[] {
-		return this._rooms;
-	}
+	// public get rooms(): Room[] {
+	// 	return this._rooms;
+	// }
 
 	public addRooms() {
 		return;
-	}
-
-	public getData(): DatasetItem[] {
-		return this._rooms;
 	}
 
 	public toJSONObject() {
@@ -51,7 +53,7 @@ export class RoomDataset extends Dataset {
 			id: this._id,
 			kind: InsightDatasetKind.Courses,
 			numRows: this._numRows,
-			rooms: this._rooms};
+			rooms: this._data};
 	}
 }
 
@@ -60,7 +62,7 @@ export class SectionDataset extends Dataset {
 	private readonly _sections: Section[];
 
 	constructor(id: string, numRows?: number, sections?: Section[]) {
-		super(id, numRows);
+		super(id, numRows, sections);
 		this._sections = sections || [];
 	}
 
@@ -119,16 +121,12 @@ export class SectionDataset extends Dataset {
 		this._numRows += numValidSections;
 	}
 
-	public getData(): DatasetItem[] {
-		return this._sections;
-	}
-
 	public toJSONObject() {
 		return {
 			id: this._id,
 			kind: InsightDatasetKind.Courses,
 			numRows: this._numRows,
-			sections: this.sections
+			sections: this._data
 		};
 	}
 }

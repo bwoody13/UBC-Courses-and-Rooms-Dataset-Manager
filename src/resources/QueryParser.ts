@@ -59,9 +59,13 @@ function parseKey(keyStr: string, query: Query) {
 	}
 }
 
+// TODO: make also work with single key for order
 function parseOrder(orderObj: any, query: Query) {
 	let order: Order | null = null;
-	if (orderObj.keys && orderObj.dir) {
+	if (typeof orderObj === "string") {
+		const key: string = orderObj.toString();
+		order = new Order(key, "UP");
+	} else if (orderObj.keys && orderObj.dir) {
 		for (let key of orderObj.keys.reverse()) {
 			if (!query.keys.includes(key)) {
 				throw new InsightError("query key: " + key + " is not in COLUMNS");

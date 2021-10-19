@@ -4,12 +4,11 @@ import {IInsightFacade,
 	InsightError,
 	NotFoundError} from "./IInsightFacade";
 import * as fs from "fs-extra";
-import {Dataset, SectionDataset} from "../objects/Dataset";
+import {Dataset, DatasetItem, SectionDataset} from "../objects/Dataset";
 import JSZip from "jszip";
 import {datasetExistsReject, datasetExists, invalidIDReject, invalidID} from "../resources/Util";
-import {Query} from "../objects/query_structure/Query";
 import {parseQuery} from "../resources/QueryParser";
-import {Section} from "../objects/Section";
+import {Query} from "../objects/query_structure/Query";
 
 export const DATASETS_DIRECTORY = "data/";
 const COURSES_DIR_NAME = "courses/";
@@ -176,7 +175,7 @@ export default class InsightFacade implements IInsightFacade {
 		} catch(e) {
 			return Promise.reject(new InsightError("Error reading dataset: " + e));
 		}
-		let filteredSections: Section[];
+		let filteredSections: DatasetItem[];
 		try {
 			filteredSections = queryObj.performFilter(dataset);
 		} catch(e) {
