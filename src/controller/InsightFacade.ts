@@ -135,7 +135,7 @@ export default class InsightFacade implements IInsightFacade {
 					if(buildingDocument != null) {
 						// const buildingCode = buildingFilePath.substring(buildingFilePath.lastIndexOf("/") + 1,
 						// 	buildingFilePath.length);
-						dataset.addRooms(buildingInfo, buildingDocument);
+						await dataset.addRooms(buildingInfo, buildingDocument);
 					}
 				} catch(e) {
 					// skip building if it failed to parse

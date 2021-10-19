@@ -3,6 +3,9 @@ import {InsightDatasetKind} from "../controller/IInsightFacade";
 import {Room} from "./Room";
 import parse5 from "parse5";
 import {BuildingInfo} from "./BuildingInfo";
+import {parseBuilding} from "../resources/BuildingParser";
+import * as http from "http";
+import {IncomingMessage} from "http";
 import {Query} from "./query_structure/Query";
 
 export type DatasetItem = Section | Room;
@@ -28,6 +31,12 @@ export abstract class Dataset {
 	public abstract toJSONObject(): any;
 }
 
+interface GeoResponse {
+	lat?: number;
+	lon?: number;
+	error?: string;
+}
+
 export class RoomDataset extends Dataset {
 	private readonly _rooms: Room[];
 
@@ -40,30 +49,46 @@ export class RoomDataset extends Dataset {
 		return this._rooms;
 	}
 
-	public addRooms(building: BuildingInfo, document: parse5.Document) {
-		// let buildingFilePaths: string[] = [];
-		// let stack = [];
-		// stack.push(document);
-		// while(stack.length !== 0) {
-		// 	const currentElement = stack.pop();
-		// 	try {
-		// 		if (currentElement.nodeName === "td" && this.isValidTDElement(currentElement)) {
-		// 			const buildingFilePath = this.getBuildingFilePath(currentElement);
-		// 			if (buildingFilePath !== "") {
-		// 				if(!buildingFilePaths.includes(buildingFilePath)) {
-		// 					buildingFilePaths.push(buildingFilePath);
-		// 				}
-		// 			}
-		// 		}
-		// 	} catch(e) {
-		// 		// skip invalid td element (don't throw error)
-		// 	}
-		// 	if(currentElement.childNodes != null) {
-		// 		for(const childNodesKey in currentElement.childNodes) {
-		// 			stack.push(currentElement.childNodes[childNodesKey]);
-		// 		}
-		// 	}
-		// }
+	public async addRooms(building: BuildingInfo, document: parse5.Document) {
+		const HTTP_ADDRESS = "http://cs310.students.cs.ubc.ca:11316/api/v1/project_team053/";
+		const rooms = parseBuilding(document);
+
+		// Reference: https://nodejs.org/api/http.html#http_http_get_url_options_callback
+		const geoResponse = await new Promise<GeoResponse>((resolve, reject) => {
+			http.get(HTTP_ADDRESS + building.address.replace(/\s/gi, "%20"),
+				(res) => {
+					let rawData = "";
+					res.on("data", (buf) => {
+						rawData += buf;
+					});
+					res.on("end", () => {
+						try {
+							resolve(JSON.parse(rawData) as GeoResponse);
+						} catch (e) {
+							reject({error: "Failed to parse geoLocation data"} as GeoResponse);
+						}
+					});
+					res.on("error", (e) => {
+						reject({error: e.toString()} as GeoResponse);
+					});
+				});
+		});
+
+		if (geoResponse == null || "error" in geoResponse || geoResponse.lat == null || geoResponse.lon == null) {
+			return;
+		}
+
+		for(const roomKey in rooms) {
+			const room = rooms[roomKey];
+			room.fullname = building.fullname;
+			room.shortname = building.shortname;
+			room.address = building.address;
+			room.name = room.shortname + "_" + room.number;
+			room.lat = geoResponse.lat;
+			room.lon = geoResponse.lon;
+			this._rooms.push(room);
+			this._numRows++;
+		}
 	}
 
 	public toJSONObject() {
