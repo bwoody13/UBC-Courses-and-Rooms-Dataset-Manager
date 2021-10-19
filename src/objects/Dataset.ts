@@ -1,36 +1,113 @@
 import {Section} from "./Section";
 import {InsightDatasetKind} from "../controller/IInsightFacade";
+import {Room} from "./Room";
+import parse5 from "parse5";
+import {BuildingInfo} from "./BuildingInfo";
+import {parseBuilding} from "../resources/BuildingParser";
+import * as http from "http";
+import {IncomingMessage} from "http";
+import {Query} from "./query_structure/Query";
 
-export interface DatasetData {
-	id: string;
-	kind: InsightDatasetKind;
-	numRows: number;
-	sections: Section[];
-}
+export type DatasetItem = Section | Room;
+export type Results = Section[] | Room[];
 
-export class Dataset {
-	private readonly _id: string;
-	private readonly _kind: InsightDatasetKind;
-	private _numRows: number;
-	private readonly _sections: Section[];
+export abstract class Dataset {
+	protected readonly _id: string;
+	protected _numRows: number;
 
-	constructor(id: string, kind: InsightDatasetKind, numRows?: number, sections?: Section[]) {
+	protected constructor(id: string, numRows?: number) {
 		this._id = id;
-		this._kind = kind;
 		this._numRows = numRows || 0;
-		this._sections = sections || [];
 	}
 
 	public get id(): string {
 		return this._id;
 	}
 
-	public get kind(): InsightDatasetKind {
-		return this._kind;
-	}
-
 	public get numRows(): number {
 		return this._numRows;
+	}
+
+	public abstract toJSONObject(): any;
+}
+
+interface GeoResponse {
+	lat?: number;
+	lon?: number;
+	error?: string;
+}
+
+export class RoomDataset extends Dataset {
+	private readonly _rooms: Room[];
+
+	constructor(id: string, numRows?: number, rooms?: Room[]) {
+		super(id, numRows);
+		this._rooms = rooms || [];
+	}
+
+	public get rooms(): Room[] {
+		return this._rooms;
+	}
+
+	public async addRooms(building: BuildingInfo, document: parse5.Document) {
+		const HTTP_ADDRESS = "http://cs310.students.cs.ubc.ca:11316/api/v1/project_team053/";
+		const rooms = parseBuilding(document);
+
+		// Reference: https://nodejs.org/api/http.html#http_http_get_url_options_callback
+		const geoResponse = await new Promise<GeoResponse>((resolve, reject) => {
+			http.get(HTTP_ADDRESS + building.address.replace(/\s/gi, "%20"),
+				(res) => {
+					let rawData = "";
+					res.on("data", (buf) => {
+						rawData += buf;
+					});
+					res.on("end", () => {
+						try {
+							resolve(JSON.parse(rawData) as GeoResponse);
+						} catch (e) {
+							reject({error: "Failed to parse geoLocation data"} as GeoResponse);
+						}
+					});
+					res.on("error", (e) => {
+						reject({error: e.toString()} as GeoResponse);
+					});
+				});
+		});
+
+		if (geoResponse == null || "error" in geoResponse || geoResponse.lat == null || geoResponse.lon == null) {
+			return;
+		}
+
+		for(const roomKey in rooms) {
+			const room = rooms[roomKey];
+			room.fullname = building.fullname;
+			room.shortname = building.shortname;
+			room.address = building.address;
+			room.name = room.shortname + "_" + room.number;
+			room.lat = geoResponse.lat;
+			room.lon = geoResponse.lon;
+			this._rooms.push(room);
+			this._numRows++;
+		}
+	}
+
+	public toJSONObject() {
+		return {
+			id: this._id,
+			kind: InsightDatasetKind.Rooms,
+			numRows: this._numRows,
+			rooms: this._rooms
+		};
+	}
+}
+
+
+export class SectionDataset extends Dataset {
+	private readonly _sections: Section[];
+
+	constructor(id: string, numRows?: number, sections?: Section[]) {
+		super(id, numRows);
+		this._sections = sections || [];
 	}
 
 	public get sections(): Section[] {
@@ -91,9 +168,9 @@ export class Dataset {
 	public toJSONObject() {
 		return {
 			id: this._id,
-			kind: this._kind,
+			kind: InsightDatasetKind.Courses,
 			numRows: this._numRows,
-			sections: this.sections
+			sections: this._sections
 		};
 	}
 }

@@ -2,6 +2,9 @@ import * as fs from "fs-extra";
 import {InsightError} from "../controller/IInsightFacade";
 import {DATASETS_DIRECTORY} from "../controller/InsightFacade";
 import {Query} from "../objects/query_structure/Query";
+import {Section} from "../objects/Section";
+import {Room} from "../objects/Room";
+
 
 export function invalidID(id: string): boolean {
 	return (id.includes("_") || !id.trim());
@@ -24,6 +27,14 @@ export function datasetExistsReject() {
 	return Promise.reject(new InsightError("A dataset with that ID already exists."));
 }
 
+export function getSectionRoomKey(key: string, dataItem: any) {
+	if (Query.TYPE === "SECTION") {
+		return dataItem[key as keyof Section];
+	} else {
+		return dataItem[key as keyof Room];
+	}
+}
+
 export function extractKey(key: string): string {
 	const underscoreLoc: number = key.indexOf("_");
 	if (underscoreLoc === -1) {
@@ -31,8 +42,15 @@ export function extractKey(key: string): string {
 	}
 
 	const k = key.substring(underscoreLoc + 1);
-	const validQueryKeys = ["avg", "dept", "instructor", "title", "uuid", "pass", "fail", "audit", "year", "id"];
-	if (!validQueryKeys.includes(k)) {
+	let type: string;
+	const validCourseQueryKeys = ["avg", "dept", "instructor", "title", "uuid", "pass", "fail", "audit", "year", "id"];
+	const validRoomQueryKeys = ["fullname", "shortname", "number", "name", "address", "type", "furniture", "href",
+		"lat", "lon", "seats"];
+	if (validCourseQueryKeys.includes(k)) {
+		type = "COURSE";
+	} else if (validRoomQueryKeys.includes(k)) {
+		type = "ROOM";
+	} else {
 		throw new InsightError("Invalid query key: " + key);
 	}
 
@@ -41,11 +59,16 @@ export function extractKey(key: string): string {
 		if (Query.ID !== datasetID) {
 			throw new InsightError("Invalid ID in query key: " + datasetID + ", Query ID: " + Query.ID);
 		}
+		if (Query.TYPE !== type) {
+			throw new InsightError("Invalid query. Use of both rooms and course fields in query.");
+		}
 	} else {
 		Query.ID = datasetID;
+		Query.TYPE = type;
 	}
 	return k;
 }
+
 
 // export function stringToKey(str: string): Key {
 // 	let key: Key;
