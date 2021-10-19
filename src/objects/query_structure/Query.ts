@@ -5,6 +5,7 @@ import {InsightError, ResultTooLargeError} from "../../controller/IInsightFacade
 import {Order} from "./Order";
 import {Room} from "../Room";
 import {getSectionRoomKey} from "../../resources/Util";
+import {Group} from "./Group";
 
 export class Query {
 	public static ID: string;
@@ -13,10 +14,12 @@ export class Query {
 	private filter?: Filter;
 	private readonly _keys: string[];
 	private order: Order | null;
+	private _group: Group | null;
 
 	constructor() {
 		this._keys = [];
 		this.order = null;
+		this._group = null;
 	}
 
 	public get keys(): string[] {
@@ -35,6 +38,13 @@ export class Query {
 		this.order = order;
 	}
 
+	public setGroup(group: Group | null) {
+		this._group = group;
+	}
+
+	public get group() {
+		return this._group;
+	}
 
 	private sortSections(data: Section[]): Section[] {
 		if (this.order) {
@@ -60,17 +70,6 @@ export class Query {
 		return data;
 	}
 
-	// public performFilter(dataset: SectionDataset | RoomDataset): Section[] | Room[] {
-	// 	console.log(dataset.constructor.name);
-	// 	console.log(dataset instanceof SectionDataset || dataset instanceof RoomDataset);
-	// 	if (dataset instanceof SectionDataset) {
-	// 		return this.performSectionFilter(dataset);
-	// 	} else if (dataset instanceof RoomDataset) {
-	// 		return this.performRoomFilter(dataset);
-	// 	}
-	// 	throw new InsightError("not instance of room or section dataset");
-	// }
-
 	public performSectionFilter (dataset: SectionDataset): Section [] {
 		let filteredSections: Section[] = [];
 		if(!this.filter) {
@@ -82,6 +81,8 @@ export class Query {
 				}
 			}
 		}
+		// TODO: add group / apply code here
+
 		if (filteredSections.length > 5000) {
 			throw new ResultTooLargeError("Returned too many results: " + filteredSections.length);
 		}
@@ -100,6 +101,9 @@ export class Query {
 				}
 			}
 		}
+
+		// TODO: add group / apply code here
+
 		if (filteredRooms.length > 5000) {
 			throw new ResultTooLargeError("Returned too many results: " + filteredRooms.length);
 		}
