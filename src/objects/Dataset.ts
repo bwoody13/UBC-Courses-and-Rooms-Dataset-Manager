@@ -3,6 +3,8 @@ import {InsightDatasetKind} from "../controller/IInsightFacade";
 import {Room} from "./Room";
 import parse5 from "parse5";
 import {BuildingInfo} from "./BuildingInfo";
+import {parseBuilding} from "../resources/BuildingParser";
+import * as http from "http";
 
 export abstract class Dataset {
 	protected readonly _id: string;
@@ -37,29 +39,45 @@ export class RoomDataset extends Dataset {
 	}
 
 	public addRooms(building: BuildingInfo, document: parse5.Document) {
-		// let buildingFilePaths: string[] = [];
-		// let stack = [];
-		// stack.push(document);
-		// while(stack.length !== 0) {
-		// 	const currentElement = stack.pop();
-		// 	try {
-		// 		if (currentElement.nodeName === "td" && this.isValidTDElement(currentElement)) {
-		// 			const buildingFilePath = this.getBuildingFilePath(currentElement);
-		// 			if (buildingFilePath !== "") {
-		// 				if(!buildingFilePaths.includes(buildingFilePath)) {
-		// 					buildingFilePaths.push(buildingFilePath);
-		// 				}
-		// 			}
-		// 		}
-		// 	} catch(e) {
-		// 		// skip invalid td element (don't throw error)
-		// 	}
-		// 	if(currentElement.childNodes != null) {
-		// 		for(const childNodesKey in currentElement.childNodes) {
-		// 			stack.push(currentElement.childNodes[childNodesKey]);
-		// 		}
-		// 	}
-		// }
+		const HTTP_ADDRESS = "http://cs310.students.cs.ubc.ca:11316/api/v1/project_team053/";
+		const rooms = parseBuilding(document);
+		for(const roomKey in rooms) {
+			const room = rooms[roomKey];
+			room.fullname = building.fullname;
+			room.shortname = building.shortname;
+			room.address = building.address;
+			room.name = room.shortname + "_" + room.number;
+
+			// Reference: https://nodejs.org/api/http.html#http_http_get_url_options_callback
+			let geoResponse: any;
+			const req = http.get(HTTP_ADDRESS + room.address.replace(/\s/gi, "%20"),
+				(res) => {
+					let rawData = "";
+					res.on("data", (buf) => {
+						rawData += buf;
+					});
+
+					res.on("end", () => {
+						try {
+							geoResponse = JSON.parse(rawData);
+							if(geoResponse != null && "lat" in geoResponse && "lon" in geoResponse) {
+								room.lat = geoResponse.lat;
+								room.lon = geoResponse.lon;
+								this._rooms.push(room);
+								this._numRows++;
+							} else {
+								console.error("Failed to get GeoResponse");
+							}
+						} catch (e) {
+							// failed to parse geoLocation data
+						}
+					});
+				});
+
+			req.on("error", (e) => {
+				console.error("Failed to get GeoResponse");
+			});
+		}
 	}
 
 	public toJSONObject() {

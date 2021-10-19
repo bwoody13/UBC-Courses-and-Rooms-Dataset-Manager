@@ -7,28 +7,39 @@
 //  **assuming building should be ignored if html elements are missing
 //  **assuming valid buildings will have their info stored in immediate child td elements of a tr element
 import {BuildingInfo} from "../objects/BuildingInfo";
+import parse5 from "parse5";
 
-export function parseIndex(document: any): BuildingInfo[] {
+export function parseIndex(document: parse5.Document): BuildingInfo[] {
 	let buildings: BuildingInfo[] = [];
-	let buildingFilePaths: string[] = []; // for preventing duplicates
 	let stack = [];
-	stack.push(document);
+
+	if(document.childNodes != null) {
+		for(const childNodesKey in document.childNodes) {
+			if (document.childNodes[childNodesKey] !== undefined) {
+				stack.push(document.childNodes[childNodesKey]);
+			}
+		}
+	}
+
 	while(stack.length !== 0) {
 		const currentElement = stack.pop();
-		try {
-			if (currentElement.nodeName === "tr") {
-				const building = parseTableRow(currentElement);
-				if(building != null && !buildingFilePaths.includes(building.path)) {
-					buildings.push(building);
-					buildingFilePaths.push(building.path);
+		if(currentElement !== undefined && "childNodes" in currentElement) {
+			try {
+				if (currentElement.nodeName === "tr") {
+					const building = parseTableRow(currentElement);
+					if (building != null) {
+						buildings.push(building);
+					}
 				}
+			} catch (e) {
+				// skip invalid tr element (don't throw error)
 			}
-		} catch(e) {
-			// skip invalid tr element (don't throw error)
-		}
-		if(currentElement.childNodes != null) {
-			for(const childNodesKey in currentElement.childNodes) {
-				stack.push(currentElement.childNodes[childNodesKey]);
+			if ("childNodes" in currentElement) {
+				for (const childNodesKey in currentElement.childNodes) {
+					if (currentElement.childNodes[childNodesKey] !== undefined) {
+						stack.push(currentElement.childNodes[childNodesKey]);
+					}
+				}
 			}
 		}
 	}
@@ -44,19 +55,19 @@ function parseTableRow(trElement: any): BuildingInfo | null {
 			if(trChildNode.attrs[0].name === "class") {
 				switch(trChildNode.attrs[0].value) {
 					case "views-field views-field-field-building-code":
-						building.shortname = getTDTextValue(trChildNode);
+						building.shortname = getTDTextValue(trChildNode).trim();
 						codeSet = true;
 						break;
 					case "views-field views-field-title":
-						building.fullname = getTDTextValue(trChildNode);
+						building.fullname = getBuildingName(trChildNode).trim();
 						nameSet = true;
 						break;
 					case "views-field views-field-field-building-address":
-						building.address = getTDTextValue(trChildNode);
+						building.address = getTDTextValue(trChildNode).trim();
 						addressSet = true;
 						break;
 					case "views-field views-field-nothing":
-						building.path = getBuildingFilePath(trChildNode);
+						building.path = getBuildingFilePath(trChildNode).trim();
 						pathSet = true;
 						break;
 				}
@@ -67,6 +78,16 @@ function parseTableRow(trElement: any): BuildingInfo | null {
 		return building;
 	}
 	return null;
+}
+
+function getBuildingName(tdElement: any): string {
+	for(const tdChildNodeKey in tdElement.childNodes) {
+		const tdChildNode = tdElement.childNodes[tdChildNodeKey];
+		if(tdChildNode.nodeName === "a") {
+			return getTDTextValue(tdChildNode);
+		}
+	}
+	return "";
 }
 
 function getTDTextValue(tdElement: any): string {
