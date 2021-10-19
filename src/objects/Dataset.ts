@@ -1,6 +1,8 @@
 import {Section} from "./Section";
 import {InsightDatasetKind} from "../controller/IInsightFacade";
 import {Room} from "./Room";
+import parse5 from "parse5";
+import {BuildingInfo} from "./BuildingInfo";
 import {Query} from "./query_structure/Query";
 
 export type DatasetItem = Section | Room;
@@ -9,12 +11,10 @@ export type Results = Section[] | Room[];
 export abstract class Dataset {
 	protected readonly _id: string;
 	protected _numRows: number;
-	protected _data: Results;
 
-	protected constructor(id: string, numRows?: number, data?: Results) {
+	protected constructor(id: string, numRows?: number) {
 		this._id = id;
 		this._numRows = numRows || 0;
-		this._data = data || [];
 	}
 
 	public get id(): string {
@@ -25,35 +25,54 @@ export abstract class Dataset {
 		return this._numRows;
 	}
 
-	public get data(): Results {
-		return this._data;
-	}
-
 	public abstract toJSONObject(): any;
 }
 
 export class RoomDataset extends Dataset {
-	// private readonly _rooms: Room[];
+	private readonly _rooms: Room[];
 
 	constructor(id: string, numRows?: number, rooms?: Room[]) {
-		super(id, numRows, rooms);
-		// this._rooms = rooms || [];
+		super(id, numRows);
+		this._rooms = rooms || [];
 	}
 
-	// public get rooms(): Room[] {
-	// 	return this._rooms;
-	// }
+	public get rooms(): Room[] {
+		return this._rooms;
+	}
 
-	public addRooms() {
-		return;
+	public addRooms(building: BuildingInfo, document: parse5.Document) {
+		// let buildingFilePaths: string[] = [];
+		// let stack = [];
+		// stack.push(document);
+		// while(stack.length !== 0) {
+		// 	const currentElement = stack.pop();
+		// 	try {
+		// 		if (currentElement.nodeName === "td" && this.isValidTDElement(currentElement)) {
+		// 			const buildingFilePath = this.getBuildingFilePath(currentElement);
+		// 			if (buildingFilePath !== "") {
+		// 				if(!buildingFilePaths.includes(buildingFilePath)) {
+		// 					buildingFilePaths.push(buildingFilePath);
+		// 				}
+		// 			}
+		// 		}
+		// 	} catch(e) {
+		// 		// skip invalid td element (don't throw error)
+		// 	}
+		// 	if(currentElement.childNodes != null) {
+		// 		for(const childNodesKey in currentElement.childNodes) {
+		// 			stack.push(currentElement.childNodes[childNodesKey]);
+		// 		}
+		// 	}
+		// }
 	}
 
 	public toJSONObject() {
 		return {
 			id: this._id,
-			kind: InsightDatasetKind.Courses,
+			kind: InsightDatasetKind.Rooms,
 			numRows: this._numRows,
-			rooms: this._data};
+			rooms: this._rooms
+		};
 	}
 }
 
@@ -62,7 +81,7 @@ export class SectionDataset extends Dataset {
 	private readonly _sections: Section[];
 
 	constructor(id: string, numRows?: number, sections?: Section[]) {
-		super(id, numRows, sections);
+		super(id, numRows);
 		this._sections = sections || [];
 	}
 
@@ -126,7 +145,7 @@ export class SectionDataset extends Dataset {
 			id: this._id,
 			kind: InsightDatasetKind.Courses,
 			numRows: this._numRows,
-			sections: this._data
+			sections: this._sections
 		};
 	}
 }
