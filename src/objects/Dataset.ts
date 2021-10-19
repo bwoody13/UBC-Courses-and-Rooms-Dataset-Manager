@@ -5,6 +5,7 @@ import parse5 from "parse5";
 import {BuildingInfo} from "./BuildingInfo";
 import {parseBuilding} from "../resources/BuildingParser";
 import * as http from "http";
+import {IncomingMessage} from "http";
 
 export abstract class Dataset {
 	protected readonly _id: string;
@@ -26,6 +27,12 @@ export abstract class Dataset {
 	public abstract toJSONObject(): any;
 }
 
+interface GeoResponse {
+	lat?: number;
+	lon?: number;
+	error?: string;
+}
+
 export class RoomDataset extends Dataset {
 	private readonly _rooms: Room[];
 
@@ -38,45 +45,45 @@ export class RoomDataset extends Dataset {
 		return this._rooms;
 	}
 
-	public addRooms(building: BuildingInfo, document: parse5.Document) {
+	public async addRooms(building: BuildingInfo, document: parse5.Document) {
 		const HTTP_ADDRESS = "http://cs310.students.cs.ubc.ca:11316/api/v1/project_team053/";
 		const rooms = parseBuilding(document);
+
+		// Reference: https://nodejs.org/api/http.html#http_http_get_url_options_callback
+		const geoResponse = await new Promise<GeoResponse>((resolve, reject) => {
+			http.get(HTTP_ADDRESS + building.address.replace(/\s/gi, "%20"),
+				(res) => {
+					let rawData = "";
+					res.on("data", (buf) => {
+						rawData += buf;
+					});
+					res.on("end", () => {
+						try {
+							resolve(JSON.parse(rawData) as GeoResponse);
+						} catch (e) {
+							reject({error: "Failed to parse geoLocation data"} as GeoResponse);
+						}
+					});
+					res.on("error", (e) => {
+						reject({error: e.toString()} as GeoResponse);
+					});
+				});
+		});
+
+		if (geoResponse == null || "error" in geoResponse || geoResponse.lat == null || geoResponse.lon == null) {
+			return;
+		}
+
 		for(const roomKey in rooms) {
 			const room = rooms[roomKey];
 			room.fullname = building.fullname;
 			room.shortname = building.shortname;
 			room.address = building.address;
 			room.name = room.shortname + "_" + room.number;
-
-			// Reference: https://nodejs.org/api/http.html#http_http_get_url_options_callback
-			let geoResponse: any;
-			const req = http.get(HTTP_ADDRESS + room.address.replace(/\s/gi, "%20"),
-				(res) => {
-					let rawData = "";
-					res.on("data", (buf) => {
-						rawData += buf;
-					});
-
-					res.on("end", () => {
-						try {
-							geoResponse = JSON.parse(rawData);
-							if(geoResponse != null && "lat" in geoResponse && "lon" in geoResponse) {
-								room.lat = geoResponse.lat;
-								room.lon = geoResponse.lon;
-								this._rooms.push(room);
-								this._numRows++;
-							} else {
-								console.error("Failed to get GeoResponse");
-							}
-						} catch (e) {
-							// failed to parse geoLocation data
-						}
-					});
-				});
-
-			req.on("error", (e) => {
-				console.error("Failed to get GeoResponse");
-			});
+			room.lat = geoResponse.lat;
+			room.lon = geoResponse.lon;
+			this._rooms.push(room);
+			this._numRows++;
 		}
 	}
 
