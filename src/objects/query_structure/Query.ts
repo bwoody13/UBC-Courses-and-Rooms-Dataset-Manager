@@ -6,6 +6,8 @@ import {Order} from "./Order";
 import {Room} from "../Room";
 import {getSectionRoomKey} from "../../resources/Util";
 import {Group} from "./Group";
+import {isBoolean} from "util";
+import {SectionGroup} from "./SectionGroup";
 
 export class Query {
 	public static ID: string;
@@ -109,6 +111,37 @@ export class Query {
 		}
 		filteredRooms = this.sortRooms(filteredRooms);
 		return filteredRooms;
+	}
+
+	private hasKeyValPairs(dataItem: DatasetItem, obj: any) {
+		let ret: boolean = true;
+		for (const key of Object.keys(obj)) {
+			ret &&= getSectionRoomKey(key, dataItem) === obj[key];
+		}
+		return ret;
+	}
+
+	private makeSectionGroups(sections: Section[]) {
+		if (this.group) {
+			let out: SectionGroup[] = [];
+			let sectionsGrouped: number = 0;
+			let secGroupObjs: Array<{[k: string]: string | number}> = [];
+			let i: number = 0;
+			while (sections.length > sectionsGrouped) {
+				let secKeyVals: {[k: string]: string | number} = {};
+				for (const key in this.group?.groupKeys) {
+					secKeyVals[key] = getSectionRoomKey(key, sections[i]);
+				}
+				if (!secGroupObjs.includes(secKeyVals)) {
+					const secList = sections.filter((section) => this.hasKeyValPairs(section, secKeyVals));
+					let secGroup = new SectionGroup(secKeyVals, secList,this.group?.applyKeys);
+					out.push(secGroup);
+					sectionsGrouped += secList.length;
+					secGroupObjs.push(secKeyVals);
+				}
+				i++;
+			}
+		}
 	}
 
 	public getOutput(results: DatasetItem[]): any[] {
