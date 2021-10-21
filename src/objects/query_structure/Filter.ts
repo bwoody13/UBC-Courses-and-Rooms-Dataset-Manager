@@ -78,7 +78,7 @@ export abstract class KeyFilter extends Filter {
 }
 
 export abstract class MFilter extends KeyFilter {
-	private _M_KEYS: string[] = ["avg", "pass", "fail", "audit", "year", "lat", "lon", "seats"];
+	private _M_KEYS: string[] = ["avg", "pass", "fail", "audit", "year", "lat", "lon", "seats"]; // TODO: these shouldn't be combined
 	protected val: number;
 	protected constructor(filterObj: any) {
 		super(filterObj);
@@ -125,7 +125,7 @@ export class LtFilter extends MFilter {
 
 export abstract class SFilter extends KeyFilter {
 	private _S_KEYS: string[] = ["dept", "id", "instructor", "title", "uuid", "fullname", "shortname", "number",
-		"name", "address", "type", "furniture", "href"];
+		"name", "address", "type", "furniture", "href"]; // TODO: these shouldn't be combined
 
 	protected val: string;
 	protected constructor(filterObj: any) {
