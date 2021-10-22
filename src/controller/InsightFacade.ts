@@ -184,16 +184,10 @@ export default class InsightFacade implements IInsightFacade {
 		} catch(e) {
 			return Promise.reject(new InsightError("Error reading dataset: " + e));
 		}
-		let filteredSections: Section[];
 		try {
-			filteredSections = query.performSectionFilter(dataset);
+			out = query.performSectionFilter(dataset);
 		} catch(e) {
 			return Promise.reject(e);
-		}
-		try {
-			out = query.getOutput(filteredSections);
-		} catch(e) {
-			return Promise.reject(new InsightError("Error getting output: " + e));
 		}
 		return out;
 	}
@@ -206,16 +200,10 @@ export default class InsightFacade implements IInsightFacade {
 		} catch(e) {
 			return Promise.reject(new InsightError("Error reading dataset: " + e));
 		}
-		let filteredRooms: Room[];
 		try {
-			filteredRooms = query.performRoomFilter(dataset);
+			out = query.performRoomFilter(dataset);
 		} catch(e) {
 			return Promise.reject(e);
-		}
-		try {
-			out = query.getOutput(filteredRooms);
-		} catch(e) {
-			return Promise.reject(new InsightError("Error getting output: " + e));
 		}
 		return out;
 	}

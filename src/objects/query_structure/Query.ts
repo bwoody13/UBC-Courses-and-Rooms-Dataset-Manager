@@ -6,22 +6,19 @@ import {Order} from "./Order";
 import {Room} from "../Room";
 import {getSectionRoomKey} from "../../resources/Util";
 import {Group} from "./Group";
-import {isBoolean} from "util";
-import {SectionGroup} from "./SectionGroup";
+
 
 export class Query {
 	public static ID: string;
 	public static TYPE: string;
 
-	private filter?: Filter;
-	private readonly _keys: string[];
-	private order: Order | null;
-	private _group: Group | null;
+	protected filter?: Filter;
+	protected readonly _keys: string[];
+	protected order: Order | null;
 
 	constructor() {
 		this._keys = [];
 		this.order = null;
-		this._group = null;
 	}
 
 	public get keys(): string[] {
@@ -38,14 +35,6 @@ export class Query {
 
 	public setOrder(order: Order | null) {
 		this.order = order;
-	}
-
-	public setGroup(group: Group | null) {
-		this._group = group;
-	}
-
-	public get group() {
-		return this._group;
 	}
 
 	private sortSections(data: Section[]): Section[] {
@@ -72,7 +61,7 @@ export class Query {
 		return data;
 	}
 
-	public performSectionFilter (dataset: SectionDataset): Section [] {
+	public performSectionFilter (dataset: SectionDataset): any[] {
 		let filteredSections: Section[] = [];
 		if(!this.filter) {
 			filteredSections = dataset.sections;
@@ -83,16 +72,15 @@ export class Query {
 				}
 			}
 		}
-		// TODO: add group / apply code here
 
 		if (filteredSections.length > 5000) {
 			throw new ResultTooLargeError("Returned too many results: " + filteredSections.length);
 		}
 		filteredSections = this.sortSections(filteredSections);
-		return filteredSections;
+		return this.getOutput(filteredSections);
 	}
 
-	public performRoomFilter (dataset: RoomDataset): Room[] {
+	public performRoomFilter (dataset: RoomDataset): any[] {
 		let filteredRooms: Room[] = [];
 		if(!this.filter) {
 			filteredRooms = dataset.rooms;
@@ -104,44 +92,11 @@ export class Query {
 			}
 		}
 
-		// TODO: add group / apply code here
-
 		if (filteredRooms.length > 5000) {
 			throw new ResultTooLargeError("Returned too many results: " + filteredRooms.length);
 		}
 		filteredRooms = this.sortRooms(filteredRooms);
-		return filteredRooms;
-	}
-
-	private hasKeyValPairs(dataItem: DatasetItem, obj: any) {
-		let ret: boolean = true;
-		for (const key of Object.keys(obj)) {
-			ret &&= getSectionRoomKey(key, dataItem) === obj[key];
-		}
-		return ret;
-	}
-
-	private makeSectionGroups(sections: Section[]) {
-		if (this.group) {
-			let out: SectionGroup[] = [];
-			let sectionsGrouped: number = 0;
-			let secGroupObjs: Array<{[k: string]: string | number}> = [];
-			let i: number = 0;
-			while (sections.length > sectionsGrouped) {
-				let secKeyVals: {[k: string]: string | number} = {};
-				for (const key in this.group?.groupKeys) {
-					secKeyVals[key] = getSectionRoomKey(key, sections[i]);
-				}
-				if (!secGroupObjs.includes(secKeyVals)) {
-					const secList = sections.filter((section) => this.hasKeyValPairs(section, secKeyVals));
-					let secGroup = new SectionGroup(secKeyVals, secList,this.group?.applyKeys);
-					out.push(secGroup);
-					sectionsGrouped += secList.length;
-					secGroupObjs.push(secKeyVals);
-				}
-				i++;
-			}
-		}
+		return this.getOutput(filteredRooms);
 	}
 
 	public getOutput(results: DatasetItem[]): any[] {

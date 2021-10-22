@@ -31,11 +31,6 @@ export class Group {
 		}
 		return names;
 	}
-
-	public makeSectionGroups(sections: Section[]) {
-		return;
-	}
-
 }
 
 export abstract class ApplyKey {
@@ -87,10 +82,9 @@ class MinApplyKey extends ApplyKey {
 class AvgApplyKey extends ApplyKey {
 	public applyOp(data: Section[] | Room[]): number {
 		let sum: Decimal = new Decimal(0);
-		let count: number = 0;
+		let count: number = data.length;
 		for (let dataItem of data) {
-			sum.add(getSectionRoomKey(this.key, dataItem));
-			count++;
+			sum = sum.plus(getSectionRoomKey(this.key, dataItem));
 		}
 		let avg = sum.toNumber() / count;
 		return Number(avg.toFixed(2));
