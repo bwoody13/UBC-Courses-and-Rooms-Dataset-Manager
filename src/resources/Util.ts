@@ -28,7 +28,7 @@ export function datasetExistsReject() {
 }
 
 export function getSectionRoomKey(key: string, dataItem: any) {
-	if (Query.TYPE === "SECTION") {
+	if (Query.TYPE === "COURSE") {
 		return dataItem[key as keyof Section];
 	} else {
 		return dataItem[key as keyof Room];
@@ -69,6 +69,15 @@ export function extractKey(key: string): string {
 	return k;
 }
 
+export function extractGroupKey(key: string): string {
+	let k: string;
+	if (key.includes("_")) {
+		k = extractKey(key);
+	} else {
+		k = key;
+	}
+	return k;
+}
 
 // export function stringToKey(str: string): Key {
 // 	let key: Key;

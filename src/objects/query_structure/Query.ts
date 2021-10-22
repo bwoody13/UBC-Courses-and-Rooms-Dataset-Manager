@@ -5,14 +5,16 @@ import {InsightError, ResultTooLargeError} from "../../controller/IInsightFacade
 import {Order} from "./Order";
 import {Room} from "../Room";
 import {getSectionRoomKey} from "../../resources/Util";
+import {Group} from "./Group";
+
 
 export class Query {
 	public static ID: string;
 	public static TYPE: string;
 
-	private filter?: Filter;
-	private readonly _keys: string[];
-	private order: Order | null;
+	protected filter?: Filter;
+	protected readonly _keys: string[];
+	protected order: Order | null;
 
 	constructor() {
 		this._keys = [];
@@ -34,7 +36,6 @@ export class Query {
 	public setOrder(order: Order | null) {
 		this.order = order;
 	}
-
 
 	private sortSections(data: Section[]): Section[] {
 		if (this.order) {
@@ -60,18 +61,7 @@ export class Query {
 		return data;
 	}
 
-	// public performFilter(dataset: SectionDataset | RoomDataset): Section[] | Room[] {
-	// 	console.log(dataset.constructor.name);
-	// 	console.log(dataset instanceof SectionDataset || dataset instanceof RoomDataset);
-	// 	if (dataset instanceof SectionDataset) {
-	// 		return this.performSectionFilter(dataset);
-	// 	} else if (dataset instanceof RoomDataset) {
-	// 		return this.performRoomFilter(dataset);
-	// 	}
-	// 	throw new InsightError("not instance of room or section dataset");
-	// }
-
-	public performSectionFilter (dataset: SectionDataset): Section [] {
+	public performSectionFilter (dataset: SectionDataset): any[] {
 		let filteredSections: Section[] = [];
 		if(!this.filter) {
 			filteredSections = dataset.sections;
@@ -82,14 +72,15 @@ export class Query {
 				}
 			}
 		}
+
 		if (filteredSections.length > 5000) {
 			throw new ResultTooLargeError("Returned too many results: " + filteredSections.length);
 		}
 		filteredSections = this.sortSections(filteredSections);
-		return filteredSections;
+		return this.getOutput(filteredSections);
 	}
 
-	public performRoomFilter (dataset: RoomDataset): Room[] {
+	public performRoomFilter (dataset: RoomDataset): any[] {
 		let filteredRooms: Room[] = [];
 		if(!this.filter) {
 			filteredRooms = dataset.rooms;
@@ -100,11 +91,12 @@ export class Query {
 				}
 			}
 		}
+
 		if (filteredRooms.length > 5000) {
 			throw new ResultTooLargeError("Returned too many results: " + filteredRooms.length);
 		}
 		filteredRooms = this.sortRooms(filteredRooms);
-		return filteredRooms;
+		return this.getOutput(filteredRooms);
 	}
 
 	public getOutput(results: DatasetItem[]): any[] {
