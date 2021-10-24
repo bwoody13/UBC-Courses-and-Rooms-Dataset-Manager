@@ -2,7 +2,7 @@ import {Query} from "./Query";
 import {Group} from "./Group";
 import {DatasetItem, RoomDataset, SectionDataset} from "../Dataset";
 import {Section} from "../Section";
-import {getSectionRoomKey} from "../../resources/Util";
+import {getSectionRoomKey, validQueryKeys} from "../../resources/Util";
 import {ResultTooLargeError} from "../../controller/IInsightFacade";
 import {DataGroup} from "./DataGroup";
 import {Room} from "../Room";
@@ -54,14 +54,18 @@ export class GroupQuery extends Query {
 		return this.getGroupOutput(secObjs);
 	}
 
+	private createKeyValObj(dataItem: Section | Room): string {
+		let keyVals: {[k: string]: string | number} = {};
+		for (const key of this.group.groupKeys) {
+			keyVals[key] = getSectionRoomKey(key, dataItem);
+		}
+		return JSON.stringify(keyVals);
+	}
+
 	private makeSectionLists(sections: Section[]): {[k: string]: Section[]} {
 		let secGroupObjs: {[k: string]: Section[]} = {};
 		for (const section of sections) {
-			let secKeyVals: {[k: string]: string | number} = {};
-			for (const key of this.group.groupKeys) {
-				secKeyVals[key] = getSectionRoomKey(key, section);
-			}
-			const strObj = JSON.stringify(secKeyVals);
+			const strObj = this.createKeyValObj(section);
 			if(secGroupObjs[strObj]) {
 				secGroupObjs[strObj].push(section);
 			} else {
@@ -105,11 +109,7 @@ export class GroupQuery extends Query {
 	private makeRoomLists(rooms: Room[]): {[k: string]: Room[]} {
 		let roomGroupObjs: {[k: string]: Room[]} = {};
 		for (const room of rooms) {
-			let roomKeyVals: {[k: string]: string | number} = {};
-			for (const key of this.group.groupKeys) {
-				roomKeyVals[key] = getSectionRoomKey(key, room);
-			}
-			const strObj = JSON.stringify(roomKeyVals);
+			const strObj = this.createKeyValObj(room);
 			if(roomGroupObjs[strObj]) {
 				roomGroupObjs[strObj].push(room);
 			} else {
@@ -136,9 +136,6 @@ export class GroupQuery extends Query {
 		for (const secGroup of results) {
 			let dataObj: {[k: string]: any} = {};
 			for(const key in this._keys) {
-				const validQueryKeys = ["avg", "dept", "instructor", "title", "uuid", "pass", "fail", "audit",
-					"year", "id", "fullname", "shortname", "number", "name", "address", "type", "furniture", "href",
-					"lat", "lon", "seats"];
 				let queryKey: string;
 				if (validQueryKeys.includes(this._keys[key])) {
 					queryKey = Query.ID + "_" + this._keys[key];

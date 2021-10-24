@@ -1,5 +1,5 @@
 import {InsightError} from "../../controller/IInsightFacade";
-import {extractKey, getSectionRoomKey} from "../../resources/Util";
+import {extractKey, getSectionRoomKey, mKeys, sKeys} from "../../resources/Util";
 import {Section} from "../Section";
 import {DatasetItem} from "../Dataset";
 import {Room} from "../Room";
@@ -78,11 +78,10 @@ export abstract class KeyFilter extends Filter {
 }
 
 export abstract class MFilter extends KeyFilter {
-	private _M_KEYS: string[] = ["avg", "pass", "fail", "audit", "year", "lat", "lon", "seats"]; // TODO: these shouldn't be combined
 	protected val: number;
 	protected constructor(filterObj: any) {
 		super(filterObj);
-		if (!(this._M_KEYS.includes(this.key))) {
+		if (!(mKeys.includes(this.key))) {
 			throw new InsightError(this.key + " is not a valid MKey");
 		}
 		const v = filterObj[Object.keys(filterObj)[0]];
@@ -124,13 +123,10 @@ export class LtFilter extends MFilter {
 }
 
 export abstract class SFilter extends KeyFilter {
-	private _S_KEYS: string[] = ["dept", "id", "instructor", "title", "uuid", "fullname", "shortname", "number",
-		"name", "address", "type", "furniture", "href"]; // TODO: these shouldn't be combined
-
 	protected val: string;
 	protected constructor(filterObj: any) {
 		super(filterObj);
-		if (!(this._S_KEYS.includes(this.key))) {
+		if (!(sKeys.includes(this.key))) {
 			throw new InsightError(this.key + " is not a valid SKey");
 		}
 		const v = filterObj[Object.keys(filterObj)[0]];
