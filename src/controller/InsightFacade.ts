@@ -4,12 +4,16 @@ import {IInsightFacade,
 	InsightError,
 	NotFoundError} from "./IInsightFacade";
 import * as fs from "fs-extra";
-import {Dataset, SectionDataset} from "../objects/Dataset";
+import {Dataset, RoomDataset, SectionDataset, DatasetItem} from "../objects/Dataset";
 import JSZip from "jszip";
 import {datasetExistsReject, datasetExists, invalidIDReject, invalidID} from "../resources/Util";
-import {Query} from "../objects/query_structure/Query";
 import {parseQuery} from "../resources/QueryParser";
 import {Section} from "../objects/Section";
+import parse5 from "parse5";
+import {Room} from "../objects/Room";
+import {BuildingInfo} from "../objects/BuildingInfo";
+import {parseIndex} from "../resources/RoomParser";
+import {Query} from "../objects/query_structure/Query";
 
 export const DATASETS_DIRECTORY = "data/";
 const COURSES_DIR_NAME = "courses/";
@@ -49,7 +53,7 @@ export default class InsightFacade implements IInsightFacade {
 		}
 		// reject if there are no valid course sections in the dataset
 		if (!dataset.numRows) {
-			return Promise.reject(new InsightError("No valid course sections."));
+			return Promise.reject(new InsightError("No valid rows in dataset."));
 		}
 		// save the dataset to disk
 		await fs.ensureDir(DATASETS_DIRECTORY);
@@ -99,53 +103,46 @@ export default class InsightFacade implements IInsightFacade {
 			return Promise.reject(new InsightError("Rooms folder is missing or not in the root directory."));
 		}
 		// parse the index.htm file
-		const parse5 = require("parse5");
 		const indexFile = dir.folder("rooms")?.file("index.htm");
 		if(!indexFile) {
 			throw new InsightError("Missing index.htm file in Rooms folder.");
 		}
 		const indexString = await indexFile.async("string");
-		const document = parse5.parse(indexString);
-		this.parseRoomsDocument(document);
+		let indexDocument: parse5.Document;
+		try {
+			indexDocument = parse5.parse(indexString);
+		} catch(e) {
+			throw new InsightError("Parse5 failed to parse index.htm");
+		}
+		// this may not be necessary
+		if(indexDocument == null) {
+			throw new InsightError("Parse5 failed to parse index.htm");
+		}
 
-		return Promise.reject("not implemented");
-	}
+		let dataset = new RoomDataset(id);
+		const buildings = parseIndex(indexDocument);
+		if(buildings.length === 0) {
+			throw new InsightError("No valid building info found within index.");
+		}
 
-	// No assumptions -- parsing Room Document by traversing the json tree to find
-	// 					 all valid td elements
-	private parseRoomsDocument(document: any) {
-		// traverse the document to find td tags
-		let tdElements = [];
-		let stack = [];
-		stack.push(document);
-		while(stack.length !== 0) {
-			const currentElement = stack.pop();
-			if(currentElement.nodeName === "td") {
-				tdElements.push(currentElement);
-			}
-			if(currentElement.childNodes != null) {
-				stack.push(currentElement.childNodes);
+		for(const buildingInfo of buildings) {
+			const path = ROOMS_DIR_NAME + buildingInfo.path.substr(2, buildingInfo.path.length);
+			const buildingFile = dir.file(path);
+			if(buildingFile != null) {
+				const buildingFileString = await buildingFile.async("string");
+				try {
+					const buildingDocument = parse5.parse(buildingFileString);
+					if(buildingDocument != null) {
+						// const buildingCode = buildingFilePath.substring(buildingFilePath.lastIndexOf("/") + 1,
+						// 	buildingFilePath.length);
+						await dataset.addRooms(buildingInfo, buildingDocument);
+					}
+				} catch(e) {
+					// skip building if it failed to parse
+				}
 			}
 		}
-		const TD_ROOM_PATH_ATTRIBUTE = "views-field views-field-nothing";
-		// traverse all the table elements to find valid td tags
-		// for(const tableElement of tableElements) {
-		// 	let tbody = tableElement.childNodes["tbody"];
-		// 	for(const tbodyElement of tbody.childNodes) {
-		// 		if(tbodyElement.nodeName === "tr") {
-		// 			for(const trElement of tbodyElement.childNodes) {
-		// 				if(trElement.nodeName === "td") {
-		//
-		// 				}
-		// 			}
-		// 		}
-		// 	}
-		// }
-
-	}
-
-	private isValidTDElement(tdElement: any): boolean {
-		return true;
+		return dataset;
 	}
 
 	public async removeDataset(id: string): Promise<string> {
@@ -170,7 +167,18 @@ export default class InsightFacade implements IInsightFacade {
 		} catch(e) {
 			return Promise.reject(new InsightError("Error parsing Query: " + e));
 		}
+		let out: any[];
+		if (Query.TYPE === "COURSE") {
+			out = await this.performSectionQuery(queryObj);
+		} else {
+			out = await this.performRoomQuery(queryObj);
+		}
+		return Promise.resolve(out);
+	}
+
+	private async performSectionQuery(query: Query): Promise<any[]> {
 		let dataset: SectionDataset;
+		let out: any[];
 		try {
 			dataset = await fs.readJSON(DATASETS_DIRECTORY + Query.ID + ".json");
 		} catch(e) {
@@ -178,18 +186,38 @@ export default class InsightFacade implements IInsightFacade {
 		}
 		let filteredSections: Section[];
 		try {
-			filteredSections = queryObj.performFilter(dataset);
+			filteredSections = query.performSectionFilter(dataset);
 		} catch(e) {
 			return Promise.reject(e);
 		}
-		let out: any[];
 		try {
-			out = queryObj.getOutput(filteredSections);
+			out = query.getOutput(filteredSections);
 		} catch(e) {
 			return Promise.reject(new InsightError("Error getting output: " + e));
 		}
-		// console.log(out);
-		return Promise.resolve(out);
+		return out;
+	}
+
+	private async performRoomQuery(query: Query):  Promise<any[]> {
+		let dataset: RoomDataset;
+		let out: any[];
+		try {
+			dataset = await fs.readJSON(DATASETS_DIRECTORY + Query.ID + ".json");
+		} catch(e) {
+			return Promise.reject(new InsightError("Error reading dataset: " + e));
+		}
+		let filteredRooms: Room[];
+		try {
+			filteredRooms = query.performRoomFilter(dataset);
+		} catch(e) {
+			return Promise.reject(e);
+		}
+		try {
+			out = query.getOutput(filteredRooms);
+		} catch(e) {
+			return Promise.reject(new InsightError("Error getting output: " + e));
+		}
+		return out;
 	}
 
 	public async listDatasets(): Promise<InsightDataset[]> {

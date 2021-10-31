@@ -1,18 +1,27 @@
 import {Filter} from "./Filter";
-import {SectionDataset} from "../Dataset";
+import {Dataset, DatasetItem, RoomDataset, SectionDataset} from "../Dataset";
 import {Section} from "../Section";
-import {ResultTooLargeError} from "../../controller/IInsightFacade";
+import {InsightError, ResultTooLargeError} from "../../controller/IInsightFacade";
+import {Order} from "./Order";
+import {Room} from "../Room";
+import {getSectionRoomKey} from "../../resources/Util";
+import {Group} from "./Group";
+import {isBoolean} from "util";
+import {SectionGroup} from "./SectionGroup";
 
 export class Query {
 	public static ID: string;
+	public static TYPE: string;
 
 	private filter?: Filter;
 	private readonly _keys: string[];
-	private order: string;
+	private order: Order | null;
+	private _group: Group | null;
 
 	constructor() {
 		this._keys = [];
-		this.order = "";
+		this.order = null;
+		this._group = null;
 	}
 
 	public get keys(): string[] {
@@ -27,12 +36,44 @@ export class Query {
 		this._keys.push(key);
 	}
 
-	public setOrder(order: string) {
+	public setOrder(order: Order | null) {
 		this.order = order;
 	}
 
-	public performFilter(dataset: SectionDataset): Section[] {
-		let filteredSections = [];
+	public setGroup(group: Group | null) {
+		this._group = group;
+	}
+
+	public get group() {
+		return this._group;
+	}
+
+	private sortSections(data: Section[]): Section[] {
+		if (this.order) {
+			data.sort((secA, secB) => {
+				if (this.order) {
+					return this.order.compare(secA, secB);
+				}
+				return 1;
+			});
+		}
+		return data;
+	}
+
+	private sortRooms(data: Room[]): Room[] {
+		if (this.order) {
+			data.sort((secA, secB) => {
+				if (this.order) {
+					return this.order.compare(secA, secB);
+				}
+				return 1;
+			});
+		}
+		return data;
+	}
+
+	public performSectionFilter (dataset: SectionDataset): Section [] {
+		let filteredSections: Section[] = [];
 		if(!this.filter) {
 			filteredSections = dataset.sections;
 		} else {
@@ -42,39 +83,76 @@ export class Query {
 				}
 			}
 		}
+		// TODO: add group / apply code here
+
 		if (filteredSections.length > 5000) {
 			throw new ResultTooLargeError("Returned too many results: " + filteredSections.length);
 		}
-		if (this.order) {
-			filteredSections.sort((secA, secB) => {
-				const valA = secA[this.order as keyof Section];
-				const valB = secB[this.order as keyof Section];
-				if (typeof valA === "string" && typeof valB === "string") {
-					return valA.localeCompare(valB);
-				} else {
-					if (valA < valB) {
-						return -1;
-					}
-					if (valA > valB) {
-						return 1;
-					}
-					return -1;
-				}
-
-			});
-		}
+		filteredSections = this.sortSections(filteredSections);
 		return filteredSections;
 	}
 
-	public getOutput(sections: Section[]): any[] {
+	public performRoomFilter (dataset: RoomDataset): Room[] {
+		let filteredRooms: Room[] = [];
+		if(!this.filter) {
+			filteredRooms = dataset.rooms;
+		} else {
+			for(const section of dataset.rooms) {
+				if(this.filter.applyFilter(section)) {
+					filteredRooms.push(section);
+				}
+			}
+		}
+
+		// TODO: add group / apply code here
+
+		if (filteredRooms.length > 5000) {
+			throw new ResultTooLargeError("Returned too many results: " + filteredRooms.length);
+		}
+		filteredRooms = this.sortRooms(filteredRooms);
+		return filteredRooms;
+	}
+
+	private hasKeyValPairs(dataItem: DatasetItem, obj: any) {
+		let ret: boolean = true;
+		for (const key of Object.keys(obj)) {
+			ret &&= getSectionRoomKey(key, dataItem) === obj[key];
+		}
+		return ret;
+	}
+
+	private makeSectionGroups(sections: Section[]) {
+		if (this.group) {
+			let out: SectionGroup[] = [];
+			let sectionsGrouped: number = 0;
+			let secGroupObjs: Array<{[k: string]: string | number}> = [];
+			let i: number = 0;
+			while (sections.length > sectionsGrouped) {
+				let secKeyVals: {[k: string]: string | number} = {};
+				for (const key in this.group?.groupKeys) {
+					secKeyVals[key] = getSectionRoomKey(key, sections[i]);
+				}
+				if (!secGroupObjs.includes(secKeyVals)) {
+					const secList = sections.filter((section) => this.hasKeyValPairs(section, secKeyVals));
+					let secGroup = new SectionGroup(secKeyVals, secList,this.group?.applyKeys);
+					out.push(secGroup);
+					sectionsGrouped += secList.length;
+					secGroupObjs.push(secKeyVals);
+				}
+				i++;
+			}
+		}
+	}
+
+	public getOutput(results: DatasetItem[]): any[] {
 		let out = [];
-		for(const section of sections) {
-			let sectionObj: {[k: string]: any} = {};
+		for(const dataItem of results) {
+			let dataObj: {[k: string]: any} = {};
 			for(const key in this._keys) {
 				const queryKey = Query.ID + "_" + this._keys[key];
-				sectionObj[queryKey] = section[this._keys[key] as keyof Section];
+				dataObj[queryKey] = getSectionRoomKey(this._keys[key], dataItem);
 			}
-			out.push(sectionObj);
+			out.push(dataObj);
 		}
 		return out;
 	}
