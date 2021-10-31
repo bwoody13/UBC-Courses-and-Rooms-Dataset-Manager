@@ -1,0 +1,24 @@
+{
+  "errorMsg": "TRANSFORMATIONS missing GROUP",
+  "title": "Invalid Trans Missing Group",
+  "input": {
+    "WHERE": {},
+    "OPTIONS": {
+      "COLUMNS": [
+        "courses_title",
+        "overallAvg"
+      ]
+    },
+    "TRANSFORMATIONS": {
+      "APPLY": [
+        {
+          "overallAvg": {
+            "AVG": "courses_avg"
+          }
+        }
+      ]
+    }
+  },
+  "errorExpected": true,
+  "with": "InsightError"
+}

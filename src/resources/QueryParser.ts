@@ -6,19 +6,14 @@ import {
 import {extractKey} from "./Util";
 import {Order} from "../objects/query_structure/Order";
 import {ApplyKey, Group, makeApplyKey} from "../objects/query_structure/Group";
+import {GroupQuery} from "../objects/query_structure/GroupQuery";
 
 export function parseQuery(queryObj: any): Query {
 	Query.ID = "";
 	const query = new Query();
 	if (queryObj.TRANSFORMATIONS) {
-		if (queryObj.TRANSFORMATIONS.GROUP && queryObj.TRANSFORMATIONS.APPLY) {
-			try {
-				parseGroup(queryObj.TRANSFORMATIONS.GROUP, query);
-				parseApply(queryObj.TRANSFORMATIONS.APPLY, query);
-			} catch (e) {
-				throw new InsightError("error parsing Transformations. " + e);
-			}
-		}
+		// parse Group Query
+		return parseGroupQuery(queryObj);
 	}
 	if (queryObj.OPTIONS) {
 		if(queryObj.OPTIONS.COLUMNS) {
@@ -56,18 +51,86 @@ export function parseQuery(queryObj: any): Query {
 	return query;
 }
 
-function parseGroup(groupObj: string[], query: Query) {
-	let group: Group = new Group(groupObj);
-	query.setGroup(group);
+function parseGroupQuery(queryObj: any): GroupQuery {
+	let query: GroupQuery;
+	if (queryObj.TRANSFORMATIONS.GROUP && queryObj.TRANSFORMATIONS.APPLY) {
+		try {
+			let groupObj: string[] = queryObj.TRANSFORMATIONS.GROUP;
+			let group: Group = new Group(groupObj);
+			query = new GroupQuery(group);
+			parseApply(queryObj.TRANSFORMATIONS.APPLY, query);
+		} catch (e) {
+			throw new InsightError("error parsing Transformations. " + e);
+		}
+	} else {
+		throw new InsightError("Invalid Group Query.");
+	}
+	if (queryObj.OPTIONS) {
+		if(queryObj.OPTIONS.COLUMNS) {
+			for(const key of queryObj.OPTIONS.COLUMNS) {
+				try {
+					query.addKey(parseGroupKey(key, query));
+				} catch(e) {
+					throw new InsightError("Error parsing Key: " + key + ": " + e);
+				}
+			}
+		} else {
+			throw new InsightError("Missing 'COLUMNS' clause in Query.");
+		}
+		if(queryObj.OPTIONS.ORDER) {
+			try {
+				parseGroupOrder(queryObj.OPTIONS.ORDER, query);
+			} catch(e) {
+				throw new InsightError("Error parsing Order: " + e);
+			}
+		}
+	} else {
+		throw new InsightError("Missing 'OPTIONS' clause in Query.");
+	}
+	if (queryObj.WHERE) {
+		for(const key of Object.keys(queryObj.WHERE)) {
+			try {
+				parseFilter(queryObj.WHERE, query);
+			} catch(e) {
+				throw new InsightError("Error parsing Filter: " + key + ": " + e);
+			}
+		}
+	} else {
+		throw new InsightError("Missing 'WHERE' clause in Query.");
+	}
+	return query;
 }
 
-function parseApply(applyObjs: any[], query: Query) {
+function parseGroupKey(keyStr: string, query: GroupQuery): string {
+	try {
+		let key: string;
+		if (keyStr.includes("_")) {
+			// regular query key
+			key = extractKey(keyStr);
+			if (!(query.group.groupKeys.includes(key))) {
+				throw new InsightError("column key (" + key + ") not in groupKeys: " + query.group.groupKeys);
+			}
+		} else {
+			// apply key
+			if (query.group.getApplyKeyNames().includes(keyStr)) {
+				key = keyStr;
+			} else {
+				throw new InsightError("Key (" + keyStr + ") is not a group key nor apply key");
+			}
+		}
+		return key;
+	} catch (e) {
+		throw new InsightError("Error parsing key: " + keyStr);
+	}
+}
+
+function parseApply(applyObjs: any[], query: GroupQuery) {
 	for (const applyObj of applyObjs) {
 		const applyKey: string = Object.keys(applyObj)[0];
 		const op = Object.keys(applyObj[applyKey])[0];
 		const key = applyObj[applyKey][op];
 		let applyKeyObj: ApplyKey = makeApplyKey(applyKey, key, op);
-		query.group?.addApplyKey(applyKeyObj);
+		query.group.addApplyKey(applyKeyObj);
 	}
 }
 
@@ -75,30 +138,48 @@ function parseFilter(filterObj: any, query: Query) {
 	query.setFilter(makeFilter(filterObj));
 }
 
-// TODO: check through applyKey objects to see if it is contained
 function parseKey(keyStr: string, query: Query) {
 	try {
 		const key = extractKey(keyStr);
-		if (query.group && !(query.group.groupKeys.includes(key))) {
-			throw new InsightError("column key (" + key + ") not in groupKeys: " + query.group.groupKeys);
-		}
 		query.addKey(key);
 	} catch(e) {
-		if (query.group && query.group.getApplyKeyNames().includes(keyStr)) {
-			// TODO: figure out where to put this key
-		}
 		throw new InsightError("Error parsing key: " + e);
 	}
 }
 
-// TODO: make also work with single key for order
-function parseOrder(orderObj: any, query: Query) {
+function parseGroupOrder(orderObj: any, query: GroupQuery) {
 	let order: Order | null = null;
 	if (typeof orderObj === "string") {
-		const key: string = orderObj.toString();
+		let key: string = orderObj.toString();
+		key = parseGroupKey(key, query);
 		order = new Order(key, "UP");
 	} else if (orderObj.keys && orderObj.dir) {
 		for (let key of orderObj.keys.reverse()) {
+			key = parseGroupKey(key, query);
+			if (order) {
+				order = new Order(key, orderObj.dir, order);
+			} else {
+				order = new Order(key, orderObj.dir);
+			}
+		}
+	} else {
+		throw new InsightError("Error parsing order. No keys or dir.");
+	}
+	if (order && !query.keys.includes(order.key)) {
+		throw new InsightError("query key: " + order.key + " is not in COLUMNS");
+	}
+	query.setOrder(order);
+}
+
+function parseOrder(orderObj: any, query: Query) {
+	let order: Order | null = null;
+	if (typeof orderObj === "string") {
+		let key: string = orderObj.toString();
+		key = extractKey(key);
+		order = new Order(key, "UP");
+	} else if (orderObj.keys && orderObj.dir) {
+		for (let key of orderObj.keys.reverse()) {
+			key = extractKey(key);
 			if (order) {
 				order = new Order(key, orderObj.dir, order);
 			} else {

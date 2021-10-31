@@ -1,4 +1,4 @@
-import {extractKey, getSectionRoomKey} from "../../resources/Util";
+import {extractKey, getSectionRoomKey, mKeys} from "../../resources/Util";
 import {InsightError} from "../../controller/IInsightFacade";
 import {Section} from "../Section";
 import {Room} from "../Room";
@@ -21,6 +21,9 @@ export class Group {
 	}
 
 	public addApplyKey(applyKey: ApplyKey) {
+		if (this.getApplyKeyNames().includes(applyKey.applyKey)) {
+			throw new InsightError("Duplicate apply keys are not allowed: " + applyKey.applyKey);
+		}
 		this.applyKeys.push(applyKey);
 	}
 
@@ -31,11 +34,6 @@ export class Group {
 		}
 		return names;
 	}
-
-	public makeSectionGroups(sections: Section[]) {
-		return;
-	}
-
 }
 
 export abstract class ApplyKey {
@@ -47,14 +45,23 @@ export abstract class ApplyKey {
 		try {
 			this.key = extractKey(key);
 		} catch (e) {
-			throw new InsightError("Error parsing apply key");
+			throw new InsightError("Error parsing key in apply key");
 		}
 	}
 
 	abstract applyOp(data: Section[] | Room[]): number;
 }
 
-class MaxApplyKey extends ApplyKey {
+abstract class MApplyKey extends ApplyKey {
+	constructor(key: string, applyKey: string) {
+		super(key, applyKey);
+		if (!mKeys.includes(this.key)) {
+			throw new InsightError("key for a numeric apply is not numeric: " + key);
+		}
+	}
+}
+
+class MaxApplyKey extends MApplyKey {
 
 	public applyOp(data: Section[] | Room[]): number {
 		let max: number = Number.MIN_VALUE;
@@ -69,7 +76,7 @@ class MaxApplyKey extends ApplyKey {
 
 }
 
-class MinApplyKey extends ApplyKey {
+class MinApplyKey extends MApplyKey {
 
 	public applyOp(data: Section[] | Room[]): number {
 		let min: number = Number.MAX_VALUE;
@@ -84,13 +91,12 @@ class MinApplyKey extends ApplyKey {
 
 }
 
-class AvgApplyKey extends ApplyKey {
+class AvgApplyKey extends MApplyKey {
 	public applyOp(data: Section[] | Room[]): number {
 		let sum: Decimal = new Decimal(0);
-		let count: number = 0;
+		let count: number = data.length;
 		for (let dataItem of data) {
-			sum.add(getSectionRoomKey(this.key, dataItem));
-			count++;
+			sum = sum.plus(getSectionRoomKey(this.key, dataItem));
 		}
 		let avg = sum.toNumber() / count;
 		return Number(avg.toFixed(2));
@@ -109,7 +115,7 @@ class CountApplyKey extends ApplyKey {
 
 }
 
-class SumApplyKey extends ApplyKey {
+class SumApplyKey extends MApplyKey {
 	public applyOp(data: Section[] | Room[]): number {
 		let sum: number = 0;
 		for (let dataItem of data) {
