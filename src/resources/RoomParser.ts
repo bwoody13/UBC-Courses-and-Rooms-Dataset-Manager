@@ -8,6 +8,7 @@
 //  **assuming valid buildings will have their info stored in immediate child td elements of a tr element
 import {BuildingInfo} from "../objects/BuildingInfo";
 import parse5 from "parse5";
+import {InsightError} from "../controller/IInsightFacade";
 
 export function parseIndex(document: parse5.Document): BuildingInfo[] {
 	let buildings: BuildingInfo[] = [];
@@ -91,7 +92,7 @@ function getBuildingName(tdElement: any): string {
 			return getTDTextValue(tdChildNode);
 		}
 	}
-	return "";
+	throw new InsightError("Could not find building name");
 }
 
 function getTDTextValue(tdElement: any): string {
@@ -115,7 +116,7 @@ function getBuildingFilePath(tdElement: any): string {
 			}
 		}
 	}
-	return "";
+	throw new InsightError("Could not find building file path");
 }
 
 // "nodeName": "td",

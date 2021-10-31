@@ -1,6 +1,7 @@
 import {BuildingInfo} from "../objects/BuildingInfo";
 import parse5 from "parse5";
 import {Room} from "../objects/Room";
+import {InsightError} from "../controller/IInsightFacade";
 
 export function parseBuilding(document: parse5.Document): Room[] {
 	let rooms: Room[] = [];
@@ -98,7 +99,7 @@ function getRoomNumber(tdElement: any): string {
 			return getTDTextValue(tdChildNode);
 		}
 	}
-	return "";
+	throw new InsightError("Could not find room number");
 }
 
 function getRoomHREF(tdElement: any): string {
@@ -112,5 +113,5 @@ function getRoomHREF(tdElement: any): string {
 			}
 		}
 	}
-	return "";
+	throw new InsightError("Could not find room link");
 }

@@ -78,23 +78,9 @@ describe("InsightFacade", function () {
 				}]);
 			});
 
-			it("should add html room with missing links",  async function () {
+			it("should not throw error with dummy td elements",  async function () {
 				await facade.addDataset("rooms",
-					getContentFromArchives("missingLinksRoom.zip", InsightDatasetKind.Rooms),
-					InsightDatasetKind.Rooms);
-				const insightDatasets = await facade.listDatasets();
-				expect(insightDatasets).to.be.an.instanceOf(Array);
-				expect(insightDatasets).to.have.length(1);
-				expect(insightDatasets).to.deep.equal([{
-					id: "rooms",
-					kind: InsightDatasetKind.Rooms,
-					numRows: 1
-				}]);
-			});
-
-			it("should add html building with missing links",  async function () {
-				await facade.addDataset("rooms",
-					getContentFromArchives("missingTitleLink.zip", InsightDatasetKind.Rooms),
+					getContentFromArchives("dummyTDElements.zip", InsightDatasetKind.Rooms),
 					InsightDatasetKind.Rooms);
 				const insightDatasets = await facade.listDatasets();
 				expect(insightDatasets).to.be.an.instanceOf(Array);
@@ -104,6 +90,28 @@ describe("InsightFacade", function () {
 					kind: InsightDatasetKind.Rooms,
 					numRows: 6
 				}]);
+			});
+
+			it("should fail to add html room with missing links",  async function () {
+				try {
+					await facade.addDataset("rooms",
+						getContentFromArchives("missingLinksRoom.zip", InsightDatasetKind.Rooms),
+						InsightDatasetKind.Rooms);
+					expect.fail("Should have rejected");
+				} catch(e) {
+					expect(e).to.be.instanceOf(InsightError);
+				}
+			});
+
+			it("should fail to add html building with missing links",  async function () {
+				try {
+					await facade.addDataset("rooms",
+						getContentFromArchives("missingTitleLink.zip", InsightDatasetKind.Rooms),
+						InsightDatasetKind.Rooms);
+					expect.fail("Should have rejected");
+				} catch(e) {
+					expect(e).to.be.instanceOf(InsightError);
+				}
 			});
 
 			it("should accept empty html fields",  async function () {
@@ -128,7 +136,7 @@ describe("InsightFacade", function () {
 				}]);
 			});
 
-			it("should fail to add invalid rooms dataset",  async function () {
+			it("should fail to add invalid empty rooms dir dataset",  async function () {
 				try {
 					await facade.addDataset("rooms",
 						getContentFromArchives("emptyRoomsDir.zip", InsightDatasetKind.Rooms),
@@ -137,70 +145,12 @@ describe("InsightFacade", function () {
 				} catch(e) {
 					expect(e).to.be.instanceOf(InsightError);
 				}
-				try {
-					await facade.addDataset("rooms",
-						getContentFromArchives("invalidClassRoom.zip", InsightDatasetKind.Rooms),
-						InsightDatasetKind.Rooms);
-					expect.fail("Should have rejected");
-				} catch(e) {
-					expect(e).to.be.instanceOf(InsightError);
-				}
-				try {
-					await facade.addDataset("rooms",
-						getContentFromArchives("invalidHREF.zip", InsightDatasetKind.Rooms),
-						InsightDatasetKind.Rooms);
-					expect.fail("Should have rejected");
-				} catch(e) {
-					expect(e).to.be.instanceOf(InsightError);
-				}
-				try {
-					await facade.addDataset("rooms",
-						getContentFromArchives("invalidHTML.zip", InsightDatasetKind.Rooms),
-						InsightDatasetKind.Rooms);
-					expect.fail("Should have rejected");
-				} catch(e) {
-					expect(e).to.be.instanceOf(InsightError);
-				}
-				try {
-					await facade.addDataset("rooms",
-						getContentFromArchives("missingBuildingElements.zip", InsightDatasetKind.Rooms),
-						InsightDatasetKind.Rooms);
-					expect.fail("Should have rejected");
-				} catch(e) {
-					expect(e).to.be.instanceOf(InsightError);
-				}
-				try {
-					await facade.addDataset("rooms",
-						getContentFromArchives("missingBuildingFile.zip", InsightDatasetKind.Rooms),
-						InsightDatasetKind.Rooms);
-					expect.fail("Should have rejected");
-				} catch(e) {
-					expect(e).to.be.instanceOf(InsightError);
-				}
-				try {
-					await facade.addDataset("rooms",
-						getContentFromArchives("missingClassAtr.zip", InsightDatasetKind.Rooms),
-						InsightDatasetKind.Rooms);
-					expect.fail("Should have rejected");
-				} catch(e) {
-					expect(e).to.be.instanceOf(InsightError);
-				}
-				try {
-					await facade.addDataset("rooms",
-						getContentFromArchives("missingRoomElements.zip", InsightDatasetKind.Rooms),
-						InsightDatasetKind.Rooms);
-					expect.fail("Should have rejected");
-				} catch(e) {
-					expect(e).to.be.instanceOf(InsightError);
-				}
-				try {
-					await facade.addDataset("rooms",
-						getContentFromArchives("missingRoomsDirectory.zip", InsightDatasetKind.Rooms),
-						InsightDatasetKind.Rooms);
-					expect.fail("Should have rejected");
-				} catch(e) {
-					expect(e).to.be.instanceOf(InsightError);
-				}
+				const insightDatasets = await facade.listDatasets();
+				expect(insightDatasets).to.be.an.instanceOf(Array);
+				expect(insightDatasets).to.have.length(0);
+			});
+
+			it("should fail to add invalid no rooms dataset",  async function () {
 				try {
 					await facade.addDataset("rooms",
 						getContentFromArchives("noRooms.zip", InsightDatasetKind.Rooms),
@@ -209,7 +159,118 @@ describe("InsightFacade", function () {
 				} catch(e) {
 					expect(e).to.be.instanceOf(InsightError);
 				}
+				const insightDatasets = await facade.listDatasets();
+				expect(insightDatasets).to.be.an.instanceOf(Array);
+				expect(insightDatasets).to.have.length(0);
+			});
 
+			it("should fail to add invalid missing rooms directory rooms dataset",  async function () {
+				try {
+					await facade.addDataset("rooms",
+						getContentFromArchives("missingRoomsDirectory.zip", InsightDatasetKind.Rooms),
+						InsightDatasetKind.Rooms);
+					expect.fail("Should have rejected");
+				} catch(e) {
+					expect(e).to.be.instanceOf(InsightError);
+				}
+				const insightDatasets = await facade.listDatasets();
+				expect(insightDatasets).to.be.an.instanceOf(Array);
+				expect(insightDatasets).to.have.length(0);
+			});
+
+			it("should fail to add invalid missing room elements dataset",  async function () {
+				try {
+					await facade.addDataset("rooms",
+						getContentFromArchives("missingRoomElements.zip", InsightDatasetKind.Rooms),
+						InsightDatasetKind.Rooms);
+					expect.fail("Should have rejected");
+				} catch(e) {
+					expect(e).to.be.instanceOf(InsightError);
+				}
+				const insightDatasets = await facade.listDatasets();
+				expect(insightDatasets).to.be.an.instanceOf(Array);
+				expect(insightDatasets).to.have.length(0);
+			});
+
+			it("should fail to add invalid missing class attributes rooms dataset",  async function () {
+				try {
+					await facade.addDataset("rooms",
+						getContentFromArchives("missingClassAtr.zip", InsightDatasetKind.Rooms),
+						InsightDatasetKind.Rooms);
+					expect.fail("Should have rejected");
+				} catch(e) {
+					expect(e).to.be.instanceOf(InsightError);
+				}
+				const insightDatasets = await facade.listDatasets();
+				expect(insightDatasets).to.be.an.instanceOf(Array);
+				expect(insightDatasets).to.have.length(0);
+			});
+
+			it("should fail to add invalid missing building file rooms dataset",  async function () {
+				try {
+					await facade.addDataset("rooms",
+						getContentFromArchives("missingBuildingFile.zip", InsightDatasetKind.Rooms),
+						InsightDatasetKind.Rooms);
+					expect.fail("Should have rejected");
+				} catch(e) {
+					expect(e).to.be.instanceOf(InsightError);
+				}
+				const insightDatasets = await facade.listDatasets();
+				expect(insightDatasets).to.be.an.instanceOf(Array);
+				expect(insightDatasets).to.have.length(0);
+			});
+
+			it("should fail to add invalid missing building elements rooms dataset",  async function () {
+				try {
+					await facade.addDataset("rooms",
+						getContentFromArchives("missingBuildingElements.zip", InsightDatasetKind.Rooms),
+						InsightDatasetKind.Rooms);
+					expect.fail("Should have rejected");
+				} catch(e) {
+					expect(e).to.be.instanceOf(InsightError);
+				}
+				const insightDatasets = await facade.listDatasets();
+				expect(insightDatasets).to.be.an.instanceOf(Array);
+				expect(insightDatasets).to.have.length(0);
+			});
+
+			it("should fail to add invalid html rooms dataset",  async function () {
+				try {
+					await facade.addDataset("rooms",
+						getContentFromArchives("invalidHTML.zip", InsightDatasetKind.Rooms),
+						InsightDatasetKind.Rooms);
+					expect.fail("Should have rejected");
+				} catch(e) {
+					expect(e).to.be.instanceOf(InsightError);
+				}
+				const insightDatasets = await facade.listDatasets();
+				expect(insightDatasets).to.be.an.instanceOf(Array);
+				expect(insightDatasets).to.have.length(0);
+			});
+
+			it("should fail to add invalid href rooms dataset",  async function () {
+				try {
+					await facade.addDataset("rooms",
+						getContentFromArchives("invalidHREF.zip", InsightDatasetKind.Rooms),
+						InsightDatasetKind.Rooms);
+					expect.fail("Should have rejected");
+				} catch(e) {
+					expect(e).to.be.instanceOf(InsightError);
+				}
+				const insightDatasets = await facade.listDatasets();
+				expect(insightDatasets).to.be.an.instanceOf(Array);
+				expect(insightDatasets).to.have.length(0);
+			});
+
+			it("should fail to add invalid class rooms dataset",  async function () {
+				try {
+					await facade.addDataset("rooms",
+						getContentFromArchives("invalidClassRoom.zip", InsightDatasetKind.Rooms),
+						InsightDatasetKind.Rooms);
+					expect.fail("Should have rejected");
+				} catch(e) {
+					expect(e).to.be.instanceOf(InsightError);
+				}
 				const insightDatasets = await facade.listDatasets();
 				expect(insightDatasets).to.be.an.instanceOf(Array);
 				expect(insightDatasets).to.have.length(0);
