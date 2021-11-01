@@ -1,6 +1,7 @@
 import {BuildingInfo} from "../objects/BuildingInfo";
 import parse5 from "parse5";
 import {Room} from "../objects/Room";
+import {InsightError} from "../controller/IInsightFacade";
 
 export function parseBuilding(document: parse5.Document): Room[] {
 	let rooms: Room[] = [];
@@ -44,31 +45,35 @@ function parseTableRow(trElement: any): Room | null {
 	let room = {} as Room;
 	for(const trChildNodeKey in trElement.childNodes) {
 		const trChildNode = trElement.childNodes[trChildNodeKey];
-		if(trChildNode.nodeName === "td") {
-			if(trChildNode.attrs[0].name === "class") {
-				switch(trChildNode.attrs[0].value) {
-					case "views-field views-field-field-room-number":
-						room.number = getRoomNumber(trChildNode).trim();
-						numberSet = true;
-						break;
-					case "views-field views-field-field-room-capacity":
-						room.seats = parseInt(getTDTextValue(trChildNode).trim(), 10);
-						seatsSet = true;
-						break;
-					case "views-field views-field-field-room-furniture":
-						room.furniture = getTDTextValue(trChildNode).trim();
-						furnitureSet = true;
-						break;
-					case "views-field views-field-field-room-type":
-						room.type = getTDTextValue(trChildNode).trim();
-						typeSet = true;
-						break;
-					case "views-field views-field-nothing":
-						room.href = getRoomHREF(trChildNode).trim();
-						hrefSet = true;
-						break;
+		try {
+			if(trChildNode.nodeName === "td") {
+				if(trChildNode.attrs[0].name === "class") {
+					switch(trChildNode.attrs[0].value) {
+						case "views-field views-field-field-room-number":
+							room.number = getRoomNumber(trChildNode).trim();
+							numberSet = true;
+							break;
+						case "views-field views-field-field-room-capacity":
+							room.seats = parseInt(getTDTextValue(trChildNode).trim(), 10) || 0;
+							seatsSet = true;
+							break;
+						case "views-field views-field-field-room-furniture":
+							room.furniture = getTDTextValue(trChildNode).trim();
+							furnitureSet = true;
+							break;
+						case "views-field views-field-field-room-type":
+							room.type = getTDTextValue(trChildNode).trim();
+							typeSet = true;
+							break;
+						case "views-field views-field-nothing":
+							room.href = getRoomHREF(trChildNode).trim();
+							hrefSet = true;
+							break;
+					}
 				}
 			}
+		} catch (e) {
+			// skip invalid td element (don't throw error)
 		}
 	}
 	if(numberSet && seatsSet && furnitureSet && typeSet && hrefSet) {
@@ -94,7 +99,7 @@ function getRoomNumber(tdElement: any): string {
 			return getTDTextValue(tdChildNode);
 		}
 	}
-	return "";
+	throw new InsightError("Could not find room number");
 }
 
 function getRoomHREF(tdElement: any): string {
@@ -108,5 +113,5 @@ function getRoomHREF(tdElement: any): string {
 			}
 		}
 	}
-	return "";
+	throw new InsightError("Could not find room link");
 }

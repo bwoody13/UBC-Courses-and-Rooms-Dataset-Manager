@@ -8,6 +8,7 @@
 //  **assuming valid buildings will have their info stored in immediate child td elements of a tr element
 import {BuildingInfo} from "../objects/BuildingInfo";
 import parse5 from "parse5";
+import {InsightError} from "../controller/IInsightFacade";
 
 export function parseIndex(document: parse5.Document): BuildingInfo[] {
 	let buildings: BuildingInfo[] = [];
@@ -51,27 +52,31 @@ function parseTableRow(trElement: any): BuildingInfo | null {
 	let building = {} as BuildingInfo;
 	for(const trChildNodeKey in trElement.childNodes) {
 		const trChildNode = trElement.childNodes[trChildNodeKey];
-		if(trChildNode.nodeName === "td") {
-			if(trChildNode.attrs[0].name === "class") {
-				switch(trChildNode.attrs[0].value) {
-					case "views-field views-field-field-building-code":
-						building.shortname = getTDTextValue(trChildNode).trim();
-						codeSet = true;
-						break;
-					case "views-field views-field-title":
-						building.fullname = getBuildingName(trChildNode).trim();
-						nameSet = true;
-						break;
-					case "views-field views-field-field-building-address":
-						building.address = getTDTextValue(trChildNode).trim();
-						addressSet = true;
-						break;
-					case "views-field views-field-nothing":
-						building.path = getBuildingFilePath(trChildNode).trim();
-						pathSet = true;
-						break;
+		try {
+			if (trChildNode.nodeName === "td") {
+				if (trChildNode.attrs[0].name === "class") {
+					switch (trChildNode.attrs[0].value) {
+						case "views-field views-field-field-building-code":
+							building.shortname = getTDTextValue(trChildNode).trim();
+							codeSet = true;
+							break;
+						case "views-field views-field-title":
+							building.fullname = getBuildingName(trChildNode).trim();
+							nameSet = true;
+							break;
+						case "views-field views-field-field-building-address":
+							building.address = getTDTextValue(trChildNode).trim();
+							addressSet = true;
+							break;
+						case "views-field views-field-nothing":
+							building.path = getBuildingFilePath(trChildNode).trim();
+							pathSet = true;
+							break;
+					}
 				}
 			}
+		} catch (e) {
+			// skip invalid td element (don't throw error)
 		}
 	}
 	if(codeSet && nameSet && addressSet && pathSet) {
@@ -87,7 +92,7 @@ function getBuildingName(tdElement: any): string {
 			return getTDTextValue(tdChildNode);
 		}
 	}
-	return "";
+	throw new InsightError("Could not find building name");
 }
 
 function getTDTextValue(tdElement: any): string {
@@ -111,7 +116,7 @@ function getBuildingFilePath(tdElement: any): string {
 			}
 		}
 	}
-	return "";
+	throw new InsightError("Could not find building file path");
 }
 
 // "nodeName": "td",

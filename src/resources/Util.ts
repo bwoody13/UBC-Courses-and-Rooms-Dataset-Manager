@@ -5,6 +5,16 @@ import {Query} from "../objects/query_structure/Query";
 import {Section} from "../objects/Section";
 import {Room} from "../objects/Room";
 
+export const courseMKeys: string[] = ["avg", "pass", "fail", "audit", "year"];
+export const roomMKeys: string[] = ["lat", "lon", "seats"];
+export const courseSKeys: string[] = ["dept", "id", "instructor", "title", "uuid"];
+export const roomSKeys: string[] = ["fullname", "shortname", "number", "name", "address", "type", "furniture", "href"];
+export const validCourseKeys: string[] = courseMKeys.concat(courseSKeys);
+export const validRoomKeys: string[] = roomMKeys.concat(roomSKeys);
+export const validQueryKeys: string[] = validCourseKeys.concat(validRoomKeys);
+export const mKeys: string[] = courseMKeys.concat(roomMKeys);
+export const sKeys: string[] = courseSKeys.concat(roomSKeys);
+
 
 export function invalidID(id: string): boolean {
 	return (id.includes("_") || !id.trim());
@@ -43,12 +53,9 @@ export function extractKey(key: string): string {
 
 	const k = key.substring(underscoreLoc + 1);
 	let type: string;
-	const validCourseQueryKeys = ["avg", "dept", "instructor", "title", "uuid", "pass", "fail", "audit", "year", "id"];
-	const validRoomQueryKeys = ["fullname", "shortname", "number", "name", "address", "type", "furniture", "href",
-		"lat", "lon", "seats"];
-	if (validCourseQueryKeys.includes(k)) {
+	if (validCourseKeys.includes(k)) {
 		type = "COURSE";
-	} else if (validRoomQueryKeys.includes(k)) {
+	} else if (validRoomKeys.includes(k)) {
 		type = "ROOM";
 	} else {
 		throw new InsightError("Invalid query key: " + key);

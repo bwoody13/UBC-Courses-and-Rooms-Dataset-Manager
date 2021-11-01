@@ -24,8 +24,6 @@ export class DataGroup {
 		} else if (Object.keys(this.applyKeyVals).includes(key)) {
 			return this.applyKeyVals[key];
 		} else {
-			console.log(this.groupKeyVals);
-			console.log(this.applyKeyVals);
 			throw new InsightError("tried to access a key in SectionGroup that does not exist: " + key);
 		}
 	}
