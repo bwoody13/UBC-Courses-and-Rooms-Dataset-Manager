@@ -16,6 +16,9 @@ export class Order {
 		} catch (e) {
 			throw new InsightError("Error parsing order key: " + e);
 		}
+		if (!(direction === "UP" || direction === "DOWN")) {
+			throw new InsightError("invalid direction specified: " + direction);
+		}
 		this.direction = direction;
 		if (order) {
 			this.nextOrder = order;

@@ -161,12 +161,12 @@ function parseGroupOrder(orderObj: any, query: GroupQuery) {
 			} else {
 				order = new Order(key, orderObj.dir);
 			}
+			if (order && !query.keys.includes(order.key)) {
+				throw new InsightError("query key: " + order.key + " is not in COLUMNS");
+			}
 		}
 	} else {
 		throw new InsightError("Error parsing order. No keys or dir.");
-	}
-	if (order && !query.keys.includes(order.key)) {
-		throw new InsightError("query key: " + order.key + " is not in COLUMNS");
 	}
 	query.setOrder(order);
 }
