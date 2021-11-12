@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Perform Query</title>
+</head>
+<body>
+	<h1>Perform Query: Dataset Name</h1>
+	<label for="groupApply">Group and Apply?</label>
+	<input type="checkbox" id="groupApply">
+	<hr>
+	<form>
+		<label for="where">WHERE: </label><br>
+		<textarea name="where" rows="5" cols="25" id="where"></textarea><br>
+		<label for="columns">Columns: </label>
+		<ul id="columns">
+			<li><label>
+				<input type="checkbox">
+			</label>col1</li>
+			<li><label>
+				<input type="checkbox">
+			</label>col2</li>
+			<li><label>
+				<input type="checkbox">
+			</label>col3</li>
+			<li><label>
+				<input type="checkbox">
+			</label>col4</li>
+		</ul>
+		<label>Order Direction:</label><br>
+		<input type="radio" id="up" name="orderDir" value="up" checked>
+		<label for="up">UP</label>
+		<input type="radio" id="down" name="orderDir" value="down">
+		<label for="down">DOWN</label>
+		<br>
+		<label for="orderColumns">Order Columns:</label>
+		<table id="orderColumns">
+			<thead>
+				<tr>
+					<th>Selected Order Columns</th>
+					<th>Available Columns</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>
+						<ul>
+							<li>col2</li>
+						</ul>
+					</td>
+					<td>
+						<ul>
+							<li>col1</li>
+							<li>col3</li>
+							<li>col4</li>
+						</ul>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<input type="submit" value="Execute Query">
+	</form>
+
+</body>
+</html>

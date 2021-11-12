@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Template 310 UI</title>
+</head>
+<body>
+	<h1>CPSC 310 Insight UBC - Group 053</h1>
+	<div>
+		<table>
+			<tr>
+				<td>
+					<form>
+						<label for="datasetID">Dataset ID:</label>
+						<input type="text" name="datasetID" value="" id="datasetID">
+						<br>
+						<label>Dataset Type:</label>
+						<input type="radio" id="courses" name="datasetType" value="courses" checked>
+						<label for="courses">Courses</label>
+						<input type="radio" id="rooms" name="datasetType" value="rooms">
+						<label for="rooms">Rooms</label>
+						<br>
+						<label for="datasetFile">Dataset File:</label>
+						<input type="file" name="datasetFile" id="datasetFile">
+						<br>
+						<input type="submit" value="Add Dataset">
+					</form>
+				</td>
+				<td>
+					<p>Dataset added!</p>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<hr>
+	<div>
+		<table>
+			<thead>
+				<tr>
+					<th colspan="5">Dataset List</th>
+				</tr>
+				<tr>
+					<th>Type</th>
+					<th>Name</th>
+					<th>Num Rows</th>
+					<th></th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>Courses</td>
+					<td>mycoursesdatasetname</td>
+					<td>133</td>
+					<td><button>Perform Query</button></td>
+					<td><button>Remove Dataset</button></td>
+				</tr>
+				<tr>
+					<td>Rooms</td>
+					<td>myroomsdatasetname</td>
+					<td>1000</td>
+					<td><button>Perform Query</button></td>
+					<td><button>Remove Dataset</button></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<hr>
+	<div>
+		<table>
+			<thead>
+			<tr><th colspan="4">Query Results</th></tr>
+			</thead>
+			<thead>
+			<tr>
+				<th>col 1</th>
+				<th>col 2</th>
+				<th>col 3</th>
+				<th>col 4</th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr>
+				<td>110</td>
+				<td>CPSC</td>
+				<td>93.86</td>
+				<td>5</td>
+			</tr>
+			<tr>
+				<td>210</td>
+				<td>CPSC</td>
+				<td>81.56</td>
+				<td>10</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+
+</body>
+</html>
