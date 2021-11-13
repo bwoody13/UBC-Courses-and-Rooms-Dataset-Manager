@@ -98,6 +98,18 @@ export default class Server {
 			(req, res) => {
 				return this.endpoints.addDataset(req, res);
 			});
+		this.express.delete("/dataset/:id",
+			(req, res) => {
+				return this.endpoints.removeDataset(req, res);
+			});
+		this.express.get("/datasets",
+			(req, res) => {
+				return this.endpoints.listDatasets(req, res);
+			});
+		this.express.post("/query",
+			(req, res) => {
+				return this.endpoints.performQuery(req, res);
+			});
 	}
 
 }

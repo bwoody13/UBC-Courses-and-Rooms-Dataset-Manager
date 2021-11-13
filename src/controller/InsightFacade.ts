@@ -48,8 +48,10 @@ export default class InsightFacade implements IInsightFacade {
 		let dataset: Dataset;
 		if (kind === InsightDatasetKind.Courses) {
 			dataset = await this.addCoursesDataset(id, dir);
-		} else {
+		} else if (kind === InsightDatasetKind.Rooms) {
 			dataset = await this.addRoomsDataset(id, dir);
+		} else {
+			return Promise.reject(new InsightError("Invalid Dataset Kind."));
 		}
 		// reject if there are no valid course sections in the dataset
 		if (!dataset.numRows) {
