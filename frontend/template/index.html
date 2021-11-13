@@ -3,6 +3,8 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Template 310 UI</title>
+
+	<link rel="stylesheet" href="style.css">
 </head>
 <body>
 	<h1>CPSC 310 Insight UBC - Group 053</h1>
@@ -27,17 +29,17 @@
 					</form>
 				</td>
 				<td>
-					<p>Dataset added!</p>
+					<p style="color: green">Dataset added!</p>
 				</td>
 			</tr>
 		</table>
 	</div>
 	<hr>
-	<div>
+	<div class="bordered">
 		<table>
 			<thead>
 				<tr>
-					<th colspan="5">Dataset List</th>
+					<th colspan="5" class="top">Dataset List</th>
 				</tr>
 				<tr>
 					<th>Type</th>
@@ -66,11 +68,9 @@
 		</table>
 	</div>
 	<hr>
-	<div>
+	<div class="bordered">
+		<label class="head">Query Results</label>
 		<table>
-			<thead>
-			<tr><th colspan="4">Query Results</th></tr>
-			</thead>
 			<thead>
 			<tr>
 				<th>col 1</th>
