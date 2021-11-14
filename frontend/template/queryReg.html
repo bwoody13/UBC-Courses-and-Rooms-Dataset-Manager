@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Perform Query</title>
+
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<h1>Perform Query: Dataset Name</h1>
+	<label for="groupApply" class="head">Group and Apply?</label>
+	<input type="checkbox" id="groupApply">
+	<hr>
+	<form class="query">
+		<label for="where" class="head">WHERE: </label><br>
+		<textarea name="where" rows="5" cols="25" id="where"></textarea>
+		<br><br>
+		<label for="columns" class="head">Columns:</label>
+		<ul id="columns" class="nobullet">
+			<li><label>
+				<input type="checkbox">
+			</label>col1</li>
+			<li><label>
+				<input type="checkbox">
+			</label>col2</li>
+			<li><label>
+				<input type="checkbox">
+			</label>col3</li>
+			<li><label>
+				<input type="checkbox">
+			</label>col4</li>
+		</ul>
+		<label class="head">Order Direction:</label><br>
+		<input type="radio" id="up" name="orderDir" value="up" checked>
+		<label for="up" class="head">UP</label>
+		<input type="radio" id="down" name="orderDir" value="down">
+		<label for="down">DOWN</label>
+		<br><br>
+		<div class="bordered">
+			<label for="orderColumns" class="head">Order Columns:</label>
+			<table id="orderColumns">
+				<thead>
+				<tr>
+					<th>Selected Order Columns</th>
+					<th>Available Columns</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr>
+					<td>
+						<ul class="nobullet">
+							<li>col2</li>
+						</ul>
+					</td>
+					<td>
+						<ul class="nobullet">
+							<li>col1</li>
+							<li>col3</li>
+							<li>col4</li>
+						</ul>
+					</td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+		<br>
+		<input type="submit" value="Execute Query">
+	</form>
+
+</body>
+</html>
