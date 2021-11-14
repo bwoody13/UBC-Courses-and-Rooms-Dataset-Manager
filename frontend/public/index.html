@@ -1,13 +1,91 @@
 <!DOCTYPE html>
-<html>
-	<head>
-		<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
-		<title>310 Frontend</title>
-		<link href="/style.css" rel="stylesheet" />
-	</head>
-	<body>
-		<button id="click-me-button" class="button" >Click Me!</button>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Template 310 UI</title>
 
-		<script type="text/javascript" src="/frontend.js"></script>
-	</body>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<h1>CPSC 310 Insight UBC - Group 053</h1>
+<div>
+	<form method="post" onsubmit="return false;">
+		<label for="datasetID">Dataset ID:</label>
+		<input type="text" id="datasetID" value="">
+		<br>
+		<label>Dataset Type:</label>
+		<input type="radio" name="datasetType" id="datasetTypeCourses" value="courses" checked>
+		<label for="datasetTypeCourses">Courses</label>
+		<input type="radio" name="datasetType" id="datasetTypeRooms" value="rooms">
+		<label for="datasetTypeRooms">Rooms</label>
+		<br>
+		<label for="datasetFile">Dataset File:</label>
+		<input type="file" id="datasetFile" accept=".zip">
+		<br>
+		<input type="submit" value="Add Dataset" onclick="addDataset()">
+	</form>
+</div>
+<hr>
+<div class="bordered">
+	<table>
+		<thead>
+		<tr>
+			<th colspan="5" class="top">Dataset List</th>
+		</tr>
+		<tr>
+			<th>Type</th>
+			<th>Name</th>
+			<th>Num Rows</th>
+			<th></th>
+			<th></th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr>
+			<td>Courses</td>
+			<td>mycoursesdatasetname</td>
+			<td>133</td>
+			<td><button>Perform Query</button></td>
+			<td><button>Remove Dataset</button></td>
+		</tr>
+		<tr>
+			<td>Rooms</td>
+			<td>myroomsdatasetname</td>
+			<td>1000</td>
+			<td><button>Perform Query</button></td>
+			<td><button>Remove Dataset</button></td>
+		</tr>
+		</tbody>
+	</table>
+</div>
+<hr>
+<div class="bordered">
+	<label class="head">Query Results</label>
+	<table>
+		<thead>
+		<tr>
+			<th>col 1</th>
+			<th>col 2</th>
+			<th>col 3</th>
+			<th>col 4</th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr>
+			<td>110</td>
+			<td>CPSC</td>
+			<td>93.86</td>
+			<td>5</td>
+		</tr>
+		<tr>
+			<td>210</td>
+			<td>CPSC</td>
+			<td>81.56</td>
+			<td>10</td>
+		</tr>
+		</tbody>
+	</table>
+</div>
+<script type="text/javascript" src="scripts/frontend.js"></script>
+</body>
 </html>
