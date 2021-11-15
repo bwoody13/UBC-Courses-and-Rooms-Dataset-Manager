@@ -14,7 +14,7 @@
 	<label for="groupApply" class="head">Group and Apply?</label>
 	<input type="checkbox" id="groupApply" onclick="showHideGroup()">
 	<hr>
-	<form class="query" id="regQuery">
+	<form class="query" id="regQuery" method="post" onsubmit="return false;">
 		<label for="where" class="head">WHERE: </label>
 		<br>
 		<textarea name="where" rows="5" cols="25" id="where"></textarea>
@@ -24,7 +24,7 @@
 			<ul id="groupKeys" class="nobullet"></ul>
 			<label class="head">Apply Keys:</label>
 			<br>
-			<form>
+			<form method="post" onsubmit="return false;">
 				<label for="applyKeys">Type:</label>
 				<select name="applyKeys" id="applyKeys">
 					<option value="">--Please choose a type--</option>
@@ -42,7 +42,7 @@
 					<option value="">--Please choose a column--</option>
 				</select>
 				<br>
-				<input type="submit" value="Add Apply Key" onsubmit="addApplyKey()">
+				<input type="submit" value="Add Apply Key" onclick="addApplyKey()">
 			</form>
 			<br><br>
 			<div class="bordered">
