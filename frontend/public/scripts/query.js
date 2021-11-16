@@ -11,77 +11,100 @@ const sKeys = courseSKeys.concat(roomSKeys);
 function initialize() {
 	showHideGroup();
 	makeColOptions();
-	fillList();
 }
 
 function fillList() {
 	let grouped = document.getElementById("groupApply").checked;
 	if (grouped) {
-		makeColumns('groupKeys');
+		makeGroupKeys();
 	} else {
-		makeColumns('columns');
+		makeSelectCols();
 	}
 }
 
-function makeColumns(id) {
-	const type = document.getElementById("queryType").textContent;
-	let cols = validQueryKeys;
-	if (type === "courses") {
-		cols = validCourseKeys;
-	} else if (type === "rooms") {
-		cols = validRoomKeys;
-	} else {
-		// should not happen
-	}
-	let columnsList = document.getElementById(id);
+function makeGroupKeys() {
+	let cols = getDefaultCols();
+	let groupKeys = document.getElementById('groupKeys');
 	for (const col of cols) {
-		let li = document.createElement("li");
-		li.setAttribute('id', col);
-		let label = document.createElement('label');
-		label.setAttribute("for", col);
-		let input = document.createElement("input");
-		input.setAttribute("type", "checkbox");
-		input.setAttribute("name", col);
-		li.appendChild(label);
-		label.appendChild(input);
-		li.appendChild(document.createTextNode(col));
+		let li = createLI(col);
+		groupKeys.appendChild(li);
+		let input = li.firstChild.firstChild;
+		input.setAttribute('onchange', 'addGroupSelectCols()')
+	}
+}
+
+function addGroupSelectCols() {
+	let groupKeys = document.getElementById('groupKeys');
+	for (const child of groupKeys.children) {
+		if (child.firstChild.firstChild.checked) {
+			addSelectColumn(child.lastChild.textContent);
+		}
+		else {
+			removeSelectColumn(child.lastChild.textContent);
+		}
+	}
+}
+
+function makeSelectCols() {
+	let cols = getDefaultCols();
+	for (const col of cols) {
+		addSelectColumn(col);
+	}
+}
+
+function addSelectColumn(name) {
+	const colName = "col" + name;
+	if (!(document.getElementById(colName))) {
+		let columnsList = document.getElementById('columns');
+		let li = createLI(name);
+		li.setAttribute('id', colName);
+		const input = li.firstChild.firstChild;
+		input.setAttribute('onchange', 'addSelectColAviailCols()')
 		columnsList.appendChild(li);
 	}
 }
 
-function makeColOptions() {
-	const type = document.getElementById("queryType").textContent;
-	let cols = validQueryKeys;
-	if (type === "courses") {
-		cols = validCourseKeys;
-	} else if (type === "rooms") {
-		cols = validRoomKeys;
-	} else {
-		// should not happen
-	}
-	let columnsDropdown = document.getElementById('applyCol');
-	for (const col of cols) {
-		let op = document.createElement("option");
-		op.setAttribute('value', col);
-		op.innerText = col;
-		columnsDropdown.appendChild(op);
+function removeSelectColumn(id) {
+	const selectCols = document.getElementById('columns');
+	const li = document.getElementById(id);
+	selectCols.removeChild(li);
+}
+
+function addSelectColAviailCols() {
+	let selectCols = document.getElementById('columns');
+	for (const child of selectCols.children) {
+		if (child.firstChild.firstChild.checked) {
+			addAvailableOrder(child.lastChild.textContent);
+		} else {
+			removeAvailableOrder(child.lastChild.textContent);
+		}
 	}
 }
 
-function resetColumns() {
-	let columnsList = document.getElementById('columns');
-	columnsList.innerHTML = '';
+function createLI(name) {
+	let li = document.createElement("li");
+	li.setAttribute('id', name);
+	let label = document.createElement('label');
+	label.setAttribute("for", name);
+	let input = document.createElement("input");
+	input.setAttribute("type", "checkbox");
+	input.setAttribute("name", name);
+	li.appendChild(label);
+	label.appendChild(input);
+	li.appendChild(document.createTextNode(name));
+	return li;
 }
 
 function showHideGroup() {
 	const grouped = document.getElementById("groupApply").checked;
 	let div = document.getElementById('group');
+	fillList();
 	if (grouped) {
 		div.style.display = "block";
-		makeColumns('groupKeys');
-		resetColumns();
+		resetColumns('columns');
 	} else {
 		div.style.display = "none";
+		resetColumns('groupKeys')
 	}
 }
 
@@ -97,4 +120,54 @@ function addApplyKey() {
 	nameCell.innerText = name;
 	let colCell = row.insertCell(2);
 	colCell.innerText = column;
+	addSelectColumn(name);
+}
+
+
+
+function addAvailableOrder(name) {
+	const orderName = 'order' + name;
+	if (!(document.getElementById(orderName))) {
+		const availList = document.getElementById('availableOrder');
+		let li = document.createElement('li');
+		li.setAttribute('id', orderName);
+		li.innerText = name;
+		availList.appendChild(li);
+	}
+}
+
+function removeAvailableOrder(name) {
+	const orderName = 'order' + name;
+	const availList = document.getElementById('availableOrder');
+	const li = document.getElementById(orderName);
+	availList.removeChild(li);
+}
+
+function makeColOptions() {
+	const cols = getDefaultCols();
+	let columnsDropdown = document.getElementById('applyCol');
+	for (const col of cols) {
+		let op = document.createElement("option");
+		op.setAttribute('value', col);
+		op.innerText = col;
+		columnsDropdown.appendChild(op);
+	}
+}
+
+function resetColumns(id) {
+	let columnsList = document.getElementById(id);
+	columnsList.innerHTML = '';
+}
+
+function getDefaultCols() {
+	const type = document.getElementById("queryType").textContent;
+	let cols = validQueryKeys;
+	if (type === "courses") {
+		cols = validCourseKeys;
+	} else if (type === "rooms") {
+		cols = validRoomKeys;
+	} else {
+		// should not happen
+	}
+	return cols;
 }

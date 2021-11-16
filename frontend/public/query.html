@@ -12,7 +12,7 @@
 	<h1>Perform Query: Dataset Name</h1>
 	<h2 id="queryType">courses</h2>
 	<label for="groupApply" class="head">Group and Apply?</label>
-	<input type="checkbox" id="groupApply" onclick="showHideGroup()">
+	<input type="checkbox" id="groupApply" onchange="showHideGroup()">
 	<hr>
 	<form class="query" id="regQuery" method="post" onsubmit="return false;">
 		<label for="where" class="head">WHERE: </label>
@@ -58,11 +58,6 @@
 					</tr>
 					</thead>
 					<tbody>
-					<tr>
-						<td>AVG</td>
-						<td>avgCol1</td>
-						<td>col1</td>
-					</tr>
 					</tbody>
 				</table>
 				<br>
@@ -93,10 +88,7 @@
 						</ul>
 					</td>
 					<td>
-						<ul class="nobullet">
-							<li>col1</li>
-							<li>col3</li>
-							<li>col4</li>
+						<ul class="nobullet" id="availableOrder">
 						</ul>
 					</td>
 				</tr>
