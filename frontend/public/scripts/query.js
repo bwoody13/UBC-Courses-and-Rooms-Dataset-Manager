@@ -13,6 +13,18 @@ function initialize() {
 	makeColOptions();
 }
 
+function showHideGroup() {
+	const grouped = document.getElementById("groupApply").checked;
+	let div = document.getElementById('group');
+	resetLists();
+	fillList();
+	if (grouped) {
+		div.style.display = "block";
+	} else {
+		div.style.display = "none";
+	}
+}
+
 function fillList() {
 	let grouped = document.getElementById("groupApply").checked;
 	if (grouped) {
@@ -22,26 +34,40 @@ function fillList() {
 	}
 }
 
+function resetLists() {
+	resetColumns('columns');
+	resetColumns('groupKeys');
+	resetColumns('availableOrder');
+}
+
+function createLICheck(name, id) {
+	let li = createLI(name, id);
+	let input = document.createElement("input");
+	input.setAttribute("type", "checkbox");
+	input.setAttribute("name", name);
+	let label = li.firstChild;
+	label.appendChild(input);
+	return li;
+}
+
+function createLI(name, id) {
+	let li = document.createElement('li');
+	li.setAttribute('id', id)
+	let label = document.createElement('label');
+	li.appendChild(label);
+	li.appendChild(document.createTextNode(name));
+	return li;
+}
+
 function makeGroupKeys() {
 	let cols = getDefaultCols();
 	let groupKeys = document.getElementById('groupKeys');
 	for (const col of cols) {
-		let li = createLI(col);
+		let groupName = getGroupName(col);
+		let li = createLICheck(col, groupName);
 		groupKeys.appendChild(li);
 		let input = li.firstChild.firstChild;
-		input.setAttribute('onchange', 'addGroupSelectCols()')
-	}
-}
-
-function addGroupSelectCols() {
-	let groupKeys = document.getElementById('groupKeys');
-	for (const child of groupKeys.children) {
-		if (child.firstChild.firstChild.checked) {
-			addSelectColumn(child.lastChild.textContent);
-		}
-		else {
-			removeSelectColumn(child.lastChild.textContent);
-		}
+		input.setAttribute('onchange', 'updateColumns()')
 	}
 }
 
@@ -53,59 +79,79 @@ function makeSelectCols() {
 }
 
 function addSelectColumn(name) {
-	const colName = "col" + name;
+	const colName = getColName(name);
 	if (!(document.getElementById(colName))) {
 		let columnsList = document.getElementById('columns');
-		let li = createLI(name);
-		li.setAttribute('id', colName);
+		let li = createLICheck(name, colName);
 		const input = li.firstChild.firstChild;
-		input.setAttribute('onchange', 'addSelectColAviailCols()')
+		input.setAttribute('onchange', 'updateAvailableOrder()')
 		columnsList.appendChild(li);
 	}
 }
 
-function removeSelectColumn(id) {
-	const selectCols = document.getElementById('columns');
-	const li = document.getElementById(id);
-	selectCols.removeChild(li);
-}
-
-function addSelectColAviailCols() {
-	let selectCols = document.getElementById('columns');
-	for (const child of selectCols.children) {
-		if (child.firstChild.firstChild.checked) {
-			addAvailableOrder(child.lastChild.textContent);
+function updateColumns() {
+	let groupKeys = document.getElementById('groupKeys');
+	for (const child of groupKeys.children) {
+		const name = child.lastChild.textContent;
+		const input = child.firstChild.firstChild;
+		if (input.checked) {
+			addToColumns(name);
 		} else {
-			removeAvailableOrder(child.lastChild.textContent);
+			removeFromColumns(name);
 		}
 	}
 }
 
-function createLI(name) {
-	let li = document.createElement("li");
-	li.setAttribute('id', name);
-	let label = document.createElement('label');
-	label.setAttribute("for", name);
-	let input = document.createElement("input");
-	input.setAttribute("type", "checkbox");
-	input.setAttribute("name", name);
-	li.appendChild(label);
-	label.appendChild(input);
-	li.appendChild(document.createTextNode(name));
-	return li;
+function addToColumns(name) {
+	const colName = getColName(name);
+	if (!document.getElementById(colName)) {
+		addSelectColumn(name);
+	}
 }
 
-function showHideGroup() {
-	const grouped = document.getElementById("groupApply").checked;
-	let div = document.getElementById('group');
-	fillList();
-	if (grouped) {
-		div.style.display = "block";
-		resetColumns('columns');
-	} else {
-		div.style.display = "none";
-		resetColumns('groupKeys')
+function removeFromColumns(name) {
+	const colName = getColName(name)
+	let col = document.getElementById(colName);
+	if (col) {
+		let columns = document.getElementById('columns');
+		columns.removeChild(col);
 	}
+}
+
+function updateAvailableOrder() {
+	let columns = document.getElementById('columns');
+	for (const child of columns.children) {
+		const name = child.lastChild.textContent;
+		const input = child.firstChild.firstChild;
+		if (input.checked) {
+			addToAvailableOrder(name);
+		} else {
+			removeFromAvailableOrder(name);
+		}
+	}
+}
+
+function addToAvailableOrder(name) {
+	const orderName = getOrderName(name);
+	if (!document.getElementById(orderName)) {
+		addOrderColumn(name);
+	}
+}
+
+function removeFromAvailableOrder(name) {
+	const orderName = getOrderName(name);
+	let col = document.getElementById(orderName);
+	if (col) {
+		let availableOrder = document.getElementById('availableOrder');
+		availableOrder.removeChild(col);
+	}
+}
+
+function addOrderColumn(name) {
+	let availableOrder = document.getElementById('availableOrder');
+	const orderName = getOrderName(name);
+	let li = createLI(name, orderName)
+	availableOrder.appendChild(li);
 }
 
 function addApplyKey() {
@@ -121,26 +167,6 @@ function addApplyKey() {
 	let colCell = row.insertCell(2);
 	colCell.innerText = column;
 	addSelectColumn(name);
-}
-
-
-
-function addAvailableOrder(name) {
-	const orderName = 'order' + name;
-	if (!(document.getElementById(orderName))) {
-		const availList = document.getElementById('availableOrder');
-		let li = document.createElement('li');
-		li.setAttribute('id', orderName);
-		li.innerText = name;
-		availList.appendChild(li);
-	}
-}
-
-function removeAvailableOrder(name) {
-	const orderName = 'order' + name;
-	const availList = document.getElementById('availableOrder');
-	const li = document.getElementById(orderName);
-	availList.removeChild(li);
 }
 
 function makeColOptions() {
@@ -170,4 +196,16 @@ function getDefaultCols() {
 		// should not happen
 	}
 	return cols;
+}
+
+function getColName(name) {
+	return "col" + name;
+}
+
+function getOrderName(name) {
+	return "order" + name;
+}
+
+function getGroupName(name) {
+	return "group" + name;
 }
