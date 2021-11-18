@@ -110,12 +110,13 @@ function addToColumns(name) {
 }
 
 function removeFromColumns(name) {
-	const colName = getColName(name)
+	const colName = getColName(name);
 	let col = document.getElementById(colName);
 	if (col) {
 		let columns = document.getElementById('columns');
 		columns.removeChild(col);
 	}
+	removeFromAvailableOrder(name);
 }
 
 function updateAvailableOrder() {
