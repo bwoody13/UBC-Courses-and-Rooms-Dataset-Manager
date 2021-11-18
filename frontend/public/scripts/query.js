@@ -158,15 +158,53 @@ function addApplyKey() {
 	const type = document.getElementById("applyKeys").value;
 	const name = document.getElementById("applyName").value;
 	const column = document.getElementById("applyCol").value;
+	if (applyValid(name, type, column)) {
+		let applyTable = document.getElementById('applyTable');
+		let row = applyTable.insertRow(-1);
+		row.setAttribute('id', getApplyName(name))
+		let removeButton = makeRemoveApplyButton(name);
+		let typeCell = row.insertCell(0);
+		typeCell.innerText = type;
+		let nameCell = row.insertCell(1);
+		nameCell.innerText = name;
+		let colCell = row.insertCell(2);
+		colCell.innerText = column;
+		let removeButtonCell = row.insertCell(3);
+		removeButtonCell.appendChild(removeButton);
+		addSelectColumn(name);
+	} else {
+		window.alert("Error in apply key format. Try Again.")
+	}
+}
+
+function applyValid(name, type, col) {
+	const defaultCols = getDefaultCols();
+	if (defaultCols.includes(name) || name.includes("_")) {
+		return false;
+	}
+	if (type !== "COUNT" && !getMKeys().includes(col)) {
+		return false;
+	}
+	return true;
+}
+
+function makeRemoveApplyButton(name) {
+	let button = document.createElement('button');
+	const buttonName = getButtonName(name);
+	button.setAttribute('id', buttonName);
+	button.setAttribute('onclick', 'removeApplyKey(this.id)')
+	button.innerText = 'Remove Apply Key';
+	return button;
+}
+
+function removeApplyKey(buttonID) {
+	const name = buttonID.substring(6)
+	const applyName = getApplyName(name);
+	let row = document.getElementById(applyName);
 	let applyTable = document.getElementById('applyTable');
-	let row = applyTable.insertRow(-1);
-	let typeCell = row.insertCell(0);
-	typeCell.innerText = type;
-	let nameCell = row.insertCell(1);
-	nameCell.innerText = name;
-	let colCell = row.insertCell(2);
-	colCell.innerText = column;
-	addSelectColumn(name);
+	row.parentNode.removeChild(row);
+	removeFromAvailableOrder(name);
+	removeFromColumns(name);
 }
 
 function makeColOptions() {
@@ -198,6 +236,19 @@ function getDefaultCols() {
 	return cols;
 }
 
+function getMKeys() {
+	const type = document.getElementById("queryType").textContent;
+	let cols = mKeys;
+	if (type === "courses") {
+		cols = courseMKeys;
+	} else if (type === "rooms") {
+		cols = roomMKeys;
+	} else {
+		// should not happen
+	}
+	return cols;
+}
+
 function getColName(name) {
 	return "col" + name;
 }
@@ -208,4 +259,12 @@ function getOrderName(name) {
 
 function getGroupName(name) {
 	return "group" + name;
+}
+
+function getButtonName(name) {
+	return "button" + name;
+}
+
+function getApplyName(name) {
+	return "apply" + name;
 }
