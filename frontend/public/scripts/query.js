@@ -7,6 +7,13 @@ const validRoomKeys = roomMKeys.concat(roomSKeys);
 const validQueryKeys = validCourseKeys.concat(validRoomKeys);
 const mKeys = courseMKeys.concat(roomMKeys);
 const sKeys = courseSKeys.concat(roomSKeys);
+const roomTypes = ['Case Style', 'Open Design General Purpose', 'Small Group', 'Tiered Large Group', 'Active Learning',
+	'Studio Lab']
+const roomFurniturePrefix = 'Classroom-'
+const roomFurniture = ["Fixed Tables/Movable Chairs", "Movable Tables & Chairs",
+	"Moveable Tables & Chairs", "Moveable Tablets", "Fixed Tablets",
+	"Fixed Tables/Fixed Chairs", "Fixed Tables/Moveable Chairs", "Movable Tablets",
+	"Hybrid Furniture", "Learn Lab"]
 
 function initialize() {
 	showHideGroup();
