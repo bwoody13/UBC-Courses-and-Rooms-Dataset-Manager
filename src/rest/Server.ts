@@ -26,10 +26,6 @@ export default class Server {
 		this.express.use(express.static("./frontend/public"));
 	}
 
-	public clear() {
-		this.endpoints.clear();
-	}
-
 	/**
 	 * Starts the server. Returns a promise that resolves if success. Promises are used
 	 * here because starting the server takes some time and we want to know when it

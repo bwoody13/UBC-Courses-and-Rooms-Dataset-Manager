@@ -9,10 +9,6 @@ export default class Endpoints {
 		this.facade = new InsightFacade();
 	}
 
-	public clear() {
-		this.facade = new InsightFacade();
-	}
-
 	public async addDataset(req: Request, res: Response) {
 		try {
 			console.log(`Server::adding dataset(..) - params: ${JSON.stringify(req.params)}`);

@@ -1,16 +1,74 @@
-.button {
-	background-color: #3f51b5;
-	border: none;
+.popup {
+	background-color: #f5f6f6;
+	border: 2px solid black;
+	border-radius: 5px;
+	height: 300px;
+	width: 400px;
+	position: fixed;
+	display: inline-block;
+	top: 25%;
+	left: 35%;
+}
+
+.popup-column {
+	width: 50%;
+	height: 100%;
+	float: left;
+	display: inline-block;
+	text-align: left;
+	vertical-align: middle;
+	line-height: 30px;
+}
+
+.popup-bar {
+	width: 100%;
+	background: #1f1e1e;
+	height: 30px;
+	display: inline-block;
+}
+
+.popup-title {
+	width: 100%;
+	height: 100%;
 	color: white;
-	padding: 15px 32px;
+	margin: 0;
+	padding-left: 20px;
+	font-size: 18px;
+}
+
+.popup-body {
+	box-sizing: border-box;
+	display: inline-block;
+	width: 100%;
+	height: 260px;
+	padding: 10px 10px 10px 10px;
+}
+
+.popup-row {
+	width: 100%;
+	display: inline-block;
+	padding: 5px;
+}
+
+.button {
+	background-color: #1f1e1e;
+	color: #ffffff;
+	border: none;
+	border-radius: 5px;
+	padding: 6px 12px;
 	text-align: center;
 	text-decoration: none;
-	display: inline-block;
-	font-size: 16px;
+	font-size: 14px;
 }
 
 .button:hover {
+	background-color: #413f3f;
 	cursor: pointer;
+}
+
+.exitButton {
+	position: absolute;
+	right: 0;
 }
 
 div.bordered table,
@@ -41,4 +99,25 @@ label.head {
 th {
 	padding-right: 8px;
 	padding-left: 8px;
+}
+
+td {
+	text-align: center;
+}
+
+.visible {
+	visibility: visible;
+}
+
+.hidden {
+	visibility: hidden;
+}
+
+.fullscreen {
+	display: none;
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	top: 0;
+	left: 0;
 }

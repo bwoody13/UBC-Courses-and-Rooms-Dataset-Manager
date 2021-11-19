@@ -4,7 +4,7 @@ const SERVER_URL = "http://localhost:" + PORT;
 async function addDataset() {
 	return new Promise((resolve, reject) => {
 		const id = document.getElementById("datasetID").value.trim();
-		const kind = document.getElementById("datasetTypeCourses").checked ? "courses" : "rooms";
+		const kind = "rooms";
 		const fileData = document.getElementById("datasetFile").files[0];
 		const endpointURL = `/dataset/${id}/${kind}`;
 		const request = new XMLHttpRequest();
@@ -79,48 +79,78 @@ function listDatasets() {
 	});
 }
 
-// Dataset List Functions ---------------------------
-updateDatasetList();
-
-async function updateDatasetList() {
-	console.log("Updating Dataset List...");
-	const datasetList = await listDatasets();
-	console.log("Returned Dataset List: " + JSON.stringify(datasetList));
-	if (datasetList !== null) {
-		clearList();
-		for (let i = 0; i < datasetList.length; i++) {
-			createDatasetElement(datasetList[i]);
+async function query(queryObj) {
+	return new Promise((resolve, reject) => {
+		const endpointURL = "/query";
+		const request = new XMLHttpRequest();
+		request.open("POST", SERVER_URL + endpointURL, true);
+		request.responseType = "json";
+		request.setRequestHeader("Content-Type", "application/json");
+		request.onload = async function () {
+			if (request.status === 200) {
+				console.log("Query successfully returned: " + JSON.stringify(request.response.result));
+				resolve(request.response.result);
+			} else {
+				reject(request.response.error);
+			}
 		}
-	}
+		request.onerror = function () {
+			alert("Error occurred. Query failed!");
+		}
+		request.send(JSON.stringify(queryObj));
+
+	}).catch(function (e) {
+		alert(e);
+	});
 }
 
-function createDatasetElement(dataset) {
-	const table = document.getElementById("datasetList");
-	const tbody = table.getElementsByTagName("tbody")[0];
-	const row = tbody.insertRow(tbody.rows.length);
-	const cellID = row.insertCell(0);
-	cellID.innerHTML = dataset.id;
-	const cellKind = row.insertCell(1);
-	cellKind.innerHTML = dataset.kind;
-	const cellNumRows = row.insertCell(2);
-	cellNumRows.innerHTML = dataset.numRows;
-	const cellPerformQuery = row.insertCell(3);
-	const performQueryButton = document.createElement("button");
-	performQueryButton.innerHTML = "Query";
-	cellPerformQuery.appendChild(performQueryButton);
-	const cellRemove = row.insertCell(4);
-	const removeButton = document.createElement("button");
-	removeButton.innerHTML = "Remove";
-	removeButton.addEventListener("click", () => removeDataset(dataset.id));
-	cellRemove.appendChild(removeButton);
+// Query functions ---------------------- Might want to move these to another script
+
+function beginQuery(id) {
+	document.getElementById("queryPopup").style.display = "block";
+	document.getElementById("query-room-id").innerHTML = "Dataset ID: " + id;
 }
 
-function clearList() {
-	const table = document.getElementById("datasetList");
-	const tbody = table.getElementsByTagName("tbody")[0];
-	const rowCount = tbody.rows.length;
-	for (let i=0; i<rowCount; i++) {
-		tbody.deleteRow(0);
-	}
+async function performQuery() {
+	const id = getQueryID();
+	console.log(id);
+	//TODO: grab info from elements and create the query object
+	const queryObj = null;
+
+	// EXAMPLE TODO: REMOVE THIS SECTION
+	const QUERY_TEST = {
+		WHERE: {
+			GT: {
+				ID_seats: 10
+			}
+		},
+		OPTIONS: {
+			COLUMNS: [
+				"ID_name",
+				"ID_address",
+				"ID_type"
+			],
+			ORDER: "ID_type"
+		}
+	};
+	outputQuery(await query(QUERY_TEST));
+	// ---------------
+
+	// outputQuery(await query(queryObj));
+	exitQuery();
+}
+
+function outputQuery(out) {
+	//TODO: output query in table
+}
+
+function exitQuery() {
+	document.getElementById("queryPopup").style.display = "none";
+	//TODO: reset all form elements
+}
+
+function getQueryID() {
+	let queryString = document.getElementById("query-room-id").innerHTML;
+	return queryString.substring(12);
 }
 
