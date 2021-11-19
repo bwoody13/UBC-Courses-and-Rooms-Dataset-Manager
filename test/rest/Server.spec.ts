@@ -38,7 +38,6 @@ describe("Facade D3", function () {
 	beforeEach(function () {
 		console.log("Server Testing: Starting new test...");
 		clearDisk();
-		server.clear();
 	});
 
 	afterEach(function () {
