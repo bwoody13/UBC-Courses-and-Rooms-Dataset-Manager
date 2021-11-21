@@ -74,3 +74,111 @@ function checkValid() {
 	}
 	button.disabled = !(validSeats && validType && validFurniture);
 }
+
+function getMinSeats() {
+	const roomSeats = document.getElementById('roomSeats');
+	return roomSeats.value;
+}
+
+function getTypeNames() {
+	const types = document.getElementById('roomTypes');
+	let typeNames = [];
+	for (const child of types.children) {
+		const name = child.lastChild.textContent;
+		const input = child.firstChild.firstChild;
+		if (input.checked) {
+			typeNames.push(name);
+		}
+	}
+	return typeNames;
+}
+
+function getFurnitureNames() {
+	const furniture = document.getElementById('roomFurniture');
+	let furnitureNames = [];
+	for (const child of furniture.children) {
+		const name = child.lastChild.textContent;
+		const input = child.firstChild.firstChild;
+		if (input.checked) {
+			furnitureNames.push(roomFurniturePrefix + name);
+		}
+	}
+	return furnitureNames;
+}
+
+function makeColID(id, colName) {
+	return id + "_" + colName;
+}
+
+function createWHEREObj(id, seats, types, furniture) {
+	const seatsID = makeColID(id, "seats");
+	const typesID = makeColID(id, "type");
+	const furnitureID = makeColID(id, "furniture");
+	const seatsOR = {OR:[
+			{GT: {
+
+				}
+			},
+			{EQ: {
+
+				}
+			}
+		]};
+	seatsOR.OR[0].GT[seatsID] = seats;
+	seatsOR.OR[1].EQ[seatsID] = seats;
+	const typesOR = {OR: [
+
+		]
+	};
+	for (const type of types) {
+		const isObj = {IS:{}};
+		isObj.IS[typesID] = type;
+		typesOR.OR.push(isObj);
+	}
+	const furnitureOR = {OR:[
+
+		]};
+	for (const furnishing of furniture) {
+		const isObj = {IS:{}};
+		isObj.IS[furnitureID] = furnishing;
+		furnitureOR.OR.push(isObj);
+	}
+	const whereObj = {AND: [seatsOR, typesOR, furnitureOR]};
+	return whereObj;
+}
+
+function createOPTIONSObj(id) {
+	const optionsObj = {
+		COLUMNS: [
+			makeColID(id, "fullname"),
+			makeColID(id, "number"),
+			makeColID(id, "address"),
+			makeColID(id, "seats"),
+			makeColID(id, "furinture"),
+			makeColID(id, "type")
+		],
+		ORDER: {
+			dir: "DOWN",
+			keys: [makeColID(id, "seats"), makeColID(id, "fullname")]
+		}
+	}
+	return optionsObj;
+}
+
+function createQueryObj(id) {
+	const minSeats = getMinSeats();
+	const types = getTypeNames();
+	const furniture = getFurnitureNames();
+	const queryObj = {
+		WHERE: createWHEREObj(id, minSeats, types, furniture),
+		OPTIONS: createOPTIONSObj(id)
+	};
+	return queryObj;
+}
+
+function displayQuery() {
+	const div = document.getElementById('query');
+	const query = document.createElement('p');
+	query.innerText = JSON.stringify(createQueryObj('rooms'));
+	div.appendChild(query);
+}
