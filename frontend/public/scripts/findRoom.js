@@ -56,6 +56,9 @@ function checkValid() {
 	const furniture = document.getElementById('roomFurniture');
 	const button = document.getElementById('findRooms');
 	const validSeats = seats.value >= 0;
+	if(!validSeats) {
+		seats.value = 0;
+	}
 	let validType = false;
 	for (const type of types.children) {
 		const input = type.firstChild.firstChild;
@@ -151,6 +154,7 @@ function createOPTIONSObj(id) {
 	const optionsObj = {
 		COLUMNS: [
 			makeColID(id, "fullname"),
+			makeColID(id, "shortname"),
 			makeColID(id, "number"),
 			makeColID(id, "address"),
 			makeColID(id, "seats"),
@@ -191,9 +195,10 @@ function resetList(id) {
 }
 
 function beginQuery(id) {
+	resetQueryFields();
 	initialize();
 	document.getElementById("queryPopup").style.display = "block";
-	document.getElementById("query-room-id").innerHTML = "Dataset ID: " + id;
+	document.getElementById("query-room-id").innerHTML = "Selected Dataset: " + id;
 }
 
 async function performQuery() {
@@ -224,15 +229,19 @@ function outputQuery(out) {
 
 function exitQuery() {
 	document.getElementById("queryPopup").style.display = "none";
+	resetQueryFields();
+}
+
+function resetQueryFields() {
 	document.getElementById('findRooms').disabled = true;
 	resetList('roomTypes');
 	resetList('roomFurniture');
-	document.getElementById('roomSeats').value = null;
+	document.getElementById('roomSeats').value = 0;
 }
 
 function getQueryID() {
 	let queryString = document.getElementById("query-room-id").innerHTML;
-	return queryString.substring(12);
+	return queryString.substring(18);
 }
 
 async function query(queryObj) {

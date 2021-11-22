@@ -71,21 +71,24 @@
 		</div>
 		<div class="popup-body">
 			<div class="popup-row">
-				<b id="query-room-id">ID: </b>
+				<b id="query-room-id"></b>
 			</div>
-			<h2>Find Applicable Rooms</h2>
-			<label class="head" for="roomSeats">Min Room Seats:</label>
-			<input type="number" id="roomSeats" onchange="checkValid()">
-			<br>
-			<br>
-			<label class="head" for="roomTypes">Room Types:</label>
-			<ul class="nobullet" id="roomTypes"></ul>
-			<br>
-			<label class="head" for="roomFurniture">Room Furniture:</label>
-			<ul class="nobullet" id="roomFurniture"></ul>
 			<div class="popup-row">
-				<button id="findRooms" type="button" onclick="performQuery()" disabled>Find Rooms</button>
-				<button type="button" class="button" onclick="performQuery()" disabled>Find Rooms</button>
+				<label class="head" for="roomSeats">Min Room Seats:</label>
+				<input type="number" min="0" id="roomSeats" onchange="checkValid()">
+			</div>
+			<br>
+			<div class="popup-row">
+				<label class="head" for="roomTypes">Room Types:</label>
+				<ul class="nobullet" id="roomTypes"></ul>
+			</div>
+			<br>
+			<div class="popup-row">
+				<label class="head" for="roomFurniture">Room Furniture:</label>
+				<ul class="nobullet" id="roomFurniture"></ul>
+			</div>
+			<div class="popup-row">
+				<button id="findRooms" type="button" class="button" onclick="performQuery()" disabled>Find Rooms</button>
 			</div>
 		</div>
 	</div>
@@ -97,6 +100,7 @@
 		<thead>
 		<tr>
 			<th>Room Name</th>
+			<th>Room Code</th>
 			<th>Room Number</th>
 			<th>Address</th>
 			<th>Seats</th>
