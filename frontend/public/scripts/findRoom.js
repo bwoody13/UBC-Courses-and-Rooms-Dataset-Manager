@@ -45,7 +45,7 @@ function makeFurniture() {
 function makeList(id, contents) {
 	let ul = document.getElementById(id);
 	for (const item of contents) {
-		let li = createLICheck(item);
+		let li = createLICheck(item, item);
 		ul.appendChild(li);
 	}
 }
@@ -124,8 +124,8 @@ function createWHEREObj(id, seats, types, furniture) {
 				}
 			}
 		]};
-	seatsOR.OR[0].GT[seatsID] = seats;
-	seatsOR.OR[1].EQ[seatsID] = seats;
+	seatsOR.OR[0].GT[seatsID] = Number(seats);
+	seatsOR.OR[1].EQ[seatsID] = Number(seats);
 	const typesOR = {OR: [
 
 		]
@@ -154,7 +154,7 @@ function createOPTIONSObj(id) {
 			makeColID(id, "number"),
 			makeColID(id, "address"),
 			makeColID(id, "seats"),
-			makeColID(id, "furinture"),
+			makeColID(id, "furniture"),
 			makeColID(id, "type")
 		],
 		ORDER: {
@@ -181,4 +181,81 @@ function displayQuery() {
 	const query = document.createElement('p');
 	query.innerText = JSON.stringify(createQueryObj('rooms'));
 	div.appendChild(query);
+}
+
+function resetList(id) {
+	const list = document.getElementById(id);
+	while (list.firstChild) {
+		list.removeChild(list.firstChild);
+	}
+}
+
+function beginQuery(id) {
+	initialize();
+	document.getElementById("queryPopup").style.display = "block";
+	document.getElementById("query-room-id").innerHTML = "Dataset ID: " + id;
+}
+
+async function performQuery() {
+	const id = getQueryID();
+	console.log(id);
+	const queryObj = createQueryObj(id);
+
+	outputQuery(await query(queryObj));
+	exitQuery();
+}
+
+function outputQuery(out) {
+	const outputTable = document.getElementById('queryOutput');
+	let rowCount = outputTable.rows.length;
+	for (let i = rowCount - 1; i > 0; i--) {
+		outputTable.deleteRow(i);
+	}
+	for (const outputObj of out) {
+		let row = outputTable.insertRow(-1);
+		let i = 0;
+		for (const key of Object.keys(outputObj)) {
+			let cell = row.insertCell(i);
+			cell.innerText = outputObj[key];
+			i++;
+		}
+	}
+}
+
+function exitQuery() {
+	document.getElementById("queryPopup").style.display = "none";
+	document.getElementById('findRooms').disabled = true;
+	resetList('roomTypes');
+	resetList('roomFurniture');
+	document.getElementById('roomSeats').value = null;
+}
+
+function getQueryID() {
+	let queryString = document.getElementById("query-room-id").innerHTML;
+	return queryString.substring(12);
+}
+
+async function query(queryObj) {
+	return new Promise((resolve, reject) => {
+		const endpointURL = "/query";
+		const request = new XMLHttpRequest();
+		request.open("POST", SERVER_URL + endpointURL, true);
+		request.responseType = "json";
+		request.setRequestHeader("Content-Type", "application/json");
+		request.onload = async function () {
+			if (request.status === 200) {
+				console.log("Query successfully returned: " + JSON.stringify(request.response.result));
+				resolve(request.response.result);
+			} else {
+				reject(request.response.error);
+			}
+		}
+		request.onerror = function () {
+			alert("Error occurred. Query failed!");
+		}
+		request.send(JSON.stringify(queryObj));
+
+	}).catch(function (e) {
+		alert(e);
+	});
 }
