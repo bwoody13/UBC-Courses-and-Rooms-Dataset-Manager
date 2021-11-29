@@ -1,0 +1,505 @@
+{
+  "title": "valid multiple apply keys courses",
+  "input": {
+    "WHERE": {
+      "IS": {
+        "courses_id": "10*"
+      }
+    },
+    "OPTIONS": {
+      "COLUMNS": [
+        "courses_dept",
+        "max",
+        "min",
+        "avg",
+        "sum",
+        "count"
+      ],
+      "ORDER": {
+        "dir": "UP",
+        "keys": [
+          "count",
+          "max",
+          "min",
+          "avg",
+          "sum"
+        ]
+      }
+    },
+    "TRANSFORMATIONS": {
+      "GROUP": [
+        "courses_dept"
+      ],
+      "APPLY": [
+        {
+          "max": {
+            "MAX": "courses_avg"
+          }
+        },
+        {
+          "min": {
+            "MIN": "courses_avg"
+          }
+        },
+        {
+          "avg": {
+            "AVG": "courses_avg"
+          }
+        },
+        {
+          "sum": {
+            "SUM": "courses_avg"
+          }
+        },
+        {
+          "count": {
+            "COUNT": "courses_avg"
+          }
+        }
+      ]
+    }
+  },
+  "errorExpected": false,
+  "with": [
+    {
+      "courses_dept": "test",
+      "max": 60,
+      "min": 60,
+      "avg": 60,
+      "sum": 60,
+      "count": 1
+    },
+    {
+      "courses_dept": "fipr",
+      "max": 73.85,
+      "min": 73.85,
+      "avg": 73.85,
+      "sum": 147.7,
+      "count": 1
+    },
+    {
+      "courses_dept": "ufor",
+      "max": 79.7,
+      "min": 79.7,
+      "avg": 79.7,
+      "sum": 159.4,
+      "count": 1
+    },
+    {
+      "courses_dept": "arth",
+      "max": 75.02,
+      "min": 72.09,
+      "avg": 73.56,
+      "sum": 294.22,
+      "count": 2
+    },
+    {
+      "courses_dept": "relg",
+      "max": 78.28,
+      "min": 76.5,
+      "avg": 77.39,
+      "sum": 309.56,
+      "count": 2
+    },
+    {
+      "courses_dept": "fnel",
+      "max": 78.55,
+      "min": 76.21,
+      "avg": 77.38,
+      "sum": 309.52,
+      "count": 2
+    },
+    {
+      "courses_dept": "fnis",
+      "max": 80.1,
+      "min": 72.18,
+      "avg": 76.13,
+      "sum": 228.38,
+      "count": 3
+    },
+    {
+      "courses_dept": "phrm",
+      "max": 81.65,
+      "min": 70.11,
+      "avg": 77.49,
+      "sum": 232.46,
+      "count": 3
+    },
+    {
+      "courses_dept": "grek",
+      "max": 81.79,
+      "min": 70.4,
+      "avg": 77.36,
+      "sum": 618.92,
+      "count": 4
+    },
+    {
+      "courses_dept": "arbc",
+      "max": 82.47,
+      "min": 79,
+      "avg": 80.58,
+      "sum": 644.66,
+      "count": 4
+    },
+    {
+      "courses_dept": "hebr",
+      "max": 82.58,
+      "min": 65.58,
+      "avg": 75.33,
+      "sum": 602.66,
+      "count": 4
+    },
+    {
+      "courses_dept": "dani",
+      "max": 89.27,
+      "min": 85.36,
+      "avg": 87.25,
+      "sum": 698,
+      "count": 4
+    },
+    {
+      "courses_dept": "arcl",
+      "max": 73.52,
+      "min": 68.14,
+      "avg": 71.13,
+      "sum": 426.78,
+      "count": 6
+    },
+    {
+      "courses_dept": "last",
+      "max": 80.78,
+      "min": 72.42,
+      "avg": 75.85,
+      "sum": 1213.66,
+      "count": 8
+    },
+    {
+      "courses_dept": "sans",
+      "max": 92.5,
+      "min": 70.69,
+      "avg": 85.07,
+      "sum": 1361.08,
+      "count": 8
+    },
+    {
+      "courses_dept": "frst",
+      "max": 83.93,
+      "min": 73.14,
+      "avg": 78.16,
+      "sum": 1406.88,
+      "count": 9
+    },
+    {
+      "courses_dept": "swed",
+      "max": 84.35,
+      "min": 79,
+      "avg": 81.6,
+      "sum": 734.36,
+      "count": 9
+    },
+    {
+      "courses_dept": "cons",
+      "max": 90.39,
+      "min": 79.12,
+      "avg": 83.51,
+      "sum": 1503.14,
+      "count": 9
+    },
+    {
+      "courses_dept": "apsc",
+      "max": 82.08,
+      "min": 77.36,
+      "avg": 79.67,
+      "sum": 796.75,
+      "count": 10
+    },
+    {
+      "courses_dept": "hinu",
+      "max": 93.22,
+      "min": 76.09,
+      "avg": 84.28,
+      "sum": 1348.41,
+      "count": 11
+    },
+    {
+      "courses_dept": "lfs",
+      "max": 84.1,
+      "min": 0,
+      "avg": 68.86,
+      "sum": 1239.53,
+      "count": 12
+    },
+    {
+      "courses_dept": "port",
+      "max": 86.61,
+      "min": 67.73,
+      "avg": 77.43,
+      "sum": 1858.38,
+      "count": 12
+    },
+    {
+      "courses_dept": "dhyg",
+      "max": 85.04,
+      "min": 69.72,
+      "avg": 76.6,
+      "sum": 1838.29,
+      "count": 15
+    },
+    {
+      "courses_dept": "astr",
+      "max": 80.17,
+      "min": 66.15,
+      "avg": 75.57,
+      "sum": 2871.56,
+      "count": 19
+    },
+    {
+      "courses_dept": "grsj",
+      "max": 83.19,
+      "min": 70.61,
+      "avg": 78.19,
+      "sum": 1642.02,
+      "count": 21
+    },
+    {
+      "courses_dept": "nest",
+      "max": 79.16,
+      "min": 65.67,
+      "avg": 72.5,
+      "sum": 1884.97,
+      "count": 22
+    },
+    {
+      "courses_dept": "asia",
+      "max": 74.66,
+      "min": 57.33,
+      "avg": 68.18,
+      "sum": 2659.13,
+      "count": 23
+    },
+    {
+      "courses_dept": "latn",
+      "max": 84.29,
+      "min": 64.83,
+      "avg": 74.23,
+      "sum": 1855.85,
+      "count": 23
+    },
+    {
+      "courses_dept": "pers",
+      "max": 89.25,
+      "min": 67.78,
+      "avg": 81.84,
+      "sum": 3191.92,
+      "count": 24
+    },
+    {
+      "courses_dept": "midw",
+      "max": 96.5,
+      "min": 83.35,
+      "avg": 89.09,
+      "sum": 4810.7,
+      "count": 25
+    },
+    {
+      "courses_dept": "clst",
+      "max": 81.02,
+      "min": 64.96,
+      "avg": 72.41,
+      "sum": 2244.6,
+      "count": 28
+    },
+    {
+      "courses_dept": "punj",
+      "max": 89.08,
+      "min": 64.89,
+      "avg": 80.6,
+      "sum": 2901.64,
+      "count": 30
+    },
+    {
+      "courses_dept": "russ",
+      "max": 90.5,
+      "min": 76.63,
+      "avg": 83.66,
+      "sum": 2593.32,
+      "count": 31
+    },
+    {
+      "courses_dept": "kin",
+      "max": 80.25,
+      "min": 68.86,
+      "avg": 75.24,
+      "sum": 2407.72,
+      "count": 32
+    },
+    {
+      "courses_dept": "fist",
+      "max": 79.74,
+      "min": 67.11,
+      "avg": 73.5,
+      "sum": 2940.15,
+      "count": 35
+    },
+    {
+      "courses_dept": "korn",
+      "max": 83.33,
+      "min": 65.75,
+      "avg": 76.28,
+      "sum": 3813.99,
+      "count": 42
+    },
+    {
+      "courses_dept": "comm",
+      "max": 74.44,
+      "min": 67.26,
+      "avg": 71.65,
+      "sum": 3510.76,
+      "count": 43
+    },
+    {
+      "courses_dept": "geob",
+      "max": 75.13,
+      "min": 62.81,
+      "avg": 69.24,
+      "sum": 3738.91,
+      "count": 51
+    },
+    {
+      "courses_dept": "ling",
+      "max": 83.51,
+      "min": 66.4,
+      "avg": 75.34,
+      "sum": 4595.85,
+      "count": 56
+    },
+    {
+      "courses_dept": "busi",
+      "max": 75.88,
+      "min": 56.52,
+      "avg": 67.78,
+      "sum": 5558.18,
+      "count": 68
+    },
+    {
+      "courses_dept": "musc",
+      "max": 94.25,
+      "min": 59,
+      "avg": 74.5,
+      "sum": 7897.47,
+      "count": 76
+    },
+    {
+      "courses_dept": "engl",
+      "max": 82.96,
+      "min": 65,
+      "avg": 73.21,
+      "sum": 6296.04,
+      "count": 82
+    },
+    {
+      "courses_dept": "poli",
+      "max": 78.88,
+      "min": 54.01,
+      "avg": 71.55,
+      "sum": 8013.53,
+      "count": 100
+    },
+    {
+      "courses_dept": "phil",
+      "max": 80.14,
+      "min": 62.57,
+      "avg": 70.29,
+      "sum": 7943.21,
+      "count": 101
+    },
+    {
+      "courses_dept": "psyc",
+      "max": 73.05,
+      "min": 60.79,
+      "avg": 68.44,
+      "sum": 10881.44,
+      "count": 134
+    },
+    {
+      "courses_dept": "hist",
+      "max": 86,
+      "min": 34,
+      "avg": 70.02,
+      "sum": 12604.12,
+      "count": 149
+    },
+    {
+      "courses_dept": "ital",
+      "max": 81.82,
+      "min": 61,
+      "avg": 72.43,
+      "sum": 12748.34,
+      "count": 158
+    },
+    {
+      "courses_dept": "chin",
+      "max": 84.24,
+      "min": 65,
+      "avg": 75.1,
+      "sum": 16896.8,
+      "count": 179
+    },
+    {
+      "courses_dept": "fren",
+      "max": 79.47,
+      "min": 61.36,
+      "avg": 73.28,
+      "sum": 16120.86,
+      "count": 187
+    },
+    {
+      "courses_dept": "phys",
+      "max": 90.25,
+      "min": 62.87,
+      "avg": 75.72,
+      "sum": 17416.08,
+      "count": 188
+    },
+    {
+      "courses_dept": "germ",
+      "max": 88.21,
+      "min": 68.32,
+      "avg": 80.27,
+      "sum": 17900.27,
+      "count": 202
+    },
+    {
+      "courses_dept": "econ",
+      "max": 79.99,
+      "min": 60.89,
+      "avg": 68.88,
+      "sum": 18460.69,
+      "count": 230
+    },
+    {
+      "courses_dept": "span",
+      "max": 80.15,
+      "min": 61.03,
+      "avg": 71.61,
+      "sum": 18189.44,
+      "count": 230
+    },
+    {
+      "courses_dept": "japn",
+      "max": 85.18,
+      "min": 54.81,
+      "avg": 72.52,
+      "sum": 31399.24,
+      "count": 352
+    },
+    {
+      "courses_dept": "math",
+      "max": 81.36,
+      "min": 53.06,
+      "avg": 67.9,
+      "sum": 38025.81,
+      "count": 455
+    }
+  ]
+}
