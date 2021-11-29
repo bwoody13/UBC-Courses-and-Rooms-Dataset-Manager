@@ -1,0 +1,39 @@
+{
+  "title": "Valid Multi-order AVG",
+  "input": {
+    "WHERE": {
+      "IS": {
+        "rooms_shortname": "COMM"
+      }
+    },
+    "OPTIONS": {
+      "COLUMNS": [
+        "rooms_shortname",
+        "rooms_number",
+        "avgSeats"
+      ],
+      "ORDER": {
+        "dir": "DOWN",
+        "keys": [
+          "rooms_shortname",
+          "avgSeats"
+        ]
+      }
+    },
+    "TRANSFORMATIONS": {
+      "GROUP": [
+        "rooms_shortname",
+        "rooms_number"
+      ],
+      "APPLY": [
+        {
+          "avgSeats": {
+            "AVG": "rooms_seats"
+          }
+        }
+      ]
+    }
+  },
+  "errorExpected": false,
+  "with": []
+}

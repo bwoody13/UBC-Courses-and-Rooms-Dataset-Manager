@@ -1,14 +1,14 @@
 import {DatasetItem} from "./Dataset";
 
 export interface Section {
-	title: string; // Title
-	uuid: string; // id
-	instructor: string; // Professor
-	audit: number; // Audit
-	year: number; // Year
-	id: string; // Course
-	pass: number; // Pass
-	fail: number; // Fail
-	avg: number; // Avg
-	dept: string // Subject
+	_title: string; // Title
+	_uuid: string; // id
+	_instructor: string; // Professor
+	_audit: number; // Audit
+	_year: number; // Year
+	_id: string; // Course
+	_pass: number; // Pass
+	_fail: number; // Fail
+	_avg: number; // Avg
+	_dept: string // Subject
 }

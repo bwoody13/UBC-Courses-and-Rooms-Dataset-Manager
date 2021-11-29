@@ -1,4 +1,4 @@
-import {extractKey, getSectionRoomKey, mKeys} from "../../resources/Util";
+import {extractKey, getSectionRoomValue, mKeys} from "../../resources/Util";
 import {InsightError} from "../../controller/IInsightFacade";
 import {Section} from "../Section";
 import {Room} from "../Room";
@@ -41,6 +41,9 @@ export abstract class ApplyKey {
 	public applyKey: string
 
 	constructor(key: string, applyKey: string) {
+		if (applyKey.includes("_")) {
+			throw new InsightError("Apply key contains _");
+		}
 		this.applyKey = applyKey;
 		try {
 			this.key = extractKey(key);
@@ -66,7 +69,7 @@ class MaxApplyKey extends MApplyKey {
 	public applyOp(data: Section[] | Room[]): number {
 		let max: number = Number.MIN_VALUE;
 		for (let dataItem of data) {
-			let val = getSectionRoomKey(this.key, dataItem);
+			let val = getSectionRoomValue(this.key, dataItem);
 			if(val > max || max === Number.MIN_VALUE) {
 				max = val;
 			}
@@ -81,7 +84,7 @@ class MinApplyKey extends MApplyKey {
 	public applyOp(data: Section[] | Room[]): number {
 		let min: number = Number.MAX_VALUE;
 		for (let dataItem of data) {
-			let val = getSectionRoomKey(this.key, dataItem);
+			let val = getSectionRoomValue(this.key, dataItem);
 			if (val < min || min === Number.MAX_VALUE) {
 				min = val;
 			}
@@ -96,7 +99,7 @@ class AvgApplyKey extends MApplyKey {
 		let sum: Decimal = new Decimal(0);
 		let count: number = data.length;
 		for (let dataItem of data) {
-			sum = sum.plus(getSectionRoomKey(this.key, dataItem));
+			sum = sum.plus(getSectionRoomValue(this.key, dataItem)); // TODO: plus vs add
 		}
 		let avg = sum.toNumber() / count;
 		return Number(avg.toFixed(2));
@@ -108,7 +111,7 @@ class CountApplyKey extends ApplyKey {
 	public applyOp(data: Section[] | Room[]): number {
 		let set: Set<number | string> = new Set();
 		for (let dataItem of data) {
-			set.add(getSectionRoomKey(this.key, dataItem));
+			set.add(getSectionRoomValue(this.key, dataItem));
 		}
 		return set.size;
 	}
@@ -119,7 +122,7 @@ class SumApplyKey extends MApplyKey {
 	public applyOp(data: Section[] | Room[]): number {
 		let sum: number = 0;
 		for (let dataItem of data) {
-			sum += getSectionRoomKey(this.key, dataItem);
+			sum += getSectionRoomValue(this.key, dataItem);
 		}
 		return Number(sum.toFixed(2));
 	}

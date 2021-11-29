@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Perform Query</title>
+
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<h1>Perform Query: Dataset Name</h1>
+	<label for="groupApply" class="head">Group and Apply?</label>
+	<input type="checkbox" id="groupApply" checked>
+	<hr>
+	<form>
+		<label for="where" class="head">WHERE: </label><br>
+		<textarea name="where" rows="5" cols="25" id="where"></textarea>
+		<br><br>
+		<label for="groupKeys" class="head">Group Keys: </label>
+		<ul id="groupKeys" class="nobullet">
+			<li><label>
+				<input type="checkbox">
+			</label>key1</li>
+			<li><label>
+				<input type="checkbox">
+			</label>key2</li>
+			<li><label>
+				<input type="checkbox">
+			</label>key3</li>
+			<li><label>
+				<input type="checkbox">
+			</label>key4</li>
+		</ul>
+		<label class="head">Apply Keys:</label><br>
+		<form>
+			<label for="applyKeys">Type:</label>
+			<select name="applyKeys" id="applyKeys">
+				<option value="">--Please choose a type--</option>
+				<option value="AVG">AVG</option>
+				<option value="MAX">MAX</option>
+				<option value="MIN">MIN</option>
+				<option value="SUM">SUM</option>
+				<option value="COUNT">COUNT</option>
+			</select><br>
+			<label for="applyName">Name:</label>
+			<input type="text" id="applyName"><br>
+			<label for="applyCol">Column:</label>
+			<select name="applyCol" id="applyCol">
+				<option value="">--Please choose a column--</option>
+				<option value="col1">col1</option>
+				<option value="col2">col2</option>
+				<option value="col3">col3</option>
+				<option value="col4">col4</option>
+				<option value="col5">col5</option>
+			</select><br>
+			<input type="submit" value="Add Apply Key">
+		</form><br>
+		<div class="bordered">
+			<table>
+				<thead>
+				<tr>
+					<th colspan="3" class="top">Added Apply Keys</th>
+				</tr>
+				<tr>
+					<th>Type</th>
+					<th>Name</th>
+					<th>Column</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr>
+					<td>AVG</td>
+					<td>avgCol1</td>
+					<td>col1</td>
+				</tr>
+				</tbody>
+			</table><br>
+		</div>
+		<label for="columns" class="head">Columns: </label>
+		<ul id="columns" class="nobullet">
+			<li><label>
+				<input type="checkbox">
+			</label>col1</li>
+			<li><label>
+				<input type="checkbox">
+			</label>col2</li>
+			<li><label>
+				<input type="checkbox">
+			</label>col3</li>
+			<li><label>
+				<input type="checkbox">
+			</label>col4</li>
+		</ul>
+		<label class="head">Order Direction:</label><br>
+		<input type="radio" id="up" name="orderDir" value="up" checked>
+		<label for="up">UP</label>
+		<input type="radio" id="down" name="orderDir" value="down">
+		<label for="down">DOWN</label>
+		<br><br>
+		<div class="bordered">
+			<label for="orderColumns" class="head">Order Columns:</label>
+			<table id="orderColumns">
+				<thead>
+					<tr>
+						<th>Selected Order Columns</th>
+						<th>Available Columns</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<ul class="nobullet">
+								<li>col2</li>
+							</ul>
+						</td>
+						<td>
+							<ul class="nobullet">
+								<li>col1</li>
+								<li>col3</li>
+								<li>col4</li>
+							</ul>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<br>
+		<input type="submit" value="Execute Query">
+	</form>
+
+</body>
+</html>

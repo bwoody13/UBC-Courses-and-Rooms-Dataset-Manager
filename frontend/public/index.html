@@ -1,13 +1,133 @@
 <!DOCTYPE html>
-<html>
-	<head>
-		<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
-		<title>310 Frontend</title>
-		<link href="/style.css" rel="stylesheet" />
-	</head>
-	<body>
-		<button id="click-me-button" class="button" >Click Me!</button>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Template 310 UI</title>
 
-		<script type="text/javascript" src="/frontend.js"></script>
-	</body>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<h1>CPSC 310 Insight UBC - Group 053</h1>
+<div>
+	<h2>Room Query</h2>
+	<form method="post" onsubmit="return false;">
+		<label for="datasetID">ID:</label>
+		<input type="text" id="datasetID" value="">
+<!--		<br>-->
+<!--		<label>Dataset Type:</label>-->
+<!--		<input type="radio" name="datasetType" id="datasetTypeCourses" value="courses" checked>-->
+<!--		<label for="datasetTypeCourses">Courses</label>-->
+<!--		<input type="radio" name="datasetType" id="datasetTypeRooms" value="rooms">-->
+<!--		<label for="datasetTypeRooms">Rooms</label>-->
+		<br>
+		<label for="datasetFile">Dataset:</label>
+		<input type="file" id="datasetFile" accept=".zip">
+		<br>
+		<input type="submit" value="Add Dataset" onclick="addDataset()">
+	</form>
+</div>
+<hr>
+<div class="bordered">
+	<table id="datasetList">
+		<thead>
+		<tr>
+			<th colspan="5" class="top">Room Datasets</th>
+		</tr>
+		<tr>
+			<th>ID</th>
+<!--			<th>Type</th>-->
+			<th>Room Count</th>
+			<th></th>
+			<th></th>
+		</tr>
+		</thead>
+		<tbody>
+<!--		<tr>-->
+<!--			<td>Courses</td>-->
+<!--			<td>mycoursesdatasetname</td>-->
+<!--			<td>133</td>-->
+<!--			<td><button>Perform Query</button></td>-->
+<!--			<td><button>Remove Dataset</button></td>-->
+<!--		</tr>-->
+<!--		<tr>-->
+<!--			<td>Rooms</td>-->
+<!--			<td>myroomsdatasetname</td>-->
+<!--			<td>1000</td>-->
+<!--			<td><button>Perform Query</button></td>-->
+<!--			<td><button>Remove Dataset</button></td>-->
+<!--		</tr>-->
+		</tbody>
+	</table>
+</div>
+<div id="queryPopup" class="fullscreen">
+	<div class="popup">
+		<div class="popup-bar">
+			<div class="popup-column">
+				<b class="popup-title">Query Dataset</b>
+			</div>
+			<div class="popup-column">
+				<button class="button exitButton" onclick="exitQuery()">X</button>
+			</div>
+		</div>
+		<div class="popup-body">
+			<div class="popup-row">
+				<b id="query-room-id"></b>
+			</div>
+			<div class="popup-row">
+				<label class="head" for="roomSeats">Min Room Seats:</label>
+				<input type="number" min="0" id="roomSeats" onchange="checkValid()">
+			</div>
+			<br>
+			<div class="popup-row">
+				<label class="head" for="roomTypes">Room Types:</label>
+				<ul class="nobullet" id="roomTypes"></ul>
+			</div>
+			<br>
+			<div class="popup-row">
+				<label class="head" for="roomFurniture">Room Furniture:</label>
+				<ul class="nobullet" id="roomFurniture"></ul>
+			</div>
+			<div class="popup-row">
+				<button id="findRooms" type="button" class="button" onclick="performQuery()" disabled>Find Rooms</button>
+			</div>
+		</div>
+	</div>
+</div>
+<hr>
+<div class="bordered">
+	<label class="head">Applicable Rooms</label>
+	<table id="queryOutput">
+		<thead>
+		<tr>
+			<th>Room Name</th>
+			<th>Room Code</th>
+			<th>Room Number</th>
+			<th>Address</th>
+			<th>Seats</th>
+			<th>Type</th>
+			<th>Furniture</th>
+		</tr>
+		</thead>
+		<tbody>
+<!--		<tr>-->
+<!--			<td>110</td>-->
+<!--			<td>CPSC</td>-->
+<!--			<td>93.86</td>-->
+<!--			<td>5</td>-->
+<!--		</tr>-->
+<!--		<tr>-->
+<!--			<td>210</td>-->
+<!--			<td>CPSC</td>-->
+<!--			<td>81.56</td>-->
+<!--			<td>10</td>-->
+<!--		</tr>-->
+		</tbody>
+	</table>
+</div>
+<script type="text/javascript" src="scripts/frontend.js"></script>
+<script type="text/javascript" src="scripts/datasetList.js"></script>
+<script type="text/javascript" src="scripts/findRoom.js"></script>
+<script type="text/javascript">updateDatasetList();</script>
+
+</body>
 </html>

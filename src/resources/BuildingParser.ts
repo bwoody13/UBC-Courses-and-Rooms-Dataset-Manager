@@ -50,23 +50,23 @@ function parseTableRow(trElement: any): Room | null {
 				if(trChildNode.attrs[0].name === "class") {
 					switch(trChildNode.attrs[0].value) {
 						case "views-field views-field-field-room-number":
-							room.number = getRoomNumber(trChildNode).trim();
+							room._number = getRoomNumber(trChildNode).trim();
 							numberSet = true;
 							break;
 						case "views-field views-field-field-room-capacity":
-							room.seats = parseInt(getTDTextValue(trChildNode).trim(), 10) || 0;
+							room._seats = parseInt(getTDTextValue(trChildNode).trim(), 10) || 0;
 							seatsSet = true;
 							break;
 						case "views-field views-field-field-room-furniture":
-							room.furniture = getTDTextValue(trChildNode).trim();
+							room._furniture = getTDTextValue(trChildNode).trim();
 							furnitureSet = true;
 							break;
 						case "views-field views-field-field-room-type":
-							room.type = getTDTextValue(trChildNode).trim();
+							room._type = getTDTextValue(trChildNode).trim();
 							typeSet = true;
 							break;
 						case "views-field views-field-nothing":
-							room.href = getRoomHREF(trChildNode).trim();
+							room._href = getRoomHREF(trChildNode).trim();
 							hrefSet = true;
 							break;
 					}

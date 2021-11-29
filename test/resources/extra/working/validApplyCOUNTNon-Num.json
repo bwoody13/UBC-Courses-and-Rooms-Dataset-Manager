@@ -1,0 +1,38 @@
+{
+  "title": "Valid Apply COUNT non-num",
+  "input": {
+    "WHERE": {
+      "IS": {
+        "rooms_shortname": "COMM"
+      }
+    },
+    "OPTIONS": {
+      "COLUMNS": [
+        "rooms_fullname",
+        "rooms_number",
+        "cntName"
+      ],
+      "ORDER": {
+        "dir": "DOWN",
+        "keys": [
+          "rooms_number"
+        ]
+      }
+    },
+    "TRANSFORMATIONS": {
+      "GROUP": [
+        "rooms_fullname",
+        "rooms_number"
+      ],
+      "APPLY": [
+        {
+          "cntName": {
+            "COUNT": "rooms_fullname"
+          }
+        }
+      ]
+    }
+  },
+  "errorExpected": false,
+  "with": []
+}

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Find Applicable Rooms</title>
+
+	<link rel="stylesheet" href="style.css">
+</head>
+<body onload="initialize()">
+<script type="text/javascript" src="scripts/findRoom.js"></script>
+	<h1>Find Applicable Rooms: datasetid</h1>
+	<label class="head" for="roomSeats">Min Room Seats:</label>
+	<input type="number" id="roomSeats" onchange="checkValid()">
+	<br>
+	<br>
+	<label class="head" for="roomTypes">Room Types:</label>
+	<ul class="nobullet" id="roomTypes"></ul>
+	<br>
+	<label class="head" for="roomFurniture">Room Furniture:</label>
+	<ul class="nobullet" id="roomFurniture"></ul>
+	<button id="findRooms" type="button" onclick="displayQuery()" disabled>Find Rooms</button>
+	<div id="query"></div>
+</body>
+</html>

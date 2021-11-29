@@ -1,4 +1,4 @@
-import {extractGroupKey, extractKey, getSectionRoomKey} from "../../resources/Util";
+import {extractGroupKey, extractKey, getSectionRoomValue} from "../../resources/Util";
 import {InsightError} from "../../controller/IInsightFacade";
 import {DatasetItem} from "../Dataset";
 import {DataGroup} from "./DataGroup";
@@ -16,6 +16,9 @@ export class Order {
 		} catch (e) {
 			throw new InsightError("Error parsing order key: " + e);
 		}
+		if (!(direction === "UP" || direction === "DOWN")) {
+			throw new InsightError("invalid direction specified: " + direction);
+		}
 		this.direction = direction;
 		if (order) {
 			this.nextOrder = order;
@@ -25,8 +28,8 @@ export class Order {
 	}
 
 	public compare(dataA: DatasetItem, dataB: DatasetItem): number {
-		const valA = getSectionRoomKey(this.key, dataA);
-		const valB = getSectionRoomKey(this.key, dataB);
+		const valA = getSectionRoomValue(this.key, dataA);
+		const valB = getSectionRoomValue(this.key, dataB);
 		if (valA === valB && this.nextOrder) {
 			return this.nextOrder.compare(dataA, dataB);
 		}
@@ -49,7 +52,7 @@ export class Order {
 		if (valA > valB) {
 			return this.direction === "UP" ? 1 : -1;
 		}
-		return this.direction === "UP" ? -1 : 1;
+		return 0; // this.direction === "UP" ? -1 : 1;
 	}
 
 }
