@@ -80,12 +80,12 @@ export class RoomDataset extends Dataset {
 
 		for(const roomKey in rooms) {
 			const room = rooms[roomKey];
-			room.fullname = building.fullname;
-			room.shortname = building.shortname;
-			room.address = building.address;
-			room.name = room.shortname + "_" + room.number;
-			room.lat = geoResponse.lat;
-			room.lon = geoResponse.lon;
+			room._fullname = building.fullname;
+			room._shortname = building.shortname;
+			room._address = building.address;
+			room._name = room._shortname + "_" + room._number;
+			room._lat = geoResponse.lat;
+			room._lon = geoResponse.lon;
 			this._rooms.push(room);
 			this._numRows++;
 		}
@@ -143,20 +143,20 @@ export class SectionDataset extends Dataset {
 					}
 				}
 				if (allCorrectType) {
-					section.title = jsonSection.Title;
-					section.uuid = jsonSection.id.toString(10);
-					section.instructor = jsonSection.Professor;
-					section.audit = jsonSection.Audit;
+					section._title = jsonSection.Title;
+					section._uuid = jsonSection.id.toString(10);
+					section._instructor = jsonSection.Professor;
+					section._audit = jsonSection.Audit;
 					if (jsonSection.Section === "overall") {
-						section.year = 1900;
+						section._year = 1900;
 					} else {
-						section.year = parseInt(jsonSection.Year, 10);
+						section._year = parseInt(jsonSection.Year, 10);
 					}
-					section.id = jsonSection.Course;
-					section.pass = jsonSection.Pass;
-					section.fail = jsonSection.Fail;
-					section.avg = jsonSection.Avg;
-					section.dept = jsonSection.Subject;
+					section._id = jsonSection.Course;
+					section._pass = jsonSection.Pass;
+					section._fail = jsonSection.Fail;
+					section._avg = jsonSection.Avg;
+					section._dept = jsonSection.Subject;
 					this._sections.push(section);
 					numValidSections++;
 				}

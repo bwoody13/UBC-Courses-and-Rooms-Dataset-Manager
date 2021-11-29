@@ -3,7 +3,12 @@ const SERVER_URL = "http://localhost:" + PORT;
 
 async function addDataset() {
 	return new Promise((resolve, reject) => {
-		const id = document.getElementById("datasetID").value.trim();
+		let id = document.getElementById("datasetID").value;
+		if(!id) {
+			id = " ";
+		} else {
+			id = id.trim();
+		}
 		const kind = "rooms";
 		const fileData = document.getElementById("datasetFile").files[0];
 		const endpointURL = `/dataset/${id}/${kind}`;

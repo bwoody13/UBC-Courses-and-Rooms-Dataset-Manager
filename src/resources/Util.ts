@@ -5,10 +5,11 @@ import {Query} from "../objects/query_structure/Query";
 import {Section} from "../objects/Section";
 import {Room} from "../objects/Room";
 
-export const courseMKeys: string[] = ["avg", "pass", "fail", "audit", "year"];
-export const roomMKeys: string[] = ["lat", "lon", "seats"];
-export const courseSKeys: string[] = ["dept", "id", "instructor", "title", "uuid"];
-export const roomSKeys: string[] = ["fullname", "shortname", "number", "name", "address", "type", "furniture", "href"];
+export const courseMKeys: string[] = ["_avg", "_pass", "_fail", "_audit", "_year"];
+export const roomMKeys: string[] = ["_lat", "_lon", "_seats"];
+export const courseSKeys: string[] = ["_dept", "_id", "_instructor", "_title", "_uuid"];
+export const roomSKeys: string[] = ["_fullname", "_shortname", "_number", "_name", "_address",
+	"_type", "_furniture", "_href"];
 export const validCourseKeys: string[] = courseMKeys.concat(courseSKeys);
 export const validRoomKeys: string[] = roomMKeys.concat(roomSKeys);
 export const validQueryKeys: string[] = validCourseKeys.concat(validRoomKeys);
@@ -37,7 +38,7 @@ export function datasetExistsReject() {
 	return Promise.reject(new InsightError("A dataset with that ID already exists."));
 }
 
-export function getSectionRoomKey(key: string, dataItem: any) {
+export function getSectionRoomValue(key: string, dataItem: any) {
 	if (Query.TYPE === "COURSE") {
 		return dataItem[key as keyof Section];
 	} else {
@@ -51,7 +52,7 @@ export function extractKey(key: string): string {
 		throw new InsightError("Invalid query key: " + key);
 	}
 
-	const k = key.substring(underscoreLoc + 1);
+	const k = key.substring(underscoreLoc);	// changing
 	let type: string;
 	if (validCourseKeys.includes(k)) {
 		type = "COURSE";
