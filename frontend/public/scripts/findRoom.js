@@ -162,8 +162,8 @@ function createOPTIONSObj(id) {
 			makeColID(id, "type")
 		],
 		ORDER: {
-			dir: "DOWN",
-			keys: [makeColID(id, "seats"), makeColID(id, "fullname")]
+			dir: "UP",
+			keys: [makeColID(id, "fullname"), makeColID(id, "number")]
 		}
 	}
 	return optionsObj;
