@@ -4,7 +4,7 @@ import {Section} from "../Section";
 import {InsightError, ResultTooLargeError} from "../../controller/IInsightFacade";
 import {Order} from "./Order";
 import {Room} from "../Room";
-import {getSectionRoomKey} from "../../resources/Util";
+import {getSectionRoomValue} from "../../resources/Util";
 import {Group} from "./Group";
 
 
@@ -104,8 +104,8 @@ export class Query {
 		for(const dataItem of results) {
 			let dataObj: {[k: string]: any} = {};
 			for(const key in this._keys) {
-				const queryKey = Query.ID + "_" + this._keys[key];
-				dataObj[queryKey] = getSectionRoomKey(this._keys[key], dataItem);
+				const queryKey = Query.ID + this._keys[key]; // changed to not include _
+				dataObj[queryKey] = getSectionRoomValue(this._keys[key], dataItem);
 			}
 			out.push(dataObj);
 		}

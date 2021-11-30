@@ -156,13 +156,13 @@ function parseGroupOrder(orderObj: any, query: GroupQuery) {
 	} else if (orderObj.keys && orderObj.dir) {
 		for (let key of orderObj.keys.reverse()) {
 			key = parseGroupKey(key, query);
+			if (!query.keys.includes(key)) {
+				throw new InsightError("query key: " + key + " is not in COLUMNS");
+			}
 			if (order) {
 				order = new Order(key, orderObj.dir, order);
 			} else {
 				order = new Order(key, orderObj.dir);
-			}
-			if (order && !query.keys.includes(order.key)) {
-				throw new InsightError("query key: " + order.key + " is not in COLUMNS");
 			}
 		}
 	} else {
@@ -176,10 +176,16 @@ function parseOrder(orderObj: any, query: Query) {
 	if (typeof orderObj === "string") {
 		let key: string = orderObj.toString();
 		key = extractKey(key);
+		if (!query.keys.includes(key)) {
+			throw new InsightError("query key: " + key + " is not in COLUMNS");
+		}
 		order = new Order(key, "UP");
 	} else if (orderObj.keys && orderObj.dir) {
 		for (let key of orderObj.keys.reverse()) {
 			key = extractKey(key);
+			if (!query.keys.includes(key)) {
+				throw new InsightError("query key: " + key + " is not in COLUMNS");
+			}
 			if (order) {
 				order = new Order(key, orderObj.dir, order);
 			} else {
@@ -188,9 +194,6 @@ function parseOrder(orderObj: any, query: Query) {
 		}
 	} else {
 		throw new InsightError("Error parsing order. No keys or dir.");
-	}
-	if (order && !query.keys.includes(order.key)) {
-		throw new InsightError("query key: " + order.key + " is not in COLUMNS");
 	}
 	query.setOrder(order);
 }

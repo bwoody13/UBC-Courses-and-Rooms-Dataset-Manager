@@ -2,7 +2,7 @@ import {Query} from "./Query";
 import {Group} from "./Group";
 import {DatasetItem, RoomDataset, SectionDataset} from "../Dataset";
 import {Section} from "../Section";
-import {getSectionRoomKey, validQueryKeys} from "../../resources/Util";
+import {getSectionRoomValue, validQueryKeys} from "../../resources/Util";
 import {ResultTooLargeError} from "../../controller/IInsightFacade";
 import {DataGroup} from "./DataGroup";
 import {Room} from "../Room";
@@ -57,7 +57,7 @@ export class GroupQuery extends Query {
 	private createKeyValObj(dataItem: Section | Room): string {
 		let keyVals: {[k: string]: string | number} = {};
 		for (const key of this.group.groupKeys) {
-			keyVals[key] = getSectionRoomKey(key, dataItem);
+			keyVals[key] = getSectionRoomValue(key, dataItem);
 		}
 		return JSON.stringify(keyVals);
 	}
@@ -133,16 +133,16 @@ export class GroupQuery extends Query {
 
 	public getGroupOutput(results: DataGroup[]): any[] {
 		let out = [];
-		for (const secGroup of results) {
+		for (const dataGroup of results) {
 			let dataObj: {[k: string]: any} = {};
 			for(const key in this._keys) {
 				let queryKey: string;
 				if (validQueryKeys.includes(this._keys[key])) {
-					queryKey = Query.ID + "_" + this._keys[key];
+					queryKey = Query.ID  + this._keys[key]; // changed to not include underscore
 				} else {
 					queryKey = this._keys[key];
 				}
-				dataObj[queryKey] = secGroup.getVal(this._keys[key]);
+				dataObj[queryKey] = dataGroup.getVal(this._keys[key]);
 			}
 			out.push(dataObj);
 		}

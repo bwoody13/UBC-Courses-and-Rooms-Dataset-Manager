@@ -28,7 +28,7 @@ export default class InsightFacade implements IInsightFacade {
 
 	public async addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
 		// reject if ID is invalid
-		if (invalidID(id)) {
+		if (id === "" || invalidID(id)) {
 			return invalidIDReject();
 		}
 

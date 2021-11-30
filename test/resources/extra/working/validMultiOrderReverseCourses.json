@@ -1,0 +1,608 @@
+{
+	"title": "Valid Multiple Ordering Reverse Courses",
+	"input": {
+		"WHERE": {
+			"AND": [
+				{
+					"EQ": {
+						"courses_year": 2010
+					}
+				},
+				{
+					"IS": {
+						"courses_dept": "comm"
+					}
+				},
+				{
+					"IS": {
+						"courses_id": "3*"
+					}
+				}
+			]
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"courses_dept",
+				"courses_id",
+				"courses_year",
+				"courses_avg"
+			],
+			"ORDER": {
+				"dir": "DOWN",
+				"keys": [
+					"courses_year",
+					"courses_dept",
+					"courses_id",
+					"courses_avg"
+				]
+			}
+		}
+	},
+	"errorExpected": false,
+	"with": [
+		{
+			"courses_dept": "comm",
+			"courses_id": "398",
+			"courses_year": 2010,
+			"courses_avg": 80.47
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "398",
+			"courses_year": 2010,
+			"courses_avg": 76.24
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "394",
+			"courses_year": 2010,
+			"courses_avg": 78.67
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "394",
+			"courses_year": 2010,
+			"courses_avg": 77.53
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "394",
+			"courses_year": 2010,
+			"courses_avg": 76.11
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "394",
+			"courses_year": 2010,
+			"courses_avg": 75.96
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "394",
+			"courses_year": 2010,
+			"courses_avg": 75.21
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "394",
+			"courses_year": 2010,
+			"courses_avg": 75.15
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "394",
+			"courses_year": 2010,
+			"courses_avg": 75.11
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "394",
+			"courses_year": 2010,
+			"courses_avg": 75.09
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "394",
+			"courses_year": 2010,
+			"courses_avg": 74.98
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "394",
+			"courses_year": 2010,
+			"courses_avg": 74.29
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "394",
+			"courses_year": 2010,
+			"courses_avg": 73.91
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "394",
+			"courses_year": 2010,
+			"courses_avg": 72.58
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "394",
+			"courses_year": 2010,
+			"courses_avg": 72.43
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "394",
+			"courses_year": 2010,
+			"courses_avg": 72.16
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "394",
+			"courses_year": 2010,
+			"courses_avg": 68.12
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "393",
+			"courses_year": 2010,
+			"courses_avg": 77.61
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "393",
+			"courses_year": 2010,
+			"courses_avg": 75.31
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "393",
+			"courses_year": 2010,
+			"courses_avg": 73.83
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "393",
+			"courses_year": 2010,
+			"courses_avg": 72.45
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "393",
+			"courses_year": 2010,
+			"courses_avg": 72.38
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "393",
+			"courses_year": 2010,
+			"courses_avg": 72.24
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "393",
+			"courses_year": 2010,
+			"courses_avg": 71.8
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "393",
+			"courses_year": 2010,
+			"courses_avg": 70.38
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "377",
+			"courses_year": 2010,
+			"courses_avg": 82.41
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "377",
+			"courses_year": 2010,
+			"courses_avg": 80.26
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "377",
+			"courses_year": 2010,
+			"courses_avg": 78.43
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "377",
+			"courses_year": 2010,
+			"courses_avg": 74.79
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "374",
+			"courses_year": 2010,
+			"courses_avg": 79.02
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "374",
+			"courses_year": 2010,
+			"courses_avg": 77.08
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "374",
+			"courses_year": 2010,
+			"courses_avg": 76.55
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "374",
+			"courses_year": 2010,
+			"courses_avg": 71.91
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "374",
+			"courses_year": 2010,
+			"courses_avg": 70.1
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "371",
+			"courses_year": 2010,
+			"courses_avg": 79.5
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "371",
+			"courses_year": 2010,
+			"courses_avg": 78.03
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "371",
+			"courses_year": 2010,
+			"courses_avg": 76.23
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "371",
+			"courses_year": 2010,
+			"courses_avg": 76.18
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "371",
+			"courses_year": 2010,
+			"courses_avg": 74.41
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "370",
+			"courses_year": 2010,
+			"courses_avg": 80.91
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "370",
+			"courses_year": 2010,
+			"courses_avg": 79.61
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "370",
+			"courses_year": 2010,
+			"courses_avg": 78.39
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "370",
+			"courses_year": 2010,
+			"courses_avg": 77.59
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "370",
+			"courses_year": 2010,
+			"courses_avg": 77.55
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "370",
+			"courses_year": 2010,
+			"courses_avg": 76.92
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "370",
+			"courses_year": 2010,
+			"courses_avg": 76.64
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "370",
+			"courses_year": 2010,
+			"courses_avg": 76.28
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "370",
+			"courses_year": 2010,
+			"courses_avg": 73.71
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "370",
+			"courses_year": 2010,
+			"courses_avg": 73.5
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "365",
+			"courses_year": 2010,
+			"courses_avg": 79.35
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "365",
+			"courses_year": 2010,
+			"courses_avg": 78.1
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "365",
+			"courses_year": 2010,
+			"courses_avg": 77.41
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "365",
+			"courses_year": 2010,
+			"courses_avg": 76.95
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "363",
+			"courses_year": 2010,
+			"courses_avg": 77.95
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "363",
+			"courses_year": 2010,
+			"courses_avg": 77.6
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "363",
+			"courses_year": 2010,
+			"courses_avg": 77.34
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "363",
+			"courses_year": 2010,
+			"courses_avg": 76.71
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "363",
+			"courses_year": 2010,
+			"courses_avg": 76.23
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "362",
+			"courses_year": 2010,
+			"courses_avg": 80.97
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "362",
+			"courses_year": 2010,
+			"courses_avg": 79.28
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "362",
+			"courses_year": 2010,
+			"courses_avg": 79
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "362",
+			"courses_year": 2010,
+			"courses_avg": 78.5
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "362",
+			"courses_year": 2010,
+			"courses_avg": 77.57
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "362",
+			"courses_year": 2010,
+			"courses_avg": 75.77
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "355",
+			"courses_year": 2010,
+			"courses_avg": 76.51
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "355",
+			"courses_year": 2010,
+			"courses_avg": 72.78
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "355",
+			"courses_year": 2010,
+			"courses_avg": 71.02
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "355",
+			"courses_year": 2010,
+			"courses_avg": 70.7
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "355",
+			"courses_year": 2010,
+			"courses_avg": 70.44
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "354",
+			"courses_year": 2010,
+			"courses_avg": 78.47
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "354",
+			"courses_year": 2010,
+			"courses_avg": 76.13
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "354",
+			"courses_year": 2010,
+			"courses_avg": 74.79
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "354",
+			"courses_year": 2010,
+			"courses_avg": 73.84
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "354",
+			"courses_year": 2010,
+			"courses_avg": 71.65
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "353",
+			"courses_year": 2010,
+			"courses_avg": 78.56
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "353",
+			"courses_year": 2010,
+			"courses_avg": 76.61
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "353",
+			"courses_year": 2010,
+			"courses_avg": 74.27
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "353",
+			"courses_year": 2010,
+			"courses_avg": 73.93
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "353",
+			"courses_year": 2010,
+			"courses_avg": 71.71
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "336",
+			"courses_year": 2010,
+			"courses_avg": 78
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "336",
+			"courses_year": 2010,
+			"courses_avg": 77.75
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "335",
+			"courses_year": 2010,
+			"courses_avg": 85.78
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "335",
+			"courses_year": 2010,
+			"courses_avg": 79.45
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "335",
+			"courses_year": 2010,
+			"courses_avg": 77.18
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "335",
+			"courses_year": 2010,
+			"courses_avg": 76.5
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "329",
+			"courses_year": 2010,
+			"courses_avg": 75.09
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "329",
+			"courses_year": 2010,
+			"courses_avg": 74.63
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "329",
+			"courses_year": 2010,
+			"courses_avg": 74.6
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "329",
+			"courses_year": 2010,
+			"courses_avg": 71.17
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "311",
+			"courses_year": 2010,
+			"courses_avg": 82
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "307",
+			"courses_year": 2010,
+			"courses_avg": 73.08
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "307",
+			"courses_year": 2010,
+			"courses_avg": 72.89
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "306",
+			"courses_year": 2010,
+			"courses_avg": 76.95
+		},
+		{
+			"courses_dept": "comm",
+			"courses_id": "306",
+			"courses_year": 2010,
+			"courses_avg": 76.78
+		}
+	]
+}

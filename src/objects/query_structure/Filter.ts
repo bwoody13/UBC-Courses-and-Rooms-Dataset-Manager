@@ -1,5 +1,5 @@
 import {InsightError} from "../../controller/IInsightFacade";
-import {extractKey, getSectionRoomKey, mKeys, sKeys} from "../../resources/Util";
+import {extractKey, getSectionRoomValue, mKeys, sKeys} from "../../resources/Util";
 import {Section} from "../Section";
 import {DatasetItem} from "../Dataset";
 import {Room} from "../Room";
@@ -98,7 +98,7 @@ export class EqFilter extends MFilter {
 	}
 
 	public applyFilter(dataItem: DatasetItem): boolean {
-		return getSectionRoomKey(this.key, dataItem) === this.val;
+		return getSectionRoomValue(this.key, dataItem) === this.val;
 	}
 }
 
@@ -108,7 +108,7 @@ export class GtFilter extends MFilter {
 	}
 
 	public applyFilter(dataItem: DatasetItem): boolean {
-		return getSectionRoomKey(this.key, dataItem) > this.val;
+		return getSectionRoomValue(this.key, dataItem) > this.val;
 	}
 }
 
@@ -118,7 +118,7 @@ export class LtFilter extends MFilter {
 	}
 
 	public applyFilter(dataItem: DatasetItem): boolean {
-		return getSectionRoomKey(this.key, dataItem) < this.val;
+		return getSectionRoomValue(this.key, dataItem) < this.val;
 	}
 }
 
@@ -150,7 +150,7 @@ export class IsFilter extends SFilter {
 		}
 		let regExStr: string = this.val.replace(/\*/gi, ".*");
 		let re: RegExp = new RegExp("^" + regExStr + "$");
-		return re.test(getSectionRoomKey(this.key, dataItem).toString());
+		return re.test(getSectionRoomValue(this.key, dataItem).toString());
 	}
 }
 
