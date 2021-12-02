@@ -978,61 +978,86 @@ describe("InsightFacade", function () {
 					expect(actual).to.be.an.instanceof(Array);
 					expect(actual).to.have.length(expected.length);
 					expect(actual).to.have.deep.members(expected);
-					if (orderKey !== undefined) {
-						expect(actual).to.eql(expected);
-					}
-					// if(orderKey !== undefined) {
-					// 	let ordered = true;
-					// 	// check if multi-order
-					// 	if(typeof orderKey !== "string") {
-					// 		// console.log(JSON.stringify(orderKey));
-					// 		if (orderKey.dir === "UP") {
-					// 			for (let i = 1; i < actual.length; i++) {
-					// 				let keyIndex = 0;
-					// 				while (keyIndex < orderKey.keys.length) {
-					// 					const key = orderKey.keys[keyIndex];
-					// 					// console.log("Key: " + key);
-					// 					if (actual[i - 1][key] < actual[i][key]) {
-					// 						break; // proper order
-					// 					} else if (actual[i - 1][key] === actual[i][key]){
-					// 						// tie break
-					// 						keyIndex++;
-					// 					} else {
-					// 						console.log(JSON.stringify(actual));
-					// 						expect.fail("Key: " + key + " Value: " + actual[i - 1][key] +
-					// 							" should be less than " + actual[i][key]); // improper order
-					// 					}
-					// 				}
-					// 			}
-					// 		} else {
-					// 			// reverse
-					// 			for (let i = 1; i < actual.length; i++) {
-					// 				let keyIndex = 0;
-					// 				while (keyIndex < orderKey.keys.length) {
-					// 					const key = orderKey.keys[keyIndex];
-					// 					if (actual[i - 1][key] > actual[i][key]) {
-					// 						break; // proper order
-					// 					} else if (actual[i - 1][key] === actual[i][key]){
-					// 						// tie break
-					// 						keyIndex++;
-					// 					} else {
-					// 						console.log(JSON.stringify(actual));
-					// 						expect.fail("Key: " + key + " Value: " + actual[i - 1][key] +
-					// 							" should be greater than " + actual[i][key]); // improper order
-					// 					}
-					// 				}
-					// 			}
-					// 		}
-					// 	} else {
-					// 		for(let i = 1; i < actual.length; i++) {
-					// 			if(actual[i - 1][orderKey] > actual[i][orderKey]) {
-					// 				ordered = false;
-					// 				break;
-					// 			}
-					// 		}
-					// 	}
-					// 	expect(ordered).to.be.true;
+					// if (orderKey !== undefined) {
+					// 	expect(actual).to.eql(expected);
 					// }
+					if(orderKey !== undefined) {
+						let ordered = true;
+						// check if multi-order
+						try {
+							if (typeof orderKey !== "string") {
+								// console.log(JSON.stringify(orderKey));
+								if (orderKey.dir === "UP") {
+									for (let i = 1; i < actual.length; i++) {
+										let keyIndex = 0;
+										while (keyIndex < orderKey.keys.length) {
+											const key = orderKey.keys[keyIndex];
+											if(typeof actual[i - 1][key] === "undefined" ||
+												typeof actual[i][key] === "undefined") {
+												console.log(JSON.stringify(actual[i - 1]));
+												console.log(JSON.stringify(actual[i]));
+												console.log("key: " + key);
+												expect.fail("Undefined");
+											}
+											// console.log(JSON.stringify(orderKey));
+											// console.log("Key: " + key + " " + keyIndex);
+											if (actual[i - 1][key] < actual[i][key]) {
+												break; // proper order
+											} else if (actual[i - 1][key] === actual[i][key]) {
+												// tie break
+												keyIndex++;
+											} else {
+												// console.log(JSON.stringify(actual));
+												// console.log(JSON.stringify(actual[i - 1]));
+												// console.log(JSON.stringify(actual[i]));
+												expect.fail("Key: " + key + " Value: " + actual[i - 1][key] +
+													" should be less than " + actual[i][key]); // improper order
+											}
+										}
+									}
+								} else {
+									// reverse
+									for (let i = 1; i < actual.length; i++) {
+										let keyIndex = 0;
+										while (keyIndex < orderKey.keys.length) {
+											const key = orderKey.keys[keyIndex];
+											if(typeof actual[i - 1][key] === "undefined" ||
+												typeof actual[i][key] === "undefined") {
+												console.log(JSON.stringify(actual[i - 1]));
+												console.log(JSON.stringify(actual[i]));
+												console.log("key: " + key);
+												expect.fail("Undefined");
+											}
+											if (actual[i - 1][key] > actual[i][key]) {
+												break; // proper order
+											} else if (actual[i - 1][key] === actual[i][key]) {
+												// tie break
+												keyIndex++;
+											} else {
+												// console.log(JSON.stringify(actual));
+												expect.fail("Key: " + key + " Value: " + actual[i - 1][key] +
+													" should be greater than " + actual[i][key]); // improper order
+											}
+										}
+									}
+								}
+							} else {
+								for (let i = 1; i < actual.length; i++) {
+									if (typeof actual[i - 1][orderKey] === "undefined" ||
+										typeof actual[i][orderKey] === "undefined" || (actual[i - 1][orderKey] >
+										actual[i][orderKey])) {
+										console.log(actual[i - 1][orderKey]);
+										console.log(actual[i][orderKey]);
+										ordered = false;
+										break;
+									}
+								}
+							}
+						} catch(e) {
+							expect.fail("Error encountered: " + e);
+						}
+						expect(ordered).to.be.true;
+					}
 				},
 				assertOnError: (expected, actual) => {
 					if (expected === "InsightError") {
