@@ -12,6 +12,7 @@ import {testFolder} from "@ubccpsc310/folder-test";
 import {expect, use} from "chai";
 import chaiAsPromised from "chai-as-promised";
 import {clearDisk, getContentFromArchives} from "../resources/TestUtil";
+import {fail} from "assert";
 
 use(chaiAsPromised);
 
@@ -978,12 +979,53 @@ describe("InsightFacade", function () {
 					expect(actual).to.have.length(expected.length);
 					expect(actual).to.have.deep.members(expected);
 					if(orderKey !== undefined) {
-						// check the order of the actual array
 						let ordered = true;
-						for(let i = 1; i < actual.length; i++) {
-							if(actual[i - 1][orderKey] > actual[i][orderKey]) {
-								ordered = false;
-								break;
+						// check if multi-order
+						if(typeof orderKey !== "string") {
+							// console.log(JSON.stringify(orderKey));
+							if (orderKey.dir === "UP") {
+								for (let i = 1; i < actual.length; i++) {
+									let keyIndex = 0;
+									while (keyIndex < orderKey.keys.length) {
+										const key = orderKey.keys[keyIndex];
+										// console.log("Key: " + key);
+										if (actual[i - 1][key] < actual[i][key]) {
+											break; // proper order
+										} else if (actual[i - 1][key] === actual[i][key]){
+											// tie break
+											keyIndex++;
+										} else {
+											console.log(JSON.stringify(actual));
+											expect.fail("Key: " + key + " Value: " + actual[i - 1][key] +
+												" should be less than " + actual[i][key]); // improper order
+										}
+									}
+								}
+							} else {
+								// reverse
+								for (let i = 1; i < actual.length; i++) {
+									let keyIndex = 0;
+									while (keyIndex < orderKey.keys.length) {
+										const key = orderKey.keys[keyIndex];
+										if (actual[i - 1][key] > actual[i][key]) {
+											break; // proper order
+										} else if (actual[i - 1][key] === actual[i][key]){
+											// tie break
+											keyIndex++;
+										} else {
+											console.log(JSON.stringify(actual));
+											expect.fail("Key: " + key + " Value: " + actual[i - 1][key] +
+												" should be greater than " + actual[i][key]); // improper order
+										}
+									}
+								}
+							}
+						} else {
+							for(let i = 1; i < actual.length; i++) {
+								if(actual[i - 1][orderKey] > actual[i][orderKey]) {
+									ordered = false;
+									break;
+								}
 							}
 						}
 						expect(ordered).to.be.true;
