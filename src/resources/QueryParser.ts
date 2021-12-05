@@ -154,7 +154,7 @@ function parseGroupOrder(orderObj: any, query: GroupQuery) {
 		key = parseGroupKey(key, query);
 		order = new Order(key, "UP");
 	} else if (orderObj.keys && orderObj.dir) {
-		for (let key of orderObj.keys.reverse()) {
+		for (let key of orderObj.keys.slice().reverse()) {
 			key = parseGroupKey(key, query);
 			if (!query.keys.includes(key)) {
 				throw new InsightError("query key: " + key + " is not in COLUMNS");
@@ -181,7 +181,7 @@ function parseOrder(orderObj: any, query: Query) {
 		}
 		order = new Order(key, "UP");
 	} else if (orderObj.keys && orderObj.dir) {
-		for (let key of orderObj.keys.reverse()) {
+		for (let key of orderObj.keys.slice().reverse()) {
 			key = extractKey(key);
 			if (!query.keys.includes(key)) {
 				throw new InsightError("query key: " + key + " is not in COLUMNS");
