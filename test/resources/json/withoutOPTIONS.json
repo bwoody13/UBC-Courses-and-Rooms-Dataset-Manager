@@ -1,0 +1,13 @@
+{
+  "errorMsg": "Missing OPTIONS",
+  "title": "without OPTIONS",
+  "input": {
+    "WHERE": {
+      "IS": {
+        "courses_dept": "cpsc"
+      }
+    }
+  },
+  "errorExpected": true,
+  "with": "InsightError"
+}

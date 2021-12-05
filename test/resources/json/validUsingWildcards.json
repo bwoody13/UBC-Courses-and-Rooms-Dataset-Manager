@@ -1,0 +1,580 @@
+{
+  "title": "Valid Using Wildcards",
+  "input": {
+    "WHERE": {
+      "IS": {
+        "courses_instructor": "*wood*"
+      }
+    },
+    "OPTIONS": {
+      "COLUMNS": [
+        "courses_instructor"
+      ],
+      "ORDER": "courses_instructor"
+    }
+  },
+  "errorExpected": false,
+  "with": [
+    {
+      "courses_instructor": "atabaki, nima;dunwoody, a bruce;feng, hsi-yung;fengler, markus;ma, hongshen;tba;van der loos, hendrik"
+    },
+    {
+      "courses_instructor": "atabaki, nima;dunwoody, a bruce;feng, hsi-yung;fengler, markus;ma, hongshen;tba;van der loos, hendrik"
+    },
+    {
+      "courses_instructor": "atabaki, nima;dunwoody, a bruce;feng, hsi-yung;fengler, markus;ma, hongshen;van der loos, hendrik"
+    },
+    {
+      "courses_instructor": "atabaki, nima;dunwoody, a bruce;feng, hsi-yung;ma, hongshen;tba;van der loos, hendrik;williams, wayne"
+    },
+    {
+      "courses_instructor": "bennewith, kevin;cote, helene;devlin, angela;granville, david;lockwood, william;shah, sohrab;steidl, christian;verchere, bruce;wellington, cheryl lea;weng, andrew"
+    },
+    {
+      "courses_instructor": "black, charlyn;homewood, susan"
+    },
+    {
+      "courses_instructor": "black, charlyn;homewood, susan"
+    },
+    {
+      "courses_instructor": "cote, helene;kalloger, steve ernest;laule, cornelia;lockwood, william;wellington, cheryl lea"
+    },
+    {
+      "courses_instructor": "cote, helene;kalloger, steve ernest;laule, cornelia;lockwood, william;wellington, cheryl lea"
+    },
+    {
+      "courses_instructor": "cote, helene;kalloger, steve ernest;laule, cornelia;lockwood, william;wellington, cheryl lea"
+    },
+    {
+      "courses_instructor": "danielson, peter;woodham, robert"
+    },
+    {
+      "courses_instructor": "dunwoody, a bruce"
+    },
+    {
+      "courses_instructor": "dunwoody, a bruce;fengler, markus;hodgson, antony;mikkelsen, jon;van der loos, hendrik"
+    },
+    {
+      "courses_instructor": "dunwoody, a bruce;fengler, markus;hodgson, antony;mikkelsen, jon;van der loos, hendrik"
+    },
+    {
+      "courses_instructor": "dunwoody, a bruce;fengler, markus;hodgson, antony;mohammadhasani khorasany, rami;mikkelsen, jon;van der loos, hendrik"
+    },
+    {
+      "courses_instructor": "dunwoody, a bruce;fengler, markus;sassani, farrokh"
+    },
+    {
+      "courses_instructor": "dunwoody, a bruce;romilly, douglas"
+    },
+    {
+      "courses_instructor": "dunwoody, a bruce;romilly, douglas"
+    },
+    {
+      "courses_instructor": "dunwoody, a bruce;romilly, douglas"
+    },
+    {
+      "courses_instructor": "eastwood, terence m"
+    },
+    {
+      "courses_instructor": "elwood, kenneth john"
+    },
+    {
+      "courses_instructor": "elwood, kenneth john"
+    },
+    {
+      "courses_instructor": "elwood, kenneth john"
+    },
+    {
+      "courses_instructor": "elwood, kenneth john"
+    },
+    {
+      "courses_instructor": "elwood, kenneth john"
+    },
+    {
+      "courses_instructor": "elwood, kenneth john"
+    },
+    {
+      "courses_instructor": "elwood, kenneth john"
+    },
+    {
+      "courses_instructor": "elwood, kenneth john"
+    },
+    {
+      "courses_instructor": "elwood, kenneth john"
+    },
+    {
+      "courses_instructor": "elwood, kenneth john"
+    },
+    {
+      "courses_instructor": "elwood, kenneth john"
+    },
+    {
+      "courses_instructor": "elwood, kenneth john"
+    },
+    {
+      "courses_instructor": "elwood, kenneth john"
+    },
+    {
+      "courses_instructor": "elwood, kenneth john"
+    },
+    {
+      "courses_instructor": "fais, laurel;mole, christopher;woodham, robert"
+    },
+    {
+      "courses_instructor": "gilley, brett;hammer, philip;porritt, lucy;stull, roland;ver, leah may;woodell, daniel"
+    },
+    {
+      "courses_instructor": "gilley, brett;hammer, philip;porritt, lucy;stull, roland;ver, leah may;woodell, daniel"
+    },
+    {
+      "courses_instructor": "gilley, brett;maldonado-pareja, maria;porritt, lucy;stull, roland;woodell, daniel"
+    },
+    {
+      "courses_instructor": "gilley, brett;maldonado-pareja, maria;porritt, lucy;stull, roland;woodell, daniel"
+    },
+    {
+      "courses_instructor": "gilley, brett;mindell, randal;porritt, lucy;stull, roland;sutherland, stuart;ver, leah may;woodell, daniel"
+    },
+    {
+      "courses_instructor": "gilley, brett;mindell, randal;porritt, lucy;stull, roland;sutherland, stuart;ver, leah may;woodell, daniel"
+    },
+    {
+      "courses_instructor": "gilley, brett;porritt, lucy;stull, roland;ver, leah may;woodell, daniel"
+    },
+    {
+      "courses_instructor": "gilley, brett;porritt, lucy;stull, roland;ver, leah may;woodell, daniel"
+    },
+    {
+      "courses_instructor": "hammer, philip;woodell, daniel"
+    },
+    {
+      "courses_instructor": "haywood, jennifer crandall;hickey, kenneth;mcdougall, scott;russell, james kelly;scoates, james stewart"
+    },
+    {
+      "courses_instructor": "homewood, susan"
+    },
+    {
+      "courses_instructor": "homewood, susan"
+    },
+    {
+      "courses_instructor": "homewood, susan"
+    },
+    {
+      "courses_instructor": "klubben, laura;westwood, marvin"
+    },
+    {
+      "courses_instructor": "klubben, laura;westwood, marvin"
+    },
+    {
+      "courses_instructor": "koert, emily;westwood, marvin"
+    },
+    {
+      "courses_instructor": "mccullough, lucy;westwood, marvin"
+    },
+    {
+      "courses_instructor": "nitkin, patricia;westwood, marvin"
+    },
+    {
+      "courses_instructor": "nitkin, patricia;westwood, marvin"
+    },
+    {
+      "courses_instructor": "nitkin, patricia;westwood, marvin"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "norwood, peter"
+    },
+    {
+      "courses_instructor": "olson, trevor;westwood, marvin"
+    },
+    {
+      "courses_instructor": "tavormina, ezula ;westwood, marvin"
+    },
+    {
+      "courses_instructor": "tba;woodell, daniel"
+    },
+    {
+      "courses_instructor": "ward, lawrence;woodham, robert"
+    },
+    {
+      "courses_instructor": "westwood, marvin"
+    },
+    {
+      "courses_instructor": "westwood, marvin"
+    },
+    {
+      "courses_instructor": "westwood, marvin"
+    },
+    {
+      "courses_instructor": "westwood, marvin"
+    },
+    {
+      "courses_instructor": "westwood, marvin"
+    },
+    {
+      "courses_instructor": "westwood, marvin"
+    },
+    {
+      "courses_instructor": "westwood, marvin"
+    },
+    {
+      "courses_instructor": "westwood, marvin"
+    },
+    {
+      "courses_instructor": "westwood, marvin"
+    },
+    {
+      "courses_instructor": "westwood, marvin"
+    },
+    {
+      "courses_instructor": "westwood, marvin"
+    },
+    {
+      "courses_instructor": "westwood, marvin"
+    },
+    {
+      "courses_instructor": "westwood, marvin"
+    },
+    {
+      "courses_instructor": "westwood, marvin"
+    },
+    {
+      "courses_instructor": "westwood, marvin"
+    },
+    {
+      "courses_instructor": "westwood, marvin"
+    },
+    {
+      "courses_instructor": "westwood, marvin"
+    },
+    {
+      "courses_instructor": "westwood, marvin"
+    },
+    {
+      "courses_instructor": "westwood, marvin"
+    },
+    {
+      "courses_instructor": "westwood, marvin"
+    },
+    {
+      "courses_instructor": "westwood, marvin;wiens, sandra"
+    },
+    {
+      "courses_instructor": "wood, paul"
+    },
+    {
+      "courses_instructor": "wood, paul"
+    },
+    {
+      "courses_instructor": "wood, paul"
+    },
+    {
+      "courses_instructor": "wood, william"
+    },
+    {
+      "courses_instructor": "wood, william"
+    },
+    {
+      "courses_instructor": "wood, william"
+    },
+    {
+      "courses_instructor": "wood, william"
+    },
+    {
+      "courses_instructor": "wood, william"
+    },
+    {
+      "courses_instructor": "wood, william"
+    },
+    {
+      "courses_instructor": "wood, william"
+    },
+    {
+      "courses_instructor": "woodell, daniel"
+    },
+    {
+      "courses_instructor": "woodell, daniel"
+    },
+    {
+      "courses_instructor": "woodell, daniel"
+    },
+    {
+      "courses_instructor": "woodell, daniel"
+    },
+    {
+      "courses_instructor": "woodell, daniel"
+    },
+    {
+      "courses_instructor": "woodell, daniel"
+    },
+    {
+      "courses_instructor": "woodell, daniel"
+    },
+    {
+      "courses_instructor": "woodell, daniel"
+    },
+    {
+      "courses_instructor": "woodell, daniel"
+    },
+    {
+      "courses_instructor": "woodell, daniel"
+    },
+    {
+      "courses_instructor": "woodell, daniel"
+    },
+    {
+      "courses_instructor": "woodell, daniel"
+    },
+    {
+      "courses_instructor": "woodell, daniel"
+    },
+    {
+      "courses_instructor": "woodell, daniel"
+    },
+    {
+      "courses_instructor": "woodell, daniel"
+    },
+    {
+      "courses_instructor": "woodford, roger"
+    },
+    {
+      "courses_instructor": "woodham, robert"
+    },
+    {
+      "courses_instructor": "woodham, robert"
+    },
+    {
+      "courses_instructor": "woodham, robert"
+    },
+    {
+      "courses_instructor": "woodham, robert"
+    },
+    {
+      "courses_instructor": "woodham, robert"
+    },
+    {
+      "courses_instructor": "woodham, robert"
+    },
+    {
+      "courses_instructor": "woodman, katherine sophia"
+    },
+    {
+      "courses_instructor": "woods, john"
+    },
+    {
+      "courses_instructor": "woody, sheila"
+    },
+    {
+      "courses_instructor": "woody, sheila"
+    },
+    {
+      "courses_instructor": "woody, sheila"
+    },
+    {
+      "courses_instructor": "woody, sheila"
+    },
+    {
+      "courses_instructor": "woody, sheila"
+    },
+    {
+      "courses_instructor": "woody, sheila"
+    },
+    {
+      "courses_instructor": "woody, sheila"
+    },
+    {
+      "courses_instructor": "woody, sheila"
+    }
+  ]
+}

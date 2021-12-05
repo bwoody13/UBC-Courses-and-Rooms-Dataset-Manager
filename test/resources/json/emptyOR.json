@@ -1,0 +1,19 @@
+{
+  "errorMsg": "OR must be a non-empty array",
+  "title": "empty OR",
+  "input": {
+    "WHERE": {
+      "OR": []
+    },
+    "OPTIONS": {
+      "COLUMNS": [
+        "courses_dept",
+        "courses_id",
+        "courses_uuid"
+      ],
+      "ORDER": "courses_dept"
+    }
+  },
+  "errorExpected": true,
+  "with": "InsightError"
+}
