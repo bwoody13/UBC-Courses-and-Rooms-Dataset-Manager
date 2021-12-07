@@ -41,8 +41,8 @@ export abstract class ApplyKey {
 	public applyKey: string
 
 	constructor(key: string, applyKey: string) {
-		if (applyKey.includes("_")) {
-			throw new InsightError("Apply key contains _");
+		if (applyKey.includes("_") || !applyKey) {
+			throw new InsightError("Apply key contains _ or is empty");
 		}
 		this.applyKey = applyKey;
 		try {
