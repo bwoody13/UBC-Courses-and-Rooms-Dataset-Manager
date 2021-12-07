@@ -1,0 +1,140 @@
+{
+  "errorMsg": "Invalid apply rule target key",
+  "title": "invalid list apply key",
+  "input": {
+    "WHERE": {},
+    "OPTIONS": {
+      "COLUMNS": [
+        "courses_id",
+        " ",
+        "maxAvg",
+        "minAvg",
+        "sumAvg"
+      ],
+      "ORDER": {
+        "dir": "DOWN",
+        "keys": [
+          "minAvg",
+          " "
+        ]
+      }
+    },
+    "TRANSFORMATIONS": {
+      "GROUP": [
+        "courses_id"
+      ],
+      "APPLY": [
+        {
+          " ": {
+            "AVG": [
+              "courses_avg",
+              "courses_year"
+            ]
+          }
+        },
+        {
+          "maxAvg": {
+            "MAX": "courses_avg"
+          }
+        },
+        {
+          "minAvg": {
+            "MIN": "courses_avg"
+          }
+        },
+        {
+          "sumAvg": {
+            "SUM": "courses_avg"
+          }
+        },
+        {
+          "countDept": {
+            "COUNT": "courses_dept"
+          }
+        },
+        {
+          "avgPass": {
+            "AVG": "courses_pass"
+          }
+        },
+        {
+          "maxPass": {
+            "MAX": "courses_pass"
+          }
+        },
+        {
+          "minPass": {
+            "MIN": "courses_pass"
+          }
+        },
+        {
+          "sumPass": {
+            "MAX": "courses_pass"
+          }
+        },
+        {
+          "avgFail": {
+            "AVG": "courses_fail"
+          }
+        },
+        {
+          "maxFail": {
+            "MAX": "courses_fail"
+          }
+        },
+        {
+          "minFail": {
+            "MIN": "courses_fail"
+          }
+        },
+        {
+          "sumFail": {
+            "MAX": "courses_fail"
+          }
+        },
+        {
+          "avgAudit": {
+            "AVG": "courses_audit"
+          }
+        },
+        {
+          "maxAudit": {
+            "MAX": "courses_audit"
+          }
+        },
+        {
+          "minAudit": {
+            "MIN": "courses_audit"
+          }
+        },
+        {
+          "sumAudit": {
+            "MAX": "courses_audit"
+          }
+        },
+        {
+          "avgYear": {
+            "AVG": "courses_year"
+          }
+        },
+        {
+          "maxYear": {
+            "MAX": "courses_year"
+          }
+        },
+        {
+          "minYear": {
+            "MIN": "courses_year"
+          }
+        },
+        {
+          "sumYear": {
+            "MAX": "courses_year"
+          }
+        }
+      ]
+    }
+  },
+  "errorExpected": true,
+  "with": "InsightError"
+}
